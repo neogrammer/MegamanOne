@@ -52,6 +52,9 @@
     <Filter Include="assets\textures\actors\player">
       <UniqueIdentifier>{ed93f371-6fbd-47c0-867e-67b1cb55b97f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="assets\textures\tilesets">
+      <UniqueIdentifier>{8a660b30-5732-4f32-b9f4-c7318b53f4ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\ServiceLocator.h">
@@ -81,6 +84,9 @@
     <ClInclude Include="headers\draw_shape.h">
       <Filter>Misc</Filter>
     </ClInclude>
+    <ClInclude Include="headers\Dynamic.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\main.cpp">
@@ -101,6 +107,9 @@
     <ClCompile Include="source\draw_shape.cpp">
       <Filter>Misc</Filter>
     </ClCompile>
+    <ClCompile Include="source\Dynamic.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="headers\tpl\ResourceManager.tpl">
@@ -116,6 +125,15 @@
   <ItemGroup>
     <Image Include="assets\textures\actors\player\player_atlas1.png">
       <Filter>assets\textures\actors\player</Filter>
+    </Image>
+    <Image Include="assets\textures\tilesets\tileset1.png">
+      <Filter>assets\textures\tilesets</Filter>
+    </Image>
+    <Image Include="assets\textures\tilesets\tileset1_32x32.png">
+      <Filter>assets\textures\tilesets</Filter>
+    </Image>
+    <Image Include="assets\textures\tilesets\tileset1_50x50.png">
+      <Filter>assets\textures\tilesets</Filter>
     </Image>
   </ItemGroup>
 </Project>

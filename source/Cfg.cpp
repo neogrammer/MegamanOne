@@ -32,6 +32,8 @@ void Cfg::initSounds()
 void Cfg::initTextures()
 {
 	textures.load((int)Textures::PlayerAtlas, "assets/textures/actors/player/player_atlas1.png");
+	textures.load((int)Textures::Tileset1, "assets/textures/tilesets/Tileset1_50x50.png");
+
 }
 
 void Cfg::initPlayerInputs()
