@@ -23,4 +23,12 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
 
+#include <3rdParty/olcUTIL_Geometry2D.h>
+
+#include <Cfg.h>
+#include <ActionTarget.h>
+#include <globals.h>
+#include <draw_shape.h>
+
+
 #endif

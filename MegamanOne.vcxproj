@@ -19,6 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="headers\Action.h" />
+    <ClInclude Include="headers\ActionMap.h" />
+    <ClInclude Include="headers\ActionTarget.h" />
+    <ClInclude Include="headers\Cfg.h" />
+    <ClInclude Include="headers\draw_shape.h" />
+    <ClInclude Include="headers\globals.h" />
+    <ClInclude Include="headers\ResourceManager.h" />
     <ClInclude Include="headers\ServiceLocator.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
@@ -27,7 +34,19 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="source\Action.cpp" />
+    <ClCompile Include="source\Cfg.cpp" />
+    <ClCompile Include="source\draw_shape.cpp" />
+    <ClCompile Include="source\globals.cpp" />
     <ClCompile Include="source\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="headers\tpl\ActionMap.tpl" />
+    <None Include="headers\tpl\ActionTarget.tpl" />
+    <None Include="headers\tpl\ResourceManager.tpl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\textures\actors\player\player_atlas1.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
