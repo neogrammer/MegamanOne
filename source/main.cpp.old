@@ -1,0 +1,297 @@
+#include <pch.h>
+#include <Dynamic.h>
+#include <physics.h>
+using namespace olc::utils::geom2d;
+
+struct Tile
+{
+	float left;
+	float top;
+	float width;
+	float height;
+	sf::IntRect texRect;
+	Cfg::Textures texType;
+};
+void setupTile(Tile& tile_, float x_, float y_, int left_, int top_, int w_, int h_, Cfg::Textures texType_)
+{
+	tile_.left = x_;
+	tile_.top = y_;
+	tile_.texType = texType_;
+	tile_.width = (float)w_;
+	tile_.height = (float)h_;
+	tile_.texRect = { {left_,top_},{w_,h_} };
+}
+
+float myDot(const sf::Vector2f& lv, const sf::Vector2f& rv)
+{
+	return lv.x * rv.x + lv.y * rv.y;
+}
+
+sf::Vector2f normalise( sf::Vector2f source)
+{
+	float length = std::sqrt(myDot(source, source));
+	if (length != 0)
+	{
+		source.x /= length;
+		source.y /= length;
+	}
+	return source;
+}
+
+sf::Vector2f reflect(const sf::Vector2f& velocity, const sf::Vector2f& normal)
+{
+	return -2.f * myDot(velocity, normal) * normal + velocity;
+}
+bool grounded = false;
+const float SPEED{500.f};
+
+sf::Vector3f getManifold(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal)
+{
+	sf::Vector3f manifold;
+
+	if (overlap.width < overlap.height)
+	{
+		manifold.x = (collisionNormal.x < 0) ? 1.f : -1.f;
+		manifold.z = overlap.width;
+	}
+	else
+	{
+		manifold.y = (collisionNormal.y < 0) ? 1.f : -1.f;
+		manifold.z = overlap.height;
+		if (collisionNormal.y == -1.f)
+		{
+			grounded = true;
+		}
+	}
+
+	return manifold;
+}
+
+void resolve(const sf::Vector3f& manifold, Dynamic& dyno)
+{
+	sf::Vector2f normal(manifold.x, manifold.y);
+	dyno.move(normal * manifold.z * gTime);
+
+	dyno.vel = reflect(dyno.vel, normal);
+}
+
+
+	
+	std::cout << "Loading..." << std::endl;
+	Cfg::Initialize();
+	std::cout << "Load Complete" << std::endl;
+	wndw::CreateWindow("MegamanOne", 1600U, 900U);
+	Dynamic player{};
+	player.setup(Cfg::Textures::PlayerAtlas, { (float)765.f, (float)240.f }, { 0.f,0.f }, { {0,160},{130,160} }, { {65,45}, {21,80} }, { 0.f,0.f });
+	std::vector<Tile*> tilemap;
+	tilemap.clear();
+	tilemap.reserve(18);
+	std::vector<int> isContained(18, false);
+	isContained.clear();
+	isContained.reserve(18);
+	std::vector<int> isOverlapping(18, false);
+	isOverlapping.clear();
+	isOverlapping.reserve(18);
+	Tile tile0{};
+	setupTile(tile0, 800.f, 680.f, 0, 0, 50, 50, Cfg::Textures::Tileset1);
+	tilemap.emplace_back(&tile0);
+	Tile tile1{};
+	setupTile(tile1, 750.f, 680.f, 0, 0, 50, 50, Cfg::Textures::Tileset1);
+	tilemap.emplace_back(&tile1);
+	Tile tile2{};
+	setupTile(tile2, 700.f, 680.f, 0, 0, 50, 50, Cfg::Textures::Tileset1);
+	tilemap.emplace_back(&tile2);
+	Tile tile3{};
+	setupTile(tile3, 600.f, 680.f, 0, 0, 50, 50, Cfg::Textures::Tileset1);
+	tilemap.emplace_back(&tile3);
+	Tile tile4{};
+	setupTile(tile4, 650.f, 680.f, 0, 0, 50, 50, Cfg::Textures::Tileset1);
+	tilemap.emplace_back(&tile4);
+	Tile tile5{};
+	setupTile(tile5, 550.f, 680.f, 0, 0, 50, 50, Cfg::Textures::Tileset1);
+	tilemap.emplace_back(&tile5);
+	Tile tile6{};
+	setupTile(tile6, 500.f, 680.f, 0, 0, 50, 50, Cfg::Textures::Tileset1);
+	tilemap.emplace_back(&tile6);
+	Tile tile7{};
+	setupTile(tile7, 450.f, 680.f, 0, 0, 50, 50, Cfg::Textures::Tileset1);
+	tilemap.emplace_back(&tile7);
+	Tile tile8{};
+	setupTile(tile8, 400.f, 680.f, 0, 0, 50, 50, Cfg::Textures::Tileset1);
+	tilemap.emplace_back(&tile8);
+	Tile tile9{};
+	setupTile(tile9, 850.f, 680.f, 0, 0, 50, 50, Cfg::Textures::Tileset1);
+	tilemap.emplace_back(&tile9);
+	Tile tile10{};
+	setupTile(tile10, 900.f, 680.f, 0, 0, 50, 50, Cfg::Textures::Tileset1);
+	tilemap.emplace_back(&tile10);
+	Tile tile11{};
+	setupTile(tile11, 950.f, 680.f, 0, 0, 50, 50, Cfg::Textures::Tileset1);
+	tilemap.emplace_back(&tile11);
+	Tile tile12{};
+	setupTile(tile12, 950.f, 630.f, 0, 0, 50, 50, Cfg::Textures::Tileset1);
+	tilemap.emplace_back(&tile12);
+	Tile tile13{};
+	setupTile(tile13, 950.f, 580.f, 0, 0, 50, 50, Cfg::Textures::Tileset1);
+	tilemap.emplace_back(&tile13);
+	Tile tile14{};
+	setupTile(tile14, 400.f, 630.f, 0, 0, 50, 50, Cfg::Textures::Tileset1);
+	tilemap.emplace_back(&tile14);
+	Tile tile15{};
+	setupTile(tile15, 400.f, 580.f, 0, 0, 50, 50, Cfg::Textures::Tileset1);
+	tilemap.emplace_back(&tile15);
+	Tile tile16{};
+	setupTile(tile16, 400.f, 530.f, 0, 0, 50, 50, Cfg::Textures::Tileset1);
+	tilemap.emplace_back(&tile16);
+	Tile tile18{};
+	setupTile(tile18, 950.f, 530.f, 0, 0, 50, 50, Cfg::Textures::Tileset1);
+	tilemap.emplace_back(&tile18);
+	sf::Vector2i mpos;
+	sf::Clock frameTimer{};
+
+	
+
+	while (gWnd.isOpen())
+	{
+		sf::Event e;
+		while (gWnd.pollEvent(e))
+		{
+			if ((e.type == sf::Event::KeyReleased && e.key.code == sf::Keyboard::Escape) || e.type == sf::Event::Closed)
+			{
+				gWnd.close();
+			}
+		}
+		if (gWnd.isOpen())
+		{
+			mpos = sf::Mouse::getPosition(gWnd);
+			gTime = frameTimer.restart().asSeconds();
+			float maxSpeed = 400.f;
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+				player.pos = { (float)mpos.x, (float)mpos.y };
+			}
+			else
+			{
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+				{
+					player.vel.x = 50.f;
+					if (abs(player.vel.x * gTime) > maxSpeed)
+					{
+						player.vel.x = maxSpeed;
+					}
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+				{
+					player.vel.x = -50.f;
+					if (abs(player.vel.x * gTime) > maxSpeed)
+					{
+						player.vel.x = -maxSpeed;
+					}
+				}
+			}
+			player.applyGravity();
+
+
+			//grounded = false;
+			////player.applyGravity();
+			//std::vector<std::vector<olc::v_2d<float>> >pts;
+			//pts.clear();
+			//pts.reserve(18);
+			//for (int i = 0; i < tilemap.size(); i++)
+			//{
+			//	Tile& tile = *(tilemap[i]);
+			//	isContained.push_back((contains(circle<float>({ olc::v_2d(mpos.x, mpos.y) }, 200.f), rect<float>(olc::v_2d((float)tile.left, (float)tile.top), olc::v_2d((float)tile.width, tile.height)))) ? 1 : 0);
+			//	isOverlapping.push_back((overlaps(circle<float>({ olc::v_2d(mpos.x, mpos.y) }, 200.f), rect<float>(olc::v_2d((float)tile.left, (float)tile.top), olc::v_2d((float)tile.width, tile.height)))) ? 1 : 0);
+			//	pts.emplace_back(std::vector<olc::v_2d<float>>{});
+			//	pts.back().clear();
+			//	if (isOverlapping.back() == 1)
+			//	{
+			//		pts.back() = intersects(circle<float>({ olc::v_2d(mpos.x, mpos.y) }, 200.f), rect<float>(olc::v_2d((float)tile.left, (float)tile.top), olc::v_2d((float)tile.width, tile.height)));
+			//	}
+			//	else
+			//	{
+			//		pts.back().emplace_back(olc::v_2d{ -1.f, -1.f });
+			//	}
+			//}
+			//sf::FloatRect plRect = player.getAABB();
+			//sf::Vector2f plCenter{};
+			//plCenter.x = plRect.left + (plRect.width / 2.f);
+			//plCenter.y = plRect.top + (plRect.height / 2.f);
+			//sf::FloatRect plNextRect = plRect;
+			//plNextRect.left += player.vel.x * gTime;
+			//plNextRect.top += player.vel.y * gTime;
+			//sf::FloatRect plBroadRect{};
+			//plBroadRect.left = (plRect.left < plNextRect.left) ? plRect.left : plNextRect.left;
+			//plBroadRect.top = (plRect.top < plNextRect.top) ? plRect.top : plNextRect.top;
+			//plBroadRect.width = plRect.width + abs(plNextRect.left - plRect.left);
+			//plBroadRect.height = plRect.height + abs(plNextRect.top - plRect.top);
+			//olc::v_2d plRectPos = olc::v_2d(plRect.getPosition().x, plRect.getPosition().y);
+			//olc::v_2d plRectSize = olc::v_2d(plRect.getSize().x, plRect.getSize().y);
+			//olc::v_2d plNRectPos = olc::v_2d(plNextRect.getPosition().x, plNextRect.getPosition().y);
+			//olc::v_2d plNRectSize = olc::v_2d(plNextRect.getSize().x, plNextRect.getSize().y);
+			//olc::v_2d plBRectPos = olc::v_2d(plBroadRect.getPosition().x, plBroadRect.getPosition().y);
+			//olc::v_2d plBRectSize = olc::v_2d(plBroadRect.getSize().x, plBroadRect.getSize().y);
+			//std::vector<Tile*> tilesToCheck;
+			//tilesToCheck.clear();
+			//tilesToCheck.reserve(tilemap.size());
+			//for (int i = 0; i < tilemap.size(); i++)
+			//{
+			//	Tile& tile = *(tilemap[i]);
+			//	if (overlaps(rect<float>(plBRectPos, plBRectSize), rect<float>(olc::v_2d((float)tile.left, (float)tile.top), olc::v_2d((float)tile.width, tile.height))))
+			//	{
+			//		tilesToCheck.push_back(tilemap[i]);
+			//	}
+			//}
+			//tilesToCheck.shrink_to_fit();
+			//if (tilesToCheck.size() > 0)
+			//{
+			//	grounded = true; 
+			//	player.vel.y = 0;
+
+			//	player.pos.y -= 0.1f;
+			//}
+			//player.applyVelocity();
+			olc::v_2d<float> cn{}, cp{};
+			float time;
+			for (auto& t : tilemap)
+			{
+
+				
+				auto l = line<float>({ player.getAABBCenter().x, player.getAABBCenter().y }, { player.getAABBCenter().x + player.vel.x, player.getAABBCenter().y + player.vel.y });
+				auto d = olc::v_2d{ l.end.x - l.start.x, l.end.y - l.start.y };
+			
+				auto vec = Physics::RayVsRect(player, rect<float>({ player.getAABB().getPosition().x,player.getAABB().getPosition().y }, { player.getBBoxSize().x,player.getBBoxSize().y })
+					, ray<float>{ l.start, { d.x / l.length(), d.y / l.length() }}
+				, player.vel.x, player.vel.y, { {t->left,t->top},{t->width,t->height} }, cp, cn, time);
+
+				if (vec.size() > 0)
+					break;
+			}
+
+			player.applyVelocity();
+
+			gWnd.clear(sf::Color::Blue);
+			for (int i = 0; i < tilemap.size(); i++)
+			{
+				Tile& tile = *(tilemap[i]);
+				auto t1 = mk::Spr(tile.texType, { tile.left,tile.top }, { {tile.texRect.left,tile.texRect.top},{tile.texRect.width,tile.texRect.height} });
+				gWnd.draw(*t1);
+			}
+
+			
+
+			auto p = player.spr();
+			gWnd.draw(*p);
+			/*for (auto& pt : pts)
+			{
+				for (auto& ptpt : pt)
+				{
+					drw::CirF({ ptpt.x, ptpt.y }, 10.f, sf::Color::Green);
+				}
+			}*/
+			drw::CirS(sf::Vector2f(mpos), 80.f, sf::Color::White);
+			gWnd.display();
+		}
+	}
+	return EXIT_SUCCESS;
+}

@@ -14,6 +14,7 @@
 #include <variant>
 #include <stack>
 #include <set>
+#include <algorithm>
 #include <unordered_map>
 #include <unordered_set>
 

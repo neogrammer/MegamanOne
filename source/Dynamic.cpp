@@ -3,8 +3,8 @@
 
 void  Dynamic::applyVelocity()
 {
-	pos.x += vel.x * gTime;
-	pos.y += vel.y * gTime;
+	aabb.pos.x += vel.x   * gTime;
+	aabb.pos.y += vel.y  *  gTime;
 }
 
 std::unique_ptr<sf::Sprite> Dynamic::spr()
@@ -12,24 +12,21 @@ std::unique_ptr<sf::Sprite> Dynamic::spr()
 	std::unique_ptr<sf::Sprite> pass = std::make_unique<sf::Sprite>(Cfg::textures.get((int)this->texType));
 	pass->setTextureRect(texRect);
 	pass->setOrigin(this->imgOrigin);
-	pass->setPosition(pos);
-
+	pass->setPosition({ aabb.pos.x - bbox.left, aabb.pos.y - bbox.top });
 	return std::move(pass);
 }
 
 void  Dynamic::setPos(sf::Vector2f pos_)
 {
-	pos.x = pos_.x;
-	pos.y = pos_.y;
+	aabb.pos.x = pos_.x;
+	aabb.pos.y = pos_.y;
 }
-
 
 void  Dynamic::move(sf::Vector2f pos_)
 {
-	pos.x += pos_.x * gTime;
-	pos.y += pos_.y * gTime;
+	aabb.pos.x += pos_.x;
+	aabb.pos.y += pos_.y;
 }
-
 
 void  Dynamic::setVelocity(sf::Vector2f vel_)
 {
@@ -78,26 +75,37 @@ sf::FloatRect Dynamic::getAABB()
 	tmp.top += (float)bbox.top;
 	tmp.width = (float)bbox.width;
 	tmp.height = (float)bbox.height;
+	tmp.left = aabb.pos.x;
+	tmp.top = aabb.pos.y;
+	tmp.width =  aabb.size.x;
+	tmp.height =aabb.size.y;
 
 	return tmp;
 }
 
 sf::Vector2f Dynamic::getAABBCenter()
 {
-	sf::FloatRect tmp = getAABB();
-	sf::Vector2f position{};
-	position.x = tmp.left + getBBoxHSize().x;
-	position.y = tmp.top + getBBoxHSize().y;
 
-	return position;
+
+	return { aabb.middle().x, aabb.middle().y };
 }
 
 void Dynamic::setup(Cfg::Textures texType_, sf::Vector2f pos_, sf::Vector2f orig_, sf::IntRect texRect_, sf::IntRect bboxRect_, sf::Vector2f vel_)
 {
+
+
 	texType = texType_;
 	pos = pos_;
 	imgOrigin = orig_;
 	texRect = texRect_;
 	bbox = bboxRect_;
 	vel = vel_;
+
+	aabb.pos.x = pos_.x + bboxRect_.left;
+	aabb.pos.y = pos_.y + bboxRect_.top;
+	aabb.size.x = (float)bboxRect_.width;
+	aabb.size.y = (float)bboxRect_.height;
+	
+
+
 }

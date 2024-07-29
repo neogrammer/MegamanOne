@@ -6,6 +6,35 @@
 #include <ActionMap.h>
 #include <vector>
 
+enum class OriginPtType
+{
+	Center,
+	TL,
+	TR,
+	TopCenter,
+	BottomCenter,
+	BR,
+	BL,
+	RightCenter,
+	LeftCenter
+};
+
+enum class RayDirType
+{
+	Velocity,
+	Target,
+	ReflectedVelocity,
+	ReflectedTarget
+};
+
+enum class AnimDirType
+{
+	Left,
+	Right,
+	Uni,
+	NotSet
+};
+
 struct Cfg
 {
 	Cfg() = delete;
