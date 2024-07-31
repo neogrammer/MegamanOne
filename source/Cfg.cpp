@@ -34,6 +34,8 @@ void Cfg::initTextures()
 	textures.load((int)Textures::PlayerAtlas, "assets/textures/actors/player/player_atlas1.png");
 	textures.load((int)Textures::Tileset1, "assets/textures/tilesets/Tileset1_50x50.png");
 	textures.load((int)Textures::China, "assets/textures/misc/face2.png");
+	textures.load((int)Textures::FlyPad, "assets/textures/platforms/fly_pad67x40.png");
+
 
 }
 

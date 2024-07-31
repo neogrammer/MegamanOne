@@ -17,7 +17,7 @@ class Tilemap
 public:
 	Tilemap() = delete;
 	explicit Tilemap(Cfg::Textures tex_, const std::string& tilesetName_, const std::string& mapName_, int zone = 1);
-	~Tilemap() = default;
+	~Tilemap();
 	Tilemap(const Tilemap&) = delete;
 	Tilemap& operator=(const Tilemap&) = delete;
 	Tilemap(Tilemap&&) = delete;

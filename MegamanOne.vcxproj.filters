@@ -79,6 +79,15 @@
     <Filter Include="assets\data\tilemaps\tilemap1">
       <UniqueIdentifier>{8381b753-0304-465f-aee4-d79ce92a4e58}</UniqueIdentifier>
     </Filter>
+    <Filter Include="assets\textures\platforms">
+      <UniqueIdentifier>{4bdde5ac-b1cd-41f5-b148-e31c699a2a21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\data\bboxes\platforms">
+      <UniqueIdentifier>{97addcba-8c37-48ac-ae45-06e543fcde26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\asprites\platforms">
+      <UniqueIdentifier>{0fe45d08-e0ea-4545-a60d-1a3cdabfd610}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\ServiceLocator.h">
@@ -132,6 +141,12 @@
     <ClInclude Include="headers\Tileset.h">
       <Filter>Levels</Filter>
     </ClInclude>
+    <ClInclude Include="headers\FlyPad.h">
+      <Filter>Entities\asprites\platforms</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Platform.h">
+      <Filter>Entities\asprites</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -176,6 +191,12 @@
     <ClCompile Include="source\Tileset.cpp">
       <Filter>Levels</Filter>
     </ClCompile>
+    <ClCompile Include="source\FlyPad.cpp">
+      <Filter>Entities\asprites\platforms</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Platform.cpp">
+      <Filter>Entities\asprites</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="headers\tpl\ResourceManager.tpl">
@@ -199,6 +220,9 @@
     <None Include="assets\data\tilemaps\tilemap1\zone1.map">
       <Filter>assets\data\tilemaps\tilemap1</Filter>
     </None>
+    <None Include="assets\data\bboxes\platforms\fly_pad.bbox">
+      <Filter>assets\data\bboxes\platforms</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\textures\actors\player\player_atlas1.png">
@@ -212,6 +236,9 @@
     </Image>
     <Image Include="assets\textures\tilesets\tileset1_50x50.png">
       <Filter>assets\textures\tilesets</Filter>
+    </Image>
+    <Image Include="assets\textures\platforms\fly_pad67x40.png">
+      <Filter>assets\textures\platforms</Filter>
     </Image>
   </ItemGroup>
 </Project>

@@ -26,6 +26,11 @@ Tileset::Tileset(Cfg::Textures tex_, const std::string& tileset_)
 
 }
 
+Tileset::~Tileset()
+{
+
+}
+
 bool Tileset::isSolid(int index_)
 {
 	return tData.at(index_).solid;

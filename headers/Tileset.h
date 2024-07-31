@@ -20,7 +20,7 @@ class Tileset
 public:
 	Tileset() = delete;
 	explicit Tileset(Cfg::Textures tex_, const std::string& tileset_);
-	~Tileset() = default;
+	~Tileset();
 	Tileset(const Tileset&) = delete;
 	Tileset& operator=(const Tileset&) = delete;
 	Tileset(Tileset&&) = delete;
