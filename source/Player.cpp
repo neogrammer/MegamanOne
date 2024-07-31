@@ -127,7 +127,7 @@ void Player::input()
 		facingLeft = false;
 		if (this->getVelocity().x <= MaxSpeed)
 		{
-			this->setVelocity({ this->getVelocity().x + 450 * gTime, this->getVelocity().y });
+			this->setVelocity({ 250.f, this->getVelocity().y });
 			//nowFacingRight
 		}
 	}
@@ -150,7 +150,7 @@ void Player::input()
 		facingLeft = true;
 		if (this->getVelocity().x >= -MaxSpeed)
 		{
-			this->setVelocity({ this->getVelocity().x - 450 * gTime, this->getVelocity().y });
+			this->setVelocity({ -250.f, this->getVelocity().y });
 			//nowFacingLeft
 		}
 	}
@@ -179,6 +179,11 @@ void Player::input()
 	else
 	{
 		jump_down = false;
+	}
+
+	if (left_down == false && right_down == false)
+	{
+		setVelocity({ 0.f, getVelocity().y });
 	}
 }
 
@@ -230,7 +235,7 @@ void Player::update()
 
 	if (this->isAffectedByGravity())
 	{
-		this->applyGravity(600.f);
+		this->applyGravity(900.f);
 	}
 
 	// update actual positions now, once only

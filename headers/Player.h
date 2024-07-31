@@ -41,7 +41,7 @@ class Player : public ASprite
 	bool jump_pressed{};
 	bool canJump{};
 	const float MaxSpeed{ 400.f };
-	const float JumpForce{ -600.f };
+	const float JumpForce{ -625.f };
 	int numAnims{ 0 };
 	bool facingLeft{ false };
 	std::string currentAnim{ "idle" };
