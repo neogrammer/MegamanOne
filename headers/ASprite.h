@@ -16,7 +16,7 @@ class ASprite
 	float accelY{};
 	Cfg::Textures tex{Cfg::Textures::Count};
 	bool bAffectedByGravity{};
-	bool showBoundingBox{ true };
+	bool showBoundingBox{ false };
 	AnimDirType animDir{ AnimDirType::NotSet };
 public:
 	// these will be changed to a heinous animation map from the depths of hell
@@ -24,7 +24,7 @@ public:
 	sf::FloatRect bbox{};
 public:
 	ASprite() = default;
-	~ASprite() = default;
+	virtual ~ASprite() = default;
 	ASprite(const ASprite&) = default;
 	ASprite& operator=(const ASprite&) = default;
 	ASprite(ASprite&&) = default;

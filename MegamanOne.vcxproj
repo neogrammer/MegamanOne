@@ -29,6 +29,7 @@
     <ClInclude Include="headers\Dynamic.h" />
     <ClInclude Include="headers\globals.h" />
     <ClInclude Include="headers\physics.h" />
+    <ClInclude Include="headers\Player.h" />
     <ClInclude Include="headers\ResourceManager.h" />
     <ClInclude Include="headers\ServiceLocator.h" />
     <ClInclude Include="pch.h" />
@@ -47,6 +48,7 @@
     <ClCompile Include="source\globals.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\physics.cpp" />
+    <ClCompile Include="source\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="headers\tpl\ActionMap.tpl" />

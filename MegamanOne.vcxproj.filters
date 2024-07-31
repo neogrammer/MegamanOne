@@ -55,6 +55,9 @@
     <Filter Include="assets\textures\tilesets">
       <UniqueIdentifier>{8a660b30-5732-4f32-b9f4-c7318b53f4ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entities\asprites">
+      <UniqueIdentifier>{d5b8e8b4-a480-4e99-92fc-232a11dbe07c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\ServiceLocator.h">
@@ -96,6 +99,9 @@
     <ClInclude Include="headers\ASprite.h">
       <Filter>Entities</Filter>
     </ClInclude>
+    <ClInclude Include="headers\Player.h">
+      <Filter>Entities\asprites</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -127,6 +133,9 @@
     </ClCompile>
     <ClCompile Include="source\ASprite.cpp">
       <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Player.cpp">
+      <Filter>Entities\asprites</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

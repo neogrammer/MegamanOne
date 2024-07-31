@@ -2,7 +2,7 @@
 #include <physics.h>
 #include <Dynamic.h>
 using namespace olc::utils::geom2d;
-bool Physics::PointVsRect(olc::utils::geom2d::rect<float> r_, olc::v_2d<float> pt_)
+bool Physics::PointVsRect(rect<float> r_, olc::v_2d<float> pt_)
 {
 	if (contains(r_, pt_))
 	{
@@ -12,19 +12,25 @@ bool Physics::PointVsRect(olc::utils::geom2d::rect<float> r_, olc::v_2d<float> p
 	return false;
 }
 
-bool Physics::RectVsRect(olc::utils::geom2d::rect<float> r1_, olc::utils::geom2d::rect<float> r2_)
+bool Physics::RectVsRect(const rect<float>& r1, const rect<float>& r2)
+{
+	return (r1.pos.x <  r2.right().start.x && r1.right().start.x > r2.pos.x &&
+		r1.pos.y <  r2.bottom().start.y && r1.bottom().start.y > r2.pos.y);
+}
+
+bool Physics::RectVsRect2(rect<float> r1_, rect<float> r2_)
 {
 	if (overlaps(r1_, r2_))
 		return true;
 	return false;
 }
 
-bool Physics::RayVsRect(olc::utils::geom2d::ray<float> ray_, olc::utils::geom2d::rect<float> target_, olc::v_2d<float>& l_contact_point_, olc::v_2d<float>& l_contact_normal_, float& t_hit_near_)
+bool Physics::RayVsRect(ray<float> ray_, rect<float> target_, olc::v_2d<float>& l_contact_point_, olc::v_2d<float>& l_contact_normal_, float& t_hit_near_)
 {
 	return false;
 }
 
-std::vector<olc::v_2d<float>> Physics::RayVsRect(Dynamic& dyno, olc::utils::geom2d::rect<float> collider_, olc::utils::geom2d::ray<float> ray_, float& velx_, float& vely_ , olc::utils::geom2d::rect<float> target_, olc::v_2d<float>& l_contact_point_, olc::v_2d<float>& l_contact_normal_, float& t_hit_near_)
+std::vector<olc::v_2d<float>> Physics::RayVsRect(Dynamic& dyno,rect<float> collider_, ray<float> ray_, float& velx_, float& vely_ , rect<float> target_, olc::v_2d<float>& l_contact_point_, olc::v_2d<float>& l_contact_normal_, float& t_hit_near_)
 {
 
 	float lengthOfMove = (float)(sqrt(pow(ray_.origin.x + velx_ * gTime - ray_.origin.x, 2) + pow(ray_.origin.y + vely_ * gTime - ray_.origin.y, 2)));
@@ -154,7 +160,7 @@ std::vector<olc::v_2d<float>> Physics::RayVsRect(Dynamic& dyno, olc::utils::geom
 	return tmpVec;
 }
 
-bool Physics::DynamicRectVsRect(olc::utils::geom2d::rect<float> r_, olc::utils::geom2d::rect<float> target_, olc::v_2d<float>& cp_, olc::v_2d<float>& cn_, float& ct_, float dt_)
+bool Physics::DynamicRectVsRect(rect<float> r_, rect<float> target_, olc::v_2d<float>& cp_, olc::v_2d<float>& cn_, float& ct_, float dt_)
 {
 	return false;
 }
@@ -174,7 +180,7 @@ bool Physics::RectVsRect(AABB& r1_, AABB& r2_)
 	return false;
 }
 
-bool Physics::RayVsRect(olc::utils::geom2d::ray<float>& ray_, AABB& target_, olc::v_2d<float>& l_contact_point_, olc::v_2d<float>& l_contact_normal_, float& t_hit_near_)
+bool Physics::RayVsRect(ray<float>& ray_, AABB& target_, olc::v_2d<float>& l_contact_point_, olc::v_2d<float>& l_contact_normal_, float& t_hit_near_)
 {
 	return false;
 }

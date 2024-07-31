@@ -168,7 +168,9 @@ void ASprite::applyGravity(float grav_)
 
 void ASprite::render()
 {
-	gWnd.draw(*this->getSpr());
+	if (this->getSpr() == nullptr) return;
+
+	gWnd.draw(*(this->getSpr()));
 	if (this->showBoundingBox == true)
 	{
 		sf::RectangleShape bounds;
@@ -247,9 +249,16 @@ ray<float> ASprite::castRay(OriginPtType oType_, RayDirType dirType, olc::v_2d<f
 
 std::unique_ptr<sf::Sprite> ASprite::getSpr()
 {
-	std::unique_ptr<sf::Sprite> tmp = std::make_unique<sf::Sprite>();
-	tmp->setTexture(Cfg::textures.get((int)tex));
-	tmp->setTextureRect(texRect);
-	tmp->setPosition(sf::Vector2f{ bbPos.x - getBBOffset().x, bbPos.y - getBBOffset().y });
-    return std::move(tmp);
+	if (tex != Cfg::Textures::Count)
+	{
+		std::unique_ptr<sf::Sprite> tmp = std::make_unique<sf::Sprite>();
+		tmp->setTexture(Cfg::textures.get((int)tex));
+		tmp->setTextureRect(texRect);
+		tmp->setPosition(sf::Vector2f{ bbPos.x - getBBOffset().x, bbPos.y - getBBOffset().y });
+		return std::move(tmp);
+	}
+	else
+	{
+		return nullptr;
+	}
 }

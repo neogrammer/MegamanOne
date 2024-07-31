@@ -1,9 +1,12 @@
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Window/ContextSettings.hpp>
+#include <SFML/System/Vector2.hpp>
 #include <string>
 
 
 extern sf::RenderWindow gWnd;
 extern sf::ContextSettings gWndSettings;
+extern sf::Vector2f mpos;
 extern unsigned int gWW;
 extern unsigned int gWH;
 extern bool gWndFull;

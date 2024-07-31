@@ -4,6 +4,7 @@ sf::RenderWindow gWnd = {};
 sf::ContextSettings gWndSettings = { sf::ContextSettings{} };
 unsigned int gWW = {};
 unsigned int gWH = {};
+sf::Vector2f mpos = {};
 bool gWndFull = false;
 
 float gTime = 0.f;
