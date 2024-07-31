@@ -55,20 +55,20 @@ int main()
 
 void createTiles() 
 {
-	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,}, { 50.f,50.f } }, { 730.f, 400.f },AnimDirType::Uni, false });
-	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,}, { 50.f,50.f } }, { 780.f, 400.f },AnimDirType::Uni, false });
-	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,}, { 50.f,50.f } }, { 630.f, 400.f },AnimDirType::Uni, false });
-	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,}, { 50.f,50.f } }, { 580.f, 400.f },AnimDirType::Uni, false });
-	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,}, { 50.f,50.f } }, { 530.f, 400.f },AnimDirType::Uni, false });
-	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,}, { 50.f,50.f } }, { 830.f, 400.f },AnimDirType::Uni, false });
-	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,}, { 50.f,50.f } }, { 880.f, 400.f },AnimDirType::Uni, false });
-	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,}, { 50.f,50.f } }, { 480.f, 400.f },AnimDirType::Uni, false });
-	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,}, { 50.f,50.f } }, { 430.f, 400.f },AnimDirType::Uni, false });
-	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,}, { 50.f,50.f } }, { 880.f, 350.f },AnimDirType::Uni, false });
-	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,}, { 50.f,50.f } }, { 880.f, 300.f },AnimDirType::Uni, false });
-	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,}, { 50.f,50.f } }, { 880.f, 250.f },AnimDirType::Uni, false });
-	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,}, { 50.f,50.f } }, { 880.f, 200.f },AnimDirType::Uni, false });
-	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,},  {50.f,50.f } }, { 680.f, 400.f },AnimDirType::Uni, false });
+	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,}, { 50.f,50.f } }, SpriteType::Basic, { 730.f, 400.f },AnimDirType::Uni, false });
+	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,}, { 50.f,50.f } }, SpriteType::Basic, { 780.f, 400.f },AnimDirType::Uni, false });
+	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,}, { 50.f,50.f } }, SpriteType::Basic, { 630.f, 400.f },AnimDirType::Uni, false });
+	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,}, { 50.f,50.f } }, SpriteType::Basic, { 580.f, 400.f },AnimDirType::Uni, false });
+	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,}, { 50.f,50.f } }, SpriteType::Basic, { 530.f, 400.f },AnimDirType::Uni, false });
+	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,}, { 50.f,50.f } }, SpriteType::Basic, { 830.f, 400.f },AnimDirType::Uni, false });
+	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,}, { 50.f,50.f } }, SpriteType::Basic, { 880.f, 400.f },AnimDirType::Uni, false });
+	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,}, { 50.f,50.f } }, SpriteType::Basic, { 480.f, 400.f },AnimDirType::Uni, false });
+	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,}, { 50.f,50.f } }, SpriteType::Basic, { 430.f, 400.f },AnimDirType::Uni, false });
+	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,}, { 50.f,50.f } }, SpriteType::Basic, { 880.f, 350.f },AnimDirType::Uni, false });
+	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,}, { 50.f,50.f } }, SpriteType::Basic, { 880.f, 300.f },AnimDirType::Uni, false });
+	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,}, { 50.f,50.f } }, SpriteType::Basic, { 880.f, 250.f },AnimDirType::Uni, false });
+	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,}, { 50.f,50.f } }, SpriteType::Basic, { 880.f, 200.f },AnimDirType::Uni, false });
+	tiles.emplace_back(ASprite{ { Cfg::Textures::Tileset1 }, { {0,0},{50,50} }, { {0,0,},  {50.f,50.f } }, SpriteType::Basic, { 680.f, 400.f },AnimDirType::Uni, false });
 
 }
 void createTilemap()

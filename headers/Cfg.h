@@ -44,6 +44,15 @@ enum class ResolutionDir
 	None
 };
 
+enum class SpriteType
+{
+	Player,
+	Projectile,
+	Enemy,
+	Basic
+};
+
+
 struct Cfg
 {
 	Cfg() = delete;

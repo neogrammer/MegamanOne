@@ -3,11 +3,12 @@
 
 using namespace olc::utils::geom2d;
 
-ASprite::ASprite(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, olc::v_2d<float> pos_, AnimDirType animDir_, bool bAffectedByGravity_)
+ASprite::ASprite(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, SpriteType type_, olc::v_2d<float> pos_, AnimDirType animDir_, bool bAffectedByGravity_)
 	: bbPos{pos_}
 	, vel{ olc::v_2d<float>{0.f,0.f} }
 	, accelY{0.0f}
 	, tex{tex_}
+	, eType{type_}
 	, bAffectedByGravity{bAffectedByGravity_}
 	, animDir{animDir_}
 	, texRect{texRect_}
@@ -15,7 +16,7 @@ ASprite::ASprite(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, 
 	, prevPos{ pos_ }
 {}
 
-void ASprite::setup(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, olc::v_2d<float> pos_, AnimDirType animDir_, bool bAffectedByGravity_)
+void ASprite::setup(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, SpriteType type_, olc::v_2d<float> pos_, AnimDirType animDir_, bool bAffectedByGravity_)
 {
 	bbPos = pos_;
 	vel = { olc::v_2d<float>{0.f, 0.f} };
@@ -55,7 +56,7 @@ sf::IntRect ASprite::getTexRect()
 	return texRect;
 }
 
-sf::FloatRect ASprite::getBBox()
+sf::FloatRect ASprite::getBBox_local()
 {
 	return bbox;
 }

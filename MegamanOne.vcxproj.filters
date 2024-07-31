@@ -58,6 +58,15 @@
     <Filter Include="Entities\asprites">
       <UniqueIdentifier>{d5b8e8b4-a480-4e99-92fc-232a11dbe07c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="assets\data">
+      <UniqueIdentifier>{1c67241d-c0ca-479d-9461-67da7fc307ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\data\bboxes">
+      <UniqueIdentifier>{d1211efc-113a-4cd2-857a-b626fe10e411}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\data\bboxes\player">
+      <UniqueIdentifier>{37a9b3a6-e391-4490-887d-34db131f9e9b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\ServiceLocator.h">
@@ -147,6 +156,9 @@
     </None>
     <None Include="headers\tpl\ActionTarget.tpl">
       <Filter>Core\tpl</Filter>
+    </None>
+    <None Include="assets\data\bboxes\player\player.bbox">
+      <Filter>assets\data\bboxes\player</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

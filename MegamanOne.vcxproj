@@ -51,6 +51,7 @@
     <ClCompile Include="source\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="assets\data\bboxes\player\player.bbox" />
     <None Include="headers\tpl\ActionMap.tpl" />
     <None Include="headers\tpl\ActionTarget.tpl" />
     <None Include="headers\tpl\ResourceManager.tpl" />
