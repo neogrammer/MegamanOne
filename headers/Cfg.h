@@ -49,6 +49,7 @@ enum class SpriteType
 	Player,
 	Projectile,
 	Enemy,
+	Tile,
 	Basic
 };
 

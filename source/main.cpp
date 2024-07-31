@@ -1,9 +1,11 @@
 #include <pch.h>
 #include <ASprite.h>
 #include <Player.h>
+#include <Tilemap.h>
 using namespace olc::utils::geom2d;
 
 std::vector<ASprite> tiles{};
+Tilemap* tmap;
 ASprite aFace{};
 Player aPlayer{ Cfg::Textures::PlayerAtlas, {{0,160},{130,160}},{ {32.f,50.f},{60.f,77.f} }, { 680.f, -100.f },AnimDirType::Right, true };
 ResolutionDir resDir = ResolutionDir::None;
@@ -18,10 +20,12 @@ void input();
 sf::Clock frameTimer{};
 int main()
 {
+	tmap = new Tilemap{ Cfg::Textures::Tileset1, "tileset1", "tilemap1", 1 };
 
 	std::cout << "Loading..." << std::endl;
 	Cfg::Initialize();
 	createWorld();
+
 	std::cout << "Load Complete" << std::endl;
 	aPlayer.setPos({ 680.f, -100.f });
 	aPlayer.setVelocity({ 0.f, 0.f });
@@ -87,10 +91,14 @@ void updateWorld()
 {
 	aPlayer.update();
 	aPlayer.handleMapCollisions(tiles);
+	aPlayer.handleMapCollisions(tmap->getSolidTiles());
 }
 
 void render()
 {
+
+	tmap->render();
+
 	for (auto& tile : tiles) { gWnd.draw(*tile.getSpr()); }
 
 	aPlayer.render();
@@ -99,5 +107,9 @@ void render()
 void input()
 {
 	aPlayer.input();
-	if (aPlayer.getVelocity().x != 0.f && !aPlayer.isTileBelow(tiles)) { aPlayer.setAffectedByGravity(true); }
+	if (aPlayer.getVelocity().x != 0.f && !aPlayer.isTileBelow(tiles) && !aPlayer.isTileBelow(tmap->getSolidTiles()))
+	{ 
+		aPlayer.setAffectedByGravity(true); 
+		aPlayer.setCanJump(false);
+	}
 }

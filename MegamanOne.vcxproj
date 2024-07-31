@@ -32,6 +32,9 @@
     <ClInclude Include="headers\Player.h" />
     <ClInclude Include="headers\ResourceManager.h" />
     <ClInclude Include="headers\ServiceLocator.h" />
+    <ClInclude Include="headers\Tile.h" />
+    <ClInclude Include="headers\Tilemap.h" />
+    <ClInclude Include="headers\Tileset.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
@@ -49,9 +52,15 @@
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\physics.cpp" />
     <ClCompile Include="source\Player.cpp" />
+    <ClCompile Include="source\Tile.cpp" />
+    <ClCompile Include="source\Tilemap.cpp" />
+    <ClCompile Include="source\Tileset.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\data\bboxes\player\player.bbox" />
+    <None Include="assets\data\tilemaps\tilemap1\zone1.map" />
+    <None Include="assets\data\tilesets\tileset1.tst" />
+    <None Include="assets\scripts\tilesets.lua" />
     <None Include="headers\tpl\ActionMap.tpl" />
     <None Include="headers\tpl\ActionTarget.tpl" />
     <None Include="headers\tpl\ResourceManager.tpl" />

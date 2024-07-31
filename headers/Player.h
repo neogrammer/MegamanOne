@@ -1,6 +1,7 @@
 #ifndef PLAYER_H__
 #define PLAYER_H__
 #include <ASprite.h>
+#include <Tile.h>
 class Player : public ASprite
 {
 
@@ -68,9 +69,12 @@ public:
 	void input();
 	void update();
 	void handleMapCollisions(std::vector<ASprite>& tiles);
+	void handleMapCollisions(std::vector<Tile>& tiles);
+
 	bool isTileBelow(std::vector<ASprite>& tiles);
+	bool isTileBelow(std::vector<Tile>& tiles);
 
-
+	void setCanJump(bool cond_);
 };
 
 #endif

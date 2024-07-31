@@ -67,6 +67,18 @@
     <Filter Include="assets\data\bboxes\player">
       <UniqueIdentifier>{37a9b3a6-e391-4490-887d-34db131f9e9b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="assets\scripts">
+      <UniqueIdentifier>{7d17166f-5ef9-49bd-bc88-2fabe936159e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\data\tilesets">
+      <UniqueIdentifier>{d894eaed-602b-40f5-92b9-be5795fb7faf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\data\tilemaps">
+      <UniqueIdentifier>{ded0beb4-c969-40dc-ab7b-b86f3129c9ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\data\tilemaps\tilemap1">
+      <UniqueIdentifier>{8381b753-0304-465f-aee4-d79ce92a4e58}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\ServiceLocator.h">
@@ -111,6 +123,15 @@
     <ClInclude Include="headers\Player.h">
       <Filter>Entities\asprites</Filter>
     </ClInclude>
+    <ClInclude Include="headers\Tilemap.h">
+      <Filter>Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Tile.h">
+      <Filter>Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Tileset.h">
+      <Filter>Levels</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -146,6 +167,15 @@
     <ClCompile Include="source\Player.cpp">
       <Filter>Entities\asprites</Filter>
     </ClCompile>
+    <ClCompile Include="source\Tile.cpp">
+      <Filter>Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Tilemap.cpp">
+      <Filter>Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Tileset.cpp">
+      <Filter>Levels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="headers\tpl\ResourceManager.tpl">
@@ -159,6 +189,15 @@
     </None>
     <None Include="assets\data\bboxes\player\player.bbox">
       <Filter>assets\data\bboxes\player</Filter>
+    </None>
+    <None Include="assets\scripts\tilesets.lua">
+      <Filter>assets\scripts</Filter>
+    </None>
+    <None Include="assets\data\tilesets\tileset1.tst">
+      <Filter>assets\data\tilesets</Filter>
+    </None>
+    <None Include="assets\data\tilemaps\tilemap1\zone1.map">
+      <Filter>assets\data\tilemaps\tilemap1</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
