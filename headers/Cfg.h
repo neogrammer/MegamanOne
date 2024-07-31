@@ -35,6 +35,15 @@ enum class AnimDirType
 	NotSet
 };
 
+enum class ResolutionDir
+{
+	Up,
+	Down,
+	Left,
+	Right,
+	None
+};
+
 struct Cfg
 {
 	Cfg() = delete;
@@ -47,7 +56,7 @@ struct Cfg
 	static void Initialize();
 
 	// Resource Enums 
-	enum class Textures : int { PlayerAtlas, Tileset1, Count };
+	enum class Textures : int { PlayerAtlas, Tileset1, China, Count };
 	enum class Fonts : int { Count };
 	enum class Music : int { Count };
 	enum class Sounds : int { Count };

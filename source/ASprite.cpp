@@ -12,6 +12,7 @@ ASprite::ASprite(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, 
 	, animDir{animDir_}
 	, texRect{texRect_}
 	, bbox{bbox_}
+	, prevPos{ pos_ }
 {}
 
 void ASprite::setup(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, olc::v_2d<float> pos_, AnimDirType animDir_, bool bAffectedByGravity_)
@@ -24,6 +25,14 @@ void ASprite::setup(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox
 	animDir = animDir_;
 	texRect = texRect_;
 	bbox = bbox_;
+	prevPos = pos_;
+}
+olc::vi2d ASprite::getActualCollisionPt(olc::vf2d collPt_)
+{
+	olc::vi2d tmp{};
+	tmp.x = (int)roundf((collPt_.x - this->getPos().x));   // - this->getPrevPos().x + (this->getPos().x - this->getPrevPos().x) + (this->getVelocity().x * gTime)));
+	tmp.y = (int)roundf((collPt_.y - this->getPos().y));  // -this->getPrevPos().y + (this->getPos().y - this->getPrevPos().y) + (this->getVelocity().y * gTime)));
+	return tmp;
 }
 bool ASprite::isAffectedByGravity()
 {
@@ -56,9 +65,37 @@ rect<float> ASprite::bbRect()
 	return rect<float>({ bbPos }, {bbox.getSize().x, bbox.getSize().y});
 }
 
+olc::utils::geom2d::rect<float> ASprite::bbPrevRect()
+{
+	return rect<float>({ prevPos }, { bbox.getSize().x, bbox.getSize().y });
+}
+
+bool ASprite::prevOverlapIsY(ASprite& other)
+{
+	if (this->getPrevPos().y  < other.getPos().y + other.getBBSize().y && this->getPrevPos().y + this->getBBSize().y > other.getPos().y)
+	{
+		return true;
+	}
+	return false;
+}
+
+bool ASprite::prevOverlapIsX(ASprite& other)
+{
+	if (this->getPrevPos().x  < other.getPos().x + other.getBBSize().x && this->getPrevPos().x + this->getBBSize().x > other.getPos().x)
+	{
+		return true;
+	}
+	return false;
+}
+
 olc::v_2d<float> ASprite::getPos()
 {
     return bbPos;
+}
+
+olc::v_2d<float> ASprite::getPrevPos()
+{
+	return prevPos;
 }
 
 olc::v_2d<float> ASprite::getBBOffset()
@@ -129,9 +166,25 @@ void ASprite::applyGravity(float grav_)
 	vel.y += grav_ * gTime;
 }
 
+void ASprite::render()
+{
+	gWnd.draw(*this->getSpr());
+	if (this->showBoundingBox == true)
+	{
+		sf::RectangleShape bounds;
+		bounds.setSize({ this->getBBSize().x, this->getBBSize().y });
+		bounds.setPosition({this->getPos().x, this->getPos().y});
+		bounds.setFillColor(sf::Color(255, 0, 0, 130));
+		gWnd.draw(bounds);
+	}
+}
+
 void ASprite::tickMovement()
 {
+	prevPos = bbPos;
+
 	bbPos += vel * gTime;
+
 }
 
 ray<float> ASprite::castRay(OriginPtType oType_, RayDirType dirType, olc::v_2d<float> target)

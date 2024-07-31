@@ -8,11 +8,15 @@
 
 class ASprite
 {
+
 	olc::v_2d<float> bbPos{};
+	olc::v_2d<float> prevPos{};
 	olc::v_2d<float> vel{};
+
 	float accelY{};
 	Cfg::Textures tex{Cfg::Textures::Count};
 	bool bAffectedByGravity{};
+	bool showBoundingBox{ true };
 	AnimDirType animDir{ AnimDirType::NotSet };
 public:
 	// these will be changed to a heinous animation map from the depths of hell
@@ -29,6 +33,8 @@ public:
 	ASprite(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, olc::v_2d<float> pos_ = { 0.f,0.f }, AnimDirType animDir_ = AnimDirType::Uni, bool bAffectedByGravity_ = false);
 	void setup(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, olc::v_2d<float> pos_ = { 0.f,0.f }, AnimDirType animDir_ = AnimDirType::Uni, bool bAffectedByGravity_ = false);
 
+	olc::vi2d getActualCollisionPt(olc::vf2d collPt_);
+
 	bool isAffectedByGravity();
 	void setAffectedByGravity(bool cond_);
 	AnimDirType getAnimDirType();
@@ -36,7 +42,14 @@ public:
 	sf::IntRect getTexRect();
 	sf::FloatRect getBBox();
 	olc::utils::geom2d::rect<float> bbRect();
+	olc::utils::geom2d::rect<float> bbPrevRect();
+	bool prevOverlapIsY(ASprite& other);
+	bool prevOverlapIsX(ASprite& other);
+
+
 	olc::v_2d<float> getPos();
+	olc::v_2d<float> getPrevPos();
+
 	olc::v_2d<float> getBBOffset();
 	olc::v_2d<float> getBBSize();
 	olc::vi2d getFrameSize();
@@ -48,7 +61,9 @@ public:
 	void switchDirection();
 	void changeDirection(AnimDirType animDir_);
 	void  applyGravity(float grav_);
+	void render();
 	void tickMovement();
+
 
 	olc::utils::geom2d::ray<float> castRay(OriginPtType oType_, RayDirType dirType, olc::v_2d<float> target = { 0.f,0.f });
 	std::unique_ptr<sf::Sprite> getSpr();
