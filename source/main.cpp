@@ -23,7 +23,9 @@ int main()
 	Cfg::Initialize();
 	createWorld();
 	std::cout << "Load Complete" << std::endl;
-
+	aPlayer.setPos({ 680.f, -100.f });
+	aPlayer.setVelocity({ 0.f, 0.f });
+	frameTimer.restart();
 	while (gWnd.isOpen())
 	{
 		sf::Event e;

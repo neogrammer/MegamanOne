@@ -60,7 +60,7 @@ void Player::update()
 {
 	if (this->isAffectedByGravity())
 	{
-		this->applyGravity(28.f);
+		this->applyGravity(600.f);
 	}
 
 	// update actual positions now, once only
