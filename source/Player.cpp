@@ -54,6 +54,28 @@ void Player::input()
 	{
 		left_down = false;
 	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+	{
+		if (!jump_down && canJump)
+		{
+			// first moment of push
+			jump_pressed = true;
+			canJump = false;
+			setVelocity({ getVelocity().x, JumpForce });
+			this->setAffectedByGravity(true);
+
+		}
+		else
+		{
+			jump_pressed = false;
+		}
+		jump_down = true;
+		
+	}
+	else
+	{
+		jump_down = false;
+	}
 }
 
 void Player::update()
@@ -132,6 +154,7 @@ void Player::handleMapCollisions(std::vector<ASprite>& tiles)
 				{
 					this->setPos({ this->getPos().x,  tile.getPos().y - this->getBBSize().y - 0.1f });
 					this->setVelocity({ this->getVelocity().x, tile.getVelocity().y });
+					this->canJump = true;
 					this->setAffectedByGravity(false);
 				}
 				else if (resDir == ResolutionDir::Down)
