@@ -11,7 +11,7 @@ Player aPlayer{ Cfg::Textures::PlayerAtlas, {{0,160},{130,160}},{ {32.f,50.f},{6
 ResolutionDir resDir = ResolutionDir::None;
 Stage stage{ 1 };
 sf::View worldSpace_;
-float bgOffset{ 0.f };
+float bgOffset{ 1600.f };
 void createWorld();
 void updateWorld();
 void render();
