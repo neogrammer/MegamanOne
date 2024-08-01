@@ -24,7 +24,17 @@ public:
 		sf::Vector2f targetPos;
 		float completionTime;
 		float elapsed;
-		ManInterpPos(Platform* obj, float y, float time);
+		ManInterpPos(Platform* obj, float x, float time);
+		bool update() override final;
+	};
+
+	struct ManInterpPosY : Manipulator
+	{
+		sf::Vector2f startPos;
+		sf::Vector2f targetPos;
+		float completionTime;
+		float elapsed;
+		ManInterpPosY(Platform* obj, float y, float time);
 		bool update() override final;
 	};
 
@@ -39,7 +49,7 @@ public:
 
 
 
-	Stage(int numPlaforms = 1);
+	Stage(int numPlaforms = 2);
 	~Stage();
 	void input();
 
@@ -47,6 +57,7 @@ public:
 
 	std::vector<Platform>& getPlats();
 	void moveObject(Platform& dyno, float x, float time);
+	void moveObjectUp(Platform& dyno, float y, float time);
 	static int lua_moveObject(lua_State* L)
 	{
 
@@ -61,7 +72,30 @@ public:
 		return 0;
 	};
 
+	static int lua_moveObjectUp(lua_State* L)
+	{
+
+		if (lua_gettop(L) != 5) return -1;
+
+		Stage* object = static_cast<Stage*>(lua_touserdata(L, 1));
+		Platform* plat = static_cast<Platform*>(lua_touserdata(L, 2));
+		float x = (float)lua_tonumber(L, 3);
+		float y = (float)lua_tonumber(L, 4);
+		float t = (float)lua_tonumber(L, 5);
+		object->moveObject(*plat, y, t);
+		return 0;
+	};
+
 	Platform* createPlatform(int id_, sf::IntRect irect_, sf::FloatRect bbox_, sf::Vector2f pos_);
+	void retry(Platform& plat);
+	static int lua_retry(lua_State* L)
+	{
+		if (lua_gettop(L) != 2) return -1;
+		Stage* object = static_cast<Stage*>(lua_touserdata(L, 1));
+		Platform* plat = static_cast<Platform*>(lua_touserdata(L, 2));
+		object->retry(*plat);
+		return 0;
+	};
 	static int lua_createPlatform(lua_State* L)
 	{
 		if (lua_gettop(L) != 12) return -1;

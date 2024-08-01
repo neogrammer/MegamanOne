@@ -9,7 +9,7 @@ Tilemap* tmap;
 ASprite aFace{};
 Player aPlayer{ Cfg::Textures::PlayerAtlas, {{0,160},{130,160}},{ {32.f,50.f},{60.f,77.f} }, { 680.f, -100.f },AnimDirType::Right, true };
 ResolutionDir resDir = ResolutionDir::None;
-Stage stage{ 1 };
+Stage stage{ 2 };
 sf::View worldSpace_;
 float bgOffset{ 1600.f };
 void createWorld();
@@ -31,7 +31,11 @@ int main()
 	L.safe_script_file("assets/scripts/StageSetup.lua");
 	L["LoadPlatforms"](&stage, 1);*/
 
+	lua_register(lua, "cpp_retry", Stage::lua_retry);
+
 	lua_register(lua, "cpp_moveObject", Stage::lua_moveObject);
+	lua_register(lua, "cpp_moveObjectUp", Stage::lua_moveObjectUp);
+
 	lua_register(lua, "cpp_createPlatform", Stage::lua_createPlatform);
 	if (scr::CheckLua(lua, luaL_dofile(lua, "assets/scripts/StageSetup.lua")))
 	{
