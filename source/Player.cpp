@@ -314,10 +314,10 @@ void Player::handleMapCollisions(std::vector<Platform>& plats_)
 				}
 				if (resDir == ResolutionDir::Up)
 				{
-					this->standingOnPlatform(true);
-					float offsetX = plat.getPos().x - this->getPos().x;
+					//this->standingOnPlatform(true);
+					float offsetX = plat.getPos().x - plat.getPrevPos().x;
 					this->setPos({ plat.getPos().x + offsetX,  plat.getPos().y - this->getBBSize().y - 0.1f});
-					this->setVelocity({  this->getVelocity().x + offsetX * gTime , -1 * (this->getPos().y + this->getBBSize().y - plat.getPos().y)});//plat.getVelocity().y });
+					this->setVelocity({  this->getVelocity().x, -1 * (this->getPos().y + this->getBBSize().y - plat.getPos().y)});//plat.getVelocity().y });
 					this->canJump = true;
 					//this->setAffectedByGravity(false);
 				}

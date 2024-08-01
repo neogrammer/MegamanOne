@@ -6,7 +6,7 @@ function PlatformBehaviourVert(plat)
 	while true do
 		cpp_moveObject( CurrentStage["host"], PlatformObject, 100.0, 850.0, 5.0)
 		coroutine.yield()
-		cpp_moveObject(CurrentStage["host"], PlatformObject, 650.0, 850.0, 5.0)
+		cpp_moveObject(CurrentStage["host"], PlatformObject, 600.0, 850.0, 5.0)
 		coroutine.yield()
 	end
 end
