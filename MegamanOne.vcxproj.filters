@@ -10,9 +10,6 @@
     <Filter Include="GameStates">
       <UniqueIdentifier>{ff4ad893-1be1-43ca-863c-498ef149ecd0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Levels">
-      <UniqueIdentifier>{6f27e125-e6fc-4525-9942-bce206a477d9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GUI">
       <UniqueIdentifier>{d4848ece-3dbf-4113-b979-83bdae2326ee}</UniqueIdentifier>
     </Filter>
@@ -88,6 +85,12 @@
     <Filter Include="Entities\asprites\platforms">
       <UniqueIdentifier>{0fe45d08-e0ea-4545-a60d-1a3cdabfd610}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Stage">
+      <UniqueIdentifier>{6f27e125-e6fc-4525-9942-bce206a477d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Stage\tilemap">
+      <UniqueIdentifier>{b5c0cb3d-82e7-4518-806f-42ee6ae38210}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\ServiceLocator.h">
@@ -132,20 +135,23 @@
     <ClInclude Include="headers\Player.h">
       <Filter>Entities\asprites</Filter>
     </ClInclude>
-    <ClInclude Include="headers\Tilemap.h">
-      <Filter>Levels</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\Tile.h">
-      <Filter>Levels</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\Tileset.h">
-      <Filter>Levels</Filter>
-    </ClInclude>
     <ClInclude Include="headers\FlyPad.h">
       <Filter>Entities\asprites\platforms</Filter>
     </ClInclude>
     <ClInclude Include="headers\Platform.h">
       <Filter>Entities\asprites</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Stage.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Tile.h">
+      <Filter>Stage\tilemap</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Tilemap.h">
+      <Filter>Stage\tilemap</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Tileset.h">
+      <Filter>Stage\tilemap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -182,20 +188,23 @@
     <ClCompile Include="source\Player.cpp">
       <Filter>Entities\asprites</Filter>
     </ClCompile>
-    <ClCompile Include="source\Tile.cpp">
-      <Filter>Levels</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Tilemap.cpp">
-      <Filter>Levels</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Tileset.cpp">
-      <Filter>Levels</Filter>
-    </ClCompile>
     <ClCompile Include="source\FlyPad.cpp">
       <Filter>Entities\asprites\platforms</Filter>
     </ClCompile>
     <ClCompile Include="source\Platform.cpp">
       <Filter>Entities\asprites</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Stage.cpp">
+      <Filter>Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Tile.cpp">
+      <Filter>Stage\tilemap</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Tilemap.cpp">
+      <Filter>Stage\tilemap</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Tileset.cpp">
+      <Filter>Stage\tilemap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -222,6 +231,9 @@
     </None>
     <None Include="assets\data\bboxes\platforms\fly_pad.bbox">
       <Filter>assets\data\bboxes\platforms</Filter>
+    </None>
+    <None Include="assets\scripts\StageSetup.lua">
+      <Filter>assets\scripts</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

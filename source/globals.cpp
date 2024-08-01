@@ -20,3 +20,15 @@ void wndw::CreateWindow(std::string title_, unsigned int w_, unsigned int h_)
 		gWnd.create({ gWW,gWH,32U }, title_, sf::Style::Close, gWndSettings);
 
 }
+
+
+bool scr::CheckLua(lua_State* L, int r)
+{
+	if (r != LUA_OK)
+	{
+		std::string errormsg = lua_tostring(L, -1);
+		std::cout << errormsg << std::endl;
+		return false;
+	}
+	return true;
+}

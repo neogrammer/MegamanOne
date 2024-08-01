@@ -16,4 +16,10 @@ extern float gTime;
 namespace wndw
 {
 	extern void CreateWindow(std::string title_, unsigned int w_, unsigned int h_);
+	
+}
+
+namespace scr
+{
+	extern bool CheckLua(lua_State* L, int r);
 }
