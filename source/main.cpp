@@ -10,6 +10,8 @@ ASprite aFace{};
 Player aPlayer{ Cfg::Textures::PlayerAtlas, {{0,160},{130,160}},{ {32.f,50.f},{60.f,77.f} }, { 680.f, -100.f },AnimDirType::Right, true };
 ResolutionDir resDir = ResolutionDir::None;
 Stage stage{ 1 };
+sf::View worldSpace_;
+float bgOffset{ 0.f };
 void createWorld();
 void updateWorld();
 void render();
@@ -18,6 +20,8 @@ void input();
 sf::Clock frameTimer{};
 int main()
 {
+	worldSpace_ = sf::View({ 800.f, 450.f }, { 1600.f,900.f });
+
 	lua_State* lua;
 	lua = luaL_newstate();
 	luaL_openlibs(lua);
@@ -109,12 +113,41 @@ void updateWorld()
 	aPlayer.handleMapCollisions(stage.getPlats());
 
 	
-	
+	bgOffset += 10.f * gTime;
 }
 
 void render()
 {
 
+	gWnd.setView(worldSpace_);
+	sf::Sprite bg{};
+	bg.setTexture(Cfg::textures.get((int)Cfg::Textures::BGSpace));
+	bg.move({ bgOffset,0.f });
+
+	auto currLeft = worldSpace_.getCenter().x - 800.f;
+	if (bgOffset >= currLeft)
+	{
+		//create another background size.x to the left of the bgOffset
+		sf::Sprite bgLeft{};
+		bgLeft.setTexture(Cfg::textures.get((int)Cfg::Textures::BGSpace));
+		bgLeft.setPosition({ bgOffset - bgLeft.getTexture()->getSize().x, 0.f });
+
+		gWnd.draw(bgLeft);
+		if (bgLeft.getPosition().x >= currLeft)
+		{
+			sf::Sprite bgLeftLeft{};
+			bgLeftLeft.setTexture(Cfg::textures.get((int)Cfg::Textures::BGSpace));
+			bgLeftLeft.setPosition({ bgLeft.getPosition().x - bgLeft.getTexture()->getSize().x, 0.0f });
+			gWnd.draw(bgLeftLeft);
+			if (bgLeftLeft.getPosition().x >= currLeft)
+			{
+				bgOffset = 0.0f;
+				bg.setPosition({ currLeft, 0.f });
+
+			}
+
+		}
+	}
 	tmap->render();
 	stage.render();
 	aPlayer.render();

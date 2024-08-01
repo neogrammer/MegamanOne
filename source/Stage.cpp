@@ -205,6 +205,8 @@ void Stage::input()
 
 void Stage::render()
 {
+
+
 	for (auto& plat : platforms)
 	{
 		plat.render();

@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\textures\actors\player\player_atlas1.png" />
+    <Image Include="assets\textures\backgrounds\space\bgSpace.png" />
     <Image Include="assets\textures\platforms\fly_pad67x40.png" />
     <Image Include="assets\textures\tilesets\tileset1.png" />
     <Image Include="assets\textures\tilesets\tileset1_32x32.png" />

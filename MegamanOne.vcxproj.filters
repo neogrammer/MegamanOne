@@ -91,6 +91,12 @@
     <Filter Include="Stage\tilemap">
       <UniqueIdentifier>{b5c0cb3d-82e7-4518-806f-42ee6ae38210}</UniqueIdentifier>
     </Filter>
+    <Filter Include="assets\textures\backgrounds">
+      <UniqueIdentifier>{8f215a10-e07a-4678-b6db-6e7486f2dde9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\textures\backgrounds\space">
+      <UniqueIdentifier>{c3bec440-b798-4c38-8225-95706bdb9667}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\ServiceLocator.h">
@@ -251,6 +257,9 @@
     </Image>
     <Image Include="assets\textures\platforms\fly_pad67x40.png">
       <Filter>assets\textures\platforms</Filter>
+    </Image>
+    <Image Include="assets\textures\backgrounds\space\bgSpace.png">
+      <Filter>assets\textures\backgrounds\space</Filter>
     </Image>
   </ItemGroup>
 </Project>
