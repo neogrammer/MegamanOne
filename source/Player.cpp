@@ -316,8 +316,49 @@ void Player::handleMapCollisions(std::vector<Platform>& plats_)
 				{
 					//this->standingOnPlatform(true);
 					float offsetX = plat.getPos().x - plat.getPrevPos().x;
-					this->setPos({ plat.getPos().x + offsetX,  plat.getPos().y - this->getBBSize().y - 0.1f});
-					this->setVelocity({  this->getVelocity().x, -1 * (this->getPos().y + this->getBBSize().y - plat.getPos().y)});//plat.getVelocity().y });
+				
+			/*		if (!landed)
+					{*/
+						//pOffsetX = this->getPos().x - plat.getPos().x;
+					
+					if (!landed && !sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+					{
+						pOffsetX = (this->getPos().x + this->getBBSize().x / 2.f) - (plat.getPos().x + this->getBBSize().x / 2.f);
+						this->setPos({ this->getPos().x,  plat.getPos().y - this->getBBSize().y - 0.1f});
+
+						landed = true;
+					}
+					else if (!landed)
+					{
+						this->setPos({ this->getPos().x,  plat.getPos().y - this->getBBSize().y - 0.1f });
+						landed = true;
+					}
+					else
+					{
+						if (!sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+						{
+							this->setPos({ plat.getPos().x + offsetX + pOffsetX + this->getVelocity().x * gTime,  plat.getPos().y - this->getBBSize().y - 0.1f});
+
+							//this->setPos({ plat.getPos().x + this->getVelocity().x * gTime + (plat.getPos().x - this->getPos().x) * gTime,  plat.getPos().y - this->getBBSize().y - 0.1f });
+						}
+						else
+						{
+							landed = false;
+							this->setPos({ this->getPos().x,  plat.getPos().y - this->getBBSize().y - 0.1f});
+
+							//this->setPos({ this->getPos().x + offsetX + this->getVelocity().x * gTime,  plat.getPos().y - this->getBBSize().y - 0.1f });
+						}
+					}
+					//landed = true;
+				//	}
+					//else
+					//{
+						//this->setPos({ plat.getPos().x + offsetX + pOffsetX + this->getVelocity().x * gTime,  plat.getPos().y - this->getBBSize().y - 0.1f});
+					//}
+					
+					this->setVelocity({ this->getVelocity().x , -1 * (this->getPos().y + this->getBBSize().y - plat.getPos().y)});//plat.getVelocity().y });
+
+					//this->setVelocity({  this->getVelocity().x, -1 * (this->getPos().y + this->getBBSize().y - plat.getPos().y)});//plat.getVelocity().y });
 					this->canJump = true;
 					//this->setAffectedByGravity(false);
 				}

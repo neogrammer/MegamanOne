@@ -33,8 +33,8 @@ class Player : public ASprite
 		void resume();
 	};
 
-
-
+	float pOffsetX{ 0.f };
+	bool landed{ false };
 	bool right_down{};
 	bool left_down{};
 	bool right_pressed{};
