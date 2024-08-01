@@ -12,12 +12,13 @@ class Stage
 
 public:
 	Stage(int numPlaforms = 1);
+	~Stage();
 	void input();
 	void update();
 
 	void render();
 
-
+	std::vector<Platform>& getPlats();
 	Platform* createPlatform(int id_, sf::IntRect irect_, sf::FloatRect bbox_, sf::Vector2f pos_);
 	static int lua_createPlatform(lua_State* L)
 	{

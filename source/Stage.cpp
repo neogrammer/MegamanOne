@@ -11,16 +11,37 @@ Stage::Stage(int numPlatforms_)
 	
 }
 
+Stage::~Stage()
+{
+}
+
 void Stage::input()
 {
+	for (auto& plat : platforms)
+	{
+		plat.input();
+	}
 }
 
 void Stage::update()
 {
+	for (auto& plat : platforms)
+	{
+		plat.update();
+	}
 }
 
 void Stage::render()
 {
+	for (auto& plat : platforms)
+	{
+		plat.render();
+	}
+}
+
+std::vector<Platform>& Stage::getPlats()
+{
+	 return platforms;
 }
 
 Platform* Stage::createPlatform(int id_, sf::IntRect irect_, sf::FloatRect bbox_, sf::Vector2f pos_)

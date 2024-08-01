@@ -9,7 +9,6 @@ Tilemap* tmap;
 ASprite aFace{};
 Player aPlayer{ Cfg::Textures::PlayerAtlas, {{0,160},{130,160}},{ {32.f,50.f},{60.f,77.f} }, { 680.f, -100.f },AnimDirType::Right, true };
 ResolutionDir resDir = ResolutionDir::None;
-ASprite aPlatform{ Cfg::Textures::FlyPad, {{0,0},{67,40}}, {{0.f,0.f},{67.f,20.f}}, SpriteType::Platform, {200.f, 700.f} };
 Stage stage;
 void createWorld();
 void updateWorld();
@@ -99,6 +98,8 @@ void updateWorld()
 {
 	aPlayer.update();
 	aPlayer.handleMapCollisions(tmap->getSolidTiles());
+	aPlayer.handleMapCollisions(stage.getPlats());
+
 
 	stage.update();
 }
@@ -107,18 +108,15 @@ void render()
 {
 
 	tmap->render();
-	gWnd.draw(*aPlatform.getSpr());
-	aPlayer.render();
-	
 	stage.render();
-
+	aPlayer.render();
 }
 
 void input()
 {
 
 	aPlayer.input();
-	if (aPlayer.getVelocity().x != 0.f &&  !aPlayer.isTileBelow(tmap->getSolidTiles()))
+	if (aPlayer.getVelocity().x != 0.f &&  !aPlayer.isTileBelow(tmap->getSolidTiles()) && !aPlayer.isTileBelow(stage.getPlats()))
 	{ 
 		aPlayer.setAffectedByGravity(true); 
 		aPlayer.setCanJump(false);

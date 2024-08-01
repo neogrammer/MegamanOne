@@ -1,6 +1,7 @@
 #include <pch.h>
 #include <Player.h>
 #include <Physics.h>
+#include <Platform.h>
 using namespace olc::utils::geom2d;
 
 void Player::loadAnimations()
@@ -250,6 +251,118 @@ void Player::update()
 
 
 
+void Player::handleMapCollisions(std::vector<Platform>& plats_)
+{
+	ResolutionDir resDir = ResolutionDir::None;
+	std::vector<olc::vf2d> aVec;
+	aVec.clear();
+
+
+
+
+	for (auto& plat : plats_)
+	{
+		if (Physics::RectVsRect(plat.bbRect(), this->bbRect()))
+		{
+			aVec = intersects(plat.bbRect(), this->bbRect());
+			if (aVec.size() > 0)
+			{
+				int num{ 0 };
+				for (int i = 0; i < aVec.size(); i++)
+				{
+					if (this->prevOverlapIsX(plat))
+					{
+						// this is the point we want to shoot a ray through
+						// resolve on the y
+						num = i;
+						if (this->getVelocity().y < 0.f)
+						{
+							// collision happened above
+							std::cout << "Collision happened above" << std::endl;
+							resDir = ResolutionDir::Down;
+							break;
+						}
+						else if (this->getVelocity().y > 0.f)
+						{
+							// collision happened below
+							std::cout << "Collision happened below need to push up " << std::endl;
+							resDir = ResolutionDir::Up;
+							break;
+
+						}
+					}
+					else if (this->prevOverlapIsY(plat))
+					{
+						// this is the point we want to shoot a ray through
+						// resolve on the x
+						num = i;
+						if (this->getVelocity().x < 0.f)
+						{
+							// collision happened on the left side
+							std::cout << "Collision happened on the left" << std::endl;
+							resDir = ResolutionDir::Right;
+							break;
+						}
+						else if (this->getVelocity().x > 0.f)
+						{
+							// collision happened on the right side
+							std::cout << "Collision happened on the right" << std::endl;
+							resDir = ResolutionDir::Left;
+							break;
+						}
+					}
+				}
+				if (resDir == ResolutionDir::Up)
+				{
+					this->setPos({ this->getPos().x,  plat.getPos().y - this->getBBSize().y - 0.1f });
+					this->setVelocity({ this->getVelocity().x, plat.getVelocity().y });
+					this->canJump = true;
+					this->setAffectedByGravity(false);
+				}
+				else if (resDir == ResolutionDir::Down)
+				{
+					this->setPos({ this->getPos().x,  plat.getPos().y + plat.getBBSize().y + 0.1f });
+					this->setVelocity({ this->getVelocity().x, plat.getVelocity().y });
+				}
+				else if (resDir == ResolutionDir::Left)
+				{
+					this->setPos({ plat.getPos().x - this->getBBSize().x - 0.1f , this->getPos().y });
+					this->setVelocity({ plat.getVelocity().x, this->getVelocity().y });
+				}
+				else if (resDir == ResolutionDir::Right)
+				{
+					this->setPos({ plat.getPos().x + plat.getBBSize().x + 0.1f,  this->getPos().y });
+					this->setVelocity({ plat.getVelocity().x, this->getVelocity().y });
+				}
+			}
+		}
+	}
+}
+
+
+bool Player::isTileBelow(std::vector<Platform>& plats)
+	{
+	rect<float> tmp{ bbRect() };
+	tmp.pos.y += 10.f;
+
+	bool collided = false;
+	for (auto& plat : plats)
+	{
+		if (Physics::RectVsRect(tmp, plat.bbRect()))
+		{
+			if (this->prevOverlapIsX(plat) && !this->prevOverlapIsY(plat))
+			{
+				collided = true;
+				break;
+
+
+			}
+		}
+	}
+	return collided;
+}
+
+
 void Player::handleMapCollisions(std::vector<Tile>& tiles)
 {
 	ResolutionDir resDir = ResolutionDir::None;
@@ -337,7 +450,6 @@ void Player::handleMapCollisions(std::vector<Tile>& tiles)
 		}
 	}
 }
-
 
 bool Player::isTileBelow(std::vector<Tile>& tiles)
 {
