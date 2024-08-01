@@ -11,14 +11,55 @@ class Stage
 	std::vector<Platform> platforms{};
 
 public:
+	struct Manipulator
+	{
+		ASprite* plat;
+		virtual bool update() = 0;
+		bool complete{ false };
+	};
+
+	struct ManInterpPos : Manipulator
+	{
+		sf::Vector2f startPos;
+		sf::Vector2f targetPos;
+		float completionTime;
+		float elapsed;
+		ManInterpPos(ASprite* obj, float y, float time);
+		bool update() override final;
+	};
+
+
+	void manipulate(sol::state_view& L);
+	void update(sol::state_view& L);
+	void cleanupManipluators(std::vector<Manipulator*>& vec);
+	void destroyAllManipluators(std::vector<Manipulator*>& vec);
+	bool isManipulatorCompleted(std::vector<Manipulator*>& vec);
+	std::vector<Manipulator*> mManipulators;
+	std::vector<Manipulator*> mNewManipulators;
+
+
+
 	Stage(int numPlaforms = 1);
 	~Stage();
 	void input();
-	void update();
 
 	void render();
 
 	std::vector<Platform>& getPlats();
+	void moveObject(ASprite& dyno, float y, float time);
+	static int lua_moveObject(lua_State* L)
+	{
+
+		if (lua_gettop(L) != 4) return -1;
+
+		Stage* object = static_cast<Stage*>(lua_touserdata(L, 1));
+		ASprite* plat = static_cast<ASprite*>(lua_touserdata(L, 2));
+		float y = (float)lua_tonumber(L, 3);
+		float t = (float)lua_tonumber(L, 4);
+		object->moveObject(*plat, y, t);
+		return 0;
+	};
+
 	Platform* createPlatform(int id_, sf::IntRect irect_, sf::FloatRect bbox_, sf::Vector2f pos_);
 	static int lua_createPlatform(lua_State* L)
 	{

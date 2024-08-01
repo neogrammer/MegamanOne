@@ -21,7 +21,7 @@ int main()
 	lua_State* lua;
 	lua = luaL_newstate();
 	luaL_openlibs(lua);
-
+	lua_register(lua, "cpp_moveObject", Stage::lua_moveObject);
 	lua_register(lua, "cpp_createPlatform", Stage::lua_createPlatform);
 	if (scr::CheckLua(lua, luaL_dofile(lua, "assets/scripts/StageSetup.lua")))
 	{
@@ -44,7 +44,9 @@ int main()
 	{
 		return -1;
 	}
-
+	{
+	sol::state_view L{ lua };
+	L.open_libraries(sol::lib::base, sol::lib::bit32, sol::lib::coroutine, sol::lib::debug, sol::lib::ffi, sol::lib::io, sol::lib::jit, sol::lib::math, sol::lib::os, sol::lib::package, sol::lib::string, sol::lib::table, sol::lib::utf8);
 
 	tmap = new Tilemap{ Cfg::Textures::Tileset1, "tileset1", "tilemap1", 1 };
 
@@ -71,10 +73,10 @@ int main()
 			gTime = frameTimer.restart().asSeconds();
 			auto num = sf::Mouse::getPosition(gWnd);
 			mpos = (sf::Vector2f)num;
-		
+
 			input();
 			updateWorld();
-
+			stage.update(L);
 			gWnd.clear(sf::Color(46, 146, 246, 255));
 			render();
 			gWnd.display();
@@ -82,7 +84,7 @@ int main()
 	}
 
 	delete tmap;
-
+	}
 	lua_close(lua);
 
 	return EXIT_SUCCESS;
@@ -100,8 +102,8 @@ void updateWorld()
 	aPlayer.handleMapCollisions(tmap->getSolidTiles());
 	aPlayer.handleMapCollisions(stage.getPlats());
 
-
-	stage.update();
+	
+	
 }
 
 void render()
