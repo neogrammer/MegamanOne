@@ -9,7 +9,7 @@ Tilemap* tmap;
 ASprite aFace{};
 Player aPlayer{ Cfg::Textures::PlayerAtlas, {{0,160},{130,160}},{ {32.f,50.f},{60.f,77.f} }, { 680.f, -100.f },AnimDirType::Right, true };
 ResolutionDir resDir = ResolutionDir::None;
-Stage stage;
+Stage stage{ 1 };
 void createWorld();
 void updateWorld();
 void render();
@@ -21,6 +21,12 @@ int main()
 	lua_State* lua;
 	lua = luaL_newstate();
 	luaL_openlibs(lua);
+	
+	/*sol::state_view L{ lua };
+	L.open_libraries(sol::lib::base, sol::lib::bit32, sol::lib::coroutine, sol::lib::debug, sol::lib::ffi, sol::lib::io, sol::lib::jit, sol::lib::math, sol::lib::os, sol::lib::package, sol::lib::string, sol::lib::table, sol::lib::utf8);
+	L.safe_script_file("assets/scripts/StageSetup.lua");
+	L["LoadPlatforms"](&stage, 1);*/
+
 	lua_register(lua, "cpp_moveObject", Stage::lua_moveObject);
 	lua_register(lua, "cpp_createPlatform", Stage::lua_createPlatform);
 	if (scr::CheckLua(lua, luaL_dofile(lua, "assets/scripts/StageSetup.lua")))
@@ -44,10 +50,8 @@ int main()
 	{
 		return -1;
 	}
-	{
-	sol::state_view L{ lua };
-	L.open_libraries(sol::lib::base, sol::lib::bit32, sol::lib::coroutine, sol::lib::debug, sol::lib::ffi, sol::lib::io, sol::lib::jit, sol::lib::math, sol::lib::os, sol::lib::package, sol::lib::string, sol::lib::table, sol::lib::utf8);
-
+	
+	
 	tmap = new Tilemap{ Cfg::Textures::Tileset1, "tileset1", "tilemap1", 1 };
 
 	std::cout << "Loading..." << std::endl;
@@ -76,15 +80,17 @@ int main()
 
 			input();
 			updateWorld();
-			stage.update(L);
+			stage.update(lua);
 			gWnd.clear(sf::Color(46, 146, 246, 255));
 			render();
 			gWnd.display();
 		}
+
 	}
 
+
 	delete tmap;
-	}
+	
 	lua_close(lua);
 
 	return EXIT_SUCCESS;

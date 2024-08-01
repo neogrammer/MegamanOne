@@ -13,7 +13,7 @@ class Stage
 public:
 	struct Manipulator
 	{
-		ASprite* plat;
+		Platform* plat;
 		virtual bool update() = 0;
 		bool complete{ false };
 	};
@@ -24,13 +24,13 @@ public:
 		sf::Vector2f targetPos;
 		float completionTime;
 		float elapsed;
-		ManInterpPos(ASprite* obj, float y, float time);
+		ManInterpPos(Platform* obj, float y, float time);
 		bool update() override final;
 	};
 
 
-	void manipulate(sol::state_view& L);
-	void update(sol::state_view& L);
+	void manipulate(lua_State* L);
+	void update(lua_State* L);
 	void cleanupManipluators(std::vector<Manipulator*>& vec);
 	void destroyAllManipluators(std::vector<Manipulator*>& vec);
 	bool isManipulatorCompleted(std::vector<Manipulator*>& vec);
@@ -46,17 +46,18 @@ public:
 	void render();
 
 	std::vector<Platform>& getPlats();
-	void moveObject(ASprite& dyno, float y, float time);
+	void moveObject(Platform& dyno, float x, float time);
 	static int lua_moveObject(lua_State* L)
 	{
 
-		if (lua_gettop(L) != 4) return -1;
+		if (lua_gettop(L) != 5) return -1;
 
 		Stage* object = static_cast<Stage*>(lua_touserdata(L, 1));
-		ASprite* plat = static_cast<ASprite*>(lua_touserdata(L, 2));
-		float y = (float)lua_tonumber(L, 3);
-		float t = (float)lua_tonumber(L, 4);
-		object->moveObject(*plat, y, t);
+		Platform* plat = static_cast<Platform*>(lua_touserdata(L, 2));
+		float x = (float)lua_tonumber(L, 3);
+		float y = (float)lua_tonumber(L, 4);
+		float t = (float)lua_tonumber(L, 5);
+		object->moveObject(*plat, x, t);
 		return 0;
 	};
 

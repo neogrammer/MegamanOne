@@ -1,7 +1,7 @@
 #include <pch.h>
 #include <Stage.h>
 
-void Stage::manipulate(sol::state_view& L)
+void Stage::manipulate(lua_State* L)
 {
 	for (auto& m : mNewManipulators)
 	{
@@ -19,21 +19,19 @@ void Stage::manipulate(sol::state_view& L)
 			
 
 
-				L["IssueNextTask"](m->plat);
+				//L["IssueNextTask"](m->plat);
 				//L["IssueNextHorizTask"]( &m->dyno, dynamic_cast<DynBullet*>(m->dyno)->maxDist, m->dyno->pos.y);
 
-				//lua_getglobal(L, "IssueNextHorizTask");
-				//if (L, lua_isfunction(L, -1))
-				//{
-				//	lua_pushlightuserdata(L, this);
-				//	lua_pushlightuserdata(L, m->dyno);
-				//	lua_pushnumber(L, dynamic_cast<DynBullet*>(m->dyno)->maxDist);
-				//	lua_pushnumber(L, m->dyno->pos.y);
-				//	if (!mylua::CheckLua(L, lua_pcall(L, 4, 1, 0)))
-				//	{
-				//		// script bad
-				//	}
-				//}
+				lua_getglobal(L, "IssueNextTask");
+				if (L, lua_isfunction(L, -1))
+				{
+					//lua_pushlightuserdata(L, this);
+					lua_pushlightuserdata(L, m->plat);
+					if (!scr::CheckLua(L, lua_pcall(L, 1, 0, 0)))
+					{
+						// script bad
+					}
+				}
 		
 
 
@@ -93,7 +91,7 @@ void Stage::manipulate(sol::state_view& L)
 		//{ return m->complete; });
 }
 
-void Stage::update(sol::state_view& L)
+void Stage::update(lua_State* L)
 {
 	manipulate(L);
 	for (auto& plat : platforms )
@@ -218,29 +216,30 @@ std::vector<Platform>& Stage::getPlats()
 	 return platforms;
 }
 
-void Stage::moveObject(ASprite& dyno,float y, float time)
+void Stage::moveObject(Platform& dyno,float x, float time)
 {
-	ASprite* tmp = &dyno;
+	Platform* tmp = &dyno;
 	if (tmp != nullptr)
 	{
-		mNewManipulators.emplace_back(new ManInterpPos{ tmp, y, time });
+		mNewManipulators.emplace_back(new ManInterpPos{ tmp, x, time });
 	}
 	tmp = nullptr;
 }
 
 Platform* Stage::createPlatform(int id_, sf::IntRect irect_, sf::FloatRect bbox_, sf::Vector2f pos_)
 {
-	Platform* plat = &platforms.emplace_back(Platform{ Cfg::Textures::FlyPad, irect_, bbox_, {pos_.x,pos_.y} });
+	platforms.emplace_back(Platform{ Cfg::Textures::FlyPad, irect_, bbox_, {pos_.x,pos_.y} });
+	Platform* plat = &platforms[id_ - 1];
 	plat->id = id_;
 	return plat;
 }
 
-Stage::ManInterpPos::ManInterpPos(ASprite* obj, float y, float time)
+Stage::ManInterpPos::ManInterpPos(Platform* obj, float x, float time)
 	: elapsed{ 0.f }
 {
 	plat = obj;
 	startPos = {obj->getPos().x, plat->getPos().y} ;
-	targetPos = { obj->getPos().x, y};
+	targetPos = { x, obj->getPos().y};
 	completionTime = time;
 
 }
@@ -249,11 +248,12 @@ Stage::ManInterpPos::ManInterpPos(ASprite* obj, float y, float time)
 bool Stage::ManInterpPos::update()
 {
 	elapsed += gTime;
-	plat->getPos() = {(targetPos.x - startPos.x) * (elapsed / completionTime) + startPos.x, (targetPos.y - startPos.y) * (elapsed / completionTime) + startPos.y};
+	plat->setPrevPos(plat->getPos());
+	plat->setPos( {(targetPos.x - startPos.x) * (elapsed / completionTime) + startPos.x, (targetPos.y - startPos.y) * (elapsed / completionTime) + startPos.y});
 
 	if (elapsed >= completionTime)
 	{
-		plat->getPos() = { targetPos.x, targetPos.y };
+		plat->setPos({ targetPos.x, targetPos.y });
 		complete = true;
 	}
 

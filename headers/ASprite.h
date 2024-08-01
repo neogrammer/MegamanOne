@@ -45,6 +45,7 @@ class ASprite
 	SpriteType eType{ SpriteType::Basic };
 	Cfg::Textures tex{Cfg::Textures::Count};
 	bool bAffectedByGravity{};
+	bool bControlledByScript{false};
 	bool showBoundingBox{ false };
 	AnimDirType animDir{ AnimDirType::NotSet };
 public:
@@ -78,7 +79,7 @@ public:
 
 	olc::v_2d<float> getPos();
 	olc::v_2d<float> getPrevPos();
-
+	void setPrevPos(olc::v_2d<float> pos_);
 	olc::v_2d<float> getBBOffset();
 	olc::v_2d<float> getBBSize();
 	olc::vi2d getFrameSize();
@@ -92,7 +93,8 @@ public:
 	void  applyGravity(float grav_);
 	void render();
 	void tickMovement();
-
+	void setControlledByScript(bool cond_);
+	bool isControlledByScript();
 
 	olc::utils::geom2d::ray<float> castRay(OriginPtType oType_, RayDirType dirType, olc::v_2d<float> target = { 0.f,0.f });
 	std::unique_ptr<sf::Sprite> getSpr();

@@ -8,7 +8,7 @@ using namespace olc::utils::geom2d;
 
 void Platform::loadAnimations()
 {
-
+	
 	this->currentAnim = "idle";
 	this->facingLeft = true;
 	// uni animations
@@ -105,6 +105,7 @@ Platform::Platform(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_
 	: ASprite{ tex_, texRect_, bbox_, SpriteType::Platform, pos_ }
 {
 	loadAnimations();
+	setControlledByScript(true);
 }
 
 void Platform::input()

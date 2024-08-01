@@ -99,6 +99,11 @@ olc::v_2d<float> ASprite::getPrevPos()
 	return prevPos;
 }
 
+void ASprite::setPrevPos(olc::v_2d<float> pos_)
+{
+	prevPos = pos_;
+}
+
 olc::v_2d<float> ASprite::getBBOffset()
 {
 	return {bbox.getPosition().x, bbox.getPosition().y};
@@ -181,12 +186,21 @@ void ASprite::render()
 		gWnd.draw(bounds);
 	}
 }
-
+void ASprite::setControlledByScript(bool cond_)
+{
+	bControlledByScript = cond_;
+}
+bool ASprite::isControlledByScript()
+{
+	return bControlledByScript;
+}
 void ASprite::tickMovement()
 {
-	prevPos = bbPos;
-
-	bbPos += vel * gTime;
+	if (!bControlledByScript)
+	{
+		prevPos = bbPos;
+		bbPos += vel * gTime;
+	}
 
 }
 
