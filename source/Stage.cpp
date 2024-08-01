@@ -242,7 +242,7 @@ Platform* Stage::createPlatform(int id_, sf::IntRect irect_, sf::FloatRect bbox_
 {
 	platforms.emplace_back(Platform{ Cfg::Textures::FlyPad, irect_, bbox_, {pos_.x,pos_.y} });
 	Platform* plat = &platforms.back();
-	plat->id = platforms.size();
+	plat->id = (int)platforms.size();
 	return plat;
 }
 

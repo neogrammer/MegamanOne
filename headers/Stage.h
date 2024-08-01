@@ -82,7 +82,7 @@ public:
 		float x = (float)lua_tonumber(L, 3);
 		float y = (float)lua_tonumber(L, 4);
 		float t = (float)lua_tonumber(L, 5);
-		object->moveObject(*plat, y, t);
+		object->moveObjectUp(*plat, y, t);
 		return 0;
 	};
 

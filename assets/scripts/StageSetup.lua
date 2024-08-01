@@ -6,44 +6,44 @@ PlatformObject2 = nil
 CurrentStage = {}
 function PlatformBehaviourHoriz(plat)
 	while true do
-		cpp_moveObject( CurrentStage["host"], PlatformObject, 100.0, 850.0, 5.0)
+		cpp_moveObject( CurrentStage["host"], plat, 100.0, 850.0, 5.0)
 		coroutine.yield()
-		cpp_moveObject(CurrentStage["host"], PlatformObject, 600.0, 850.0, 5.0)
+		cpp_moveObject(CurrentStage["host"], plat, 600.0, 850.0, 5.0)
 		coroutine.yield()
 	end
 end
 
-function PlatformBehaviourVert(plat)
+function PlatformBehaviourVert(plat2)
 	while true do
-		cpp_moveObjectUp( CurrentStage["host"], PlatformObject2, 50.0, 100.0, 1.0)
+		cpp_moveObjectUp( CurrentStage["host"], plat2, 50.0, 100.0, 1.0)
 		coroutine.yield()
-		cpp_moveObjectUp(CurrentStage["host"], PlatformObject2, 50.0, 500.0, 5.0)
+		cpp_moveObjectUp(CurrentStage["host"], plat2, 50.0, 500.0, 5.0)
 		coroutine.yield()
 	end
 end
 
-function IssueNextTask( plat)
+function IssueNextTask(aplat)
 
-	if coroutine.status(scripted[plat].behaviour) ~= 'dead' then
-		if plat == PlatformObject then
+	if coroutine.status(scripted[aplat].behaviour) ~= 'dead' then
+		if aplat == PlatformObject then
 			if PlatformObject2 ~= nil then
-				if coroutine.status(scripted[PlatformObject2].behaviour) ~= 'suspended' or coroutine.status(scripted[PlatformObject2].behaviour) == 'normal' or coroutine.status(scripted[PlatformObject2].behaviour) == 'running' then
-					cpp_retry( CurrentStage["host"], PlatformObject)	
+				if coroutine.status(scripted[PlatformObject2].behaviour) ~= 'suspended' then
+					cpp_retry( CurrentStage["host"], aplat)	
 				else
-					coroutine.resume(scripted[PlatformObject].behaviour, PlatformObject)	
+					coroutine.resume(scripted[aplat].behaviour, aplat)	
 				end
 			else
-				coroutine.resume(scripted[PlatformObject].behaviour, PlatformObject)
+				coroutine.resume(scripted[aplat].behaviour, aplat)
 			end
-		elseif  plat == PlatformObject2 then
+		elseif  aplat == PlatformObject2 then
 			if PlatformObject ~= nil then
-				if coroutine.status(scripted[PlatformObject].behaviour) ~= 'suspended' or coroutine.status(scripted[PlatformObject].behaviour) == 'normal' or coroutine.status(scripted[PlatformObject].behaviour) == 'running' then
-					cpp_retry( CurrentStage["host"], PlatformObject2)	
+				if coroutine.status(scripted[PlatformObject].behaviour) ~= 'suspended' then
+					cpp_retry( CurrentStage["host"], aplat)	
 				else
-					coroutine.resume(scripted[PlatformObject2].behaviour, PlatformObject2)
+					coroutine.resume(scripted[aplat].behaviour, aplat)
 				end
 			else
-				coroutine.resume(scripted[PlatformObject2].behaviour, PlatformObject2)
+				coroutine.resume(scripted[aplat].behaviour, aplat)
 			end
 		end
 	end
