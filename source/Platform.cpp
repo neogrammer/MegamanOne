@@ -163,6 +163,21 @@ void Platform::update()
 	this->tickMovement();
 }
 
+float Platform::getMinY()
+{
+	return minY;
+}
+
+void Platform::setMinY(float val_)
+{
+	minY = val_;
+}
+
+bool Platform::isAtTopOfPath()
+{
+	return (this->getPos().y == this->getMinY());
+}
+
 
 
 bool Platform::AnimData::isOnLastFrame()

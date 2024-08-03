@@ -39,6 +39,10 @@ class Platform : public ASprite
 	float elapsed{ 0.f };
 	bool animPaused{ false };
 	int index{ 0 };
+	float minY{ 0.f };
+	float maxY{ 0.f };
+	float minX{ 0.f };
+	float maxX{ 0.f };
 
 	void loadAnimations();
 	std::vector<sf::IntRect> loadAnimation(int numFrames, int  pitch, int startCol = 0, int startRow = 0, int pitchColBegin = 0);
@@ -46,6 +50,8 @@ class Platform : public ASprite
 	bool hasBBoxesSet(const std::string& animname, bool facingleft);
 	std::map<std::pair<std::string, bool>, AnimData> animMap{};
 public:
+	float platDisp{ 0.f };
+	bool goingUp{ false };
 	int id{ 1 };
 	Platform() = default;
 	Platform(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, olc::v_2d<float> pos_);
@@ -58,6 +64,10 @@ public:
 
 	void input();
 	void update();
+
+	float getMinY();
+	void setMinY(float val_);
+	bool isAtTopOfPath();
 };
 
 #endif

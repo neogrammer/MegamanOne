@@ -198,9 +198,18 @@ void ASprite::tickMovement()
 {
 	if (!bControlledByScript)
 	{
+		if (isAffectedByGravity())
+		{
+			applyGravity(900.f);
+		}
 		prevPos = bbPos;
 		bbPos += vel * gTime;
 	}
+	else
+	{
+		bbPos += vel * gTime;
+	}
+
 
 }
 

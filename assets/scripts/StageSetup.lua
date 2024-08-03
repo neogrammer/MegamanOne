@@ -15,9 +15,9 @@ end
 
 function PlatformBehaviourVert(plat2)
 	while true do
-		cpp_moveObjectUp( CurrentStage["host"], plat2, 50.0, 100.0, 1.0)
+		cpp_moveObjectUp( CurrentStage["host"], plat2, 350.0, 100.0, 1.0)
 		coroutine.yield()
-		cpp_moveObjectUp(CurrentStage["host"], plat2, 50.0, 600.0, 7.0)
+		cpp_moveObjectUp(CurrentStage["host"], plat2, 350.0, 600.0, 7.0)
 		coroutine.yield()
 	end
 end
@@ -59,7 +59,7 @@ function LoadPlatforms(host, stageNum)
 		scripted[PlatformObject] = {behaviour = coroutine.create(PlatformBehaviourHoriz) }
 		IssueNextTask( PlatformObject)
 
-		PlatformObject2 = cpp_createPlatform(host, 1, 0, 0, 67, 40, 0, 0, 67, 20, 150, 600)
+		PlatformObject2 = cpp_createPlatform(host, 1, 0, 0, 67, 40, 0, 0, 67, 20, 350, 600)
 		scripted[PlatformObject2] = {behaviour = coroutine.create(PlatformBehaviourVert) }
 		IssueNextTask( PlatformObject2)
 	end

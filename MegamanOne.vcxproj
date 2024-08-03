@@ -28,6 +28,7 @@
     <ClInclude Include="headers\draw_shape.h" />
     <ClInclude Include="headers\Dynamic.h" />
     <ClInclude Include="headers\FlyPad.h" />
+    <ClInclude Include="headers\Game.h" />
     <ClInclude Include="headers\globals.h" />
     <ClInclude Include="headers\physics.h" />
     <ClInclude Include="headers\Platform.h" />
@@ -52,6 +53,7 @@
     <ClCompile Include="source\draw_shape.cpp" />
     <ClCompile Include="source\Dynamic.cpp" />
     <ClCompile Include="source\FlyPad.cpp" />
+    <ClCompile Include="source\Game.cpp" />
     <ClCompile Include="source\globals.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\physics.cpp" />

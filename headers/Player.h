@@ -51,6 +51,11 @@ class Player : public ASprite
 	float elapsed{ 0.f };
 	bool animPaused{false};
 	int index{ 0 };
+	bool onPlatform{ false };
+	float platPlayerOffsetX{ 0.f };
+	float initialLandedXPlatDisp{ 0.f };
+
+
 
 	void loadAnimations();
 	std::vector<sf::IntRect> loadAnimation(int numFrames, int  pitch, int startCol = 0, int startRow = 0, int pitchColBegin = 0);
@@ -58,10 +63,11 @@ class Player : public ASprite
 	bool hasBBoxesSet(const std::string& animname, bool facingleft);
 	std::map<std::pair<std::string, bool>, AnimData> animMap{};
 public:
+	bool riding{ false };
 	Player() = default;
 	Player(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, olc::v_2d<float> pos_ = { 0.f,0.f }, AnimDirType animDir_ = AnimDirType::Uni, bool bAffectedByGravity_ = false);
 	~Player() override = default;
-
+	bool tmpFlag{ false };
 	Player(const Player&) = default;
 	Player& operator=(const Player&) = default;
 	Player(Player&&) = default;

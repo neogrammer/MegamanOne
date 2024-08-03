@@ -159,6 +159,9 @@
     <ClInclude Include="headers\Tileset.h">
       <Filter>Stage\tilemap</Filter>
     </ClInclude>
+    <ClInclude Include="headers\Game.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -211,6 +214,9 @@
     </ClCompile>
     <ClCompile Include="source\Tileset.cpp">
       <Filter>Stage\tilemap</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Game.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

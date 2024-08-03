@@ -131,6 +131,7 @@ void Player::input()
 			this->setVelocity({ 250.f, this->getVelocity().y });
 			//nowFacingRight
 		}
+		onPlatform = false;
 	}
 	else
 	{
@@ -154,6 +155,7 @@ void Player::input()
 			this->setVelocity({ -250.f, this->getVelocity().y });
 			//nowFacingLeft
 		}
+		onPlatform = false;
 	}
 	else
 	{
@@ -166,8 +168,10 @@ void Player::input()
 			// first moment of push
 			jump_pressed = true;
 			canJump = false;
+			onPlatform = false;
 			setVelocity({ getVelocity().x, JumpForce });
 			this->setAffectedByGravity(true);
+			this->tickMovement();
 
 		}
 		else
@@ -187,7 +191,7 @@ void Player::input()
 		setVelocity({ 0.f, getVelocity().y });
 	}
 
-	if (jump_down == false && getVelocity().y < -50.f)
+	if (jump_down == false && getVelocity().y < -50.f && !onPlatform)
 	{
 		setVelocity({ getVelocity().x, -50.f });
 	}
@@ -240,31 +244,39 @@ void Player::update()
 	bbox = animMap[std::pair(currentAnim, facingLeft)].bboxes[index];
 	texRect = animMap[std::pair(currentAnim, facingLeft)].frames[index];
 
-	if (this->isAffectedByGravity())
-	{
-		this->applyGravity(900.f);
-	}
+	
 
-	// update actual positions now, once only
-	this->tickMovement();
 }
-
-
 
 void Player::handleMapCollisions(std::vector<Platform>& plats_)
 {
 	ResolutionDir resDir = ResolutionDir::None;
 	std::vector<olc::vf2d> aVec;
 	aVec.clear();
-
-
-
-
+	olc::vf2d tmpPos = this->getPos();
+	if (this->onPlatform && !this->riding)
+	{
+		this->setPos({ this->getPos().x, this->getPrevPos().y });
+	}
+	else if (this->onPlatform && this->riding)
+	{
+		this->setPos({ this->getPos().x, this->getPrevPos().y + 1.f });
+	}
+	else
+	{
+		
+			//this->setPos({ this->getPos().x, this->getPos().y + 3.f });
+	}
 	for (auto& plat : plats_)
 	{
 		if (Physics::RectVsRect(plat.bbRect(), this->bbRect()))
 		{
+
+
 			aVec = intersects(plat.bbRect(), this->bbRect());
+
+		
+
 			if (aVec.size() > 0)
 			{
 				int num{ 0 };
@@ -277,9 +289,18 @@ void Player::handleMapCollisions(std::vector<Platform>& plats_)
 						num = i;
 						if (this->getVelocity().y < 0.f)
 						{
-							// collision happened above
-							std::cout << "Collision happened above" << std::endl;
-							resDir = ResolutionDir::Down;
+							if (plat.getPos().y < this->getPos().y)
+							{
+								// collision happened above
+								std::cout << "Collision happened above" << std::endl;
+								resDir = ResolutionDir::Down;
+							}
+							else
+							{
+								// collision happened above
+								std::cout << "Collision happened below.. the platform is moving upward and the player is standing on it" << std::endl;
+								resDir = ResolutionDir::Up;
+							}
 							break;
 						}
 						else if (this->getVelocity().y > 0.f)
@@ -288,7 +309,6 @@ void Player::handleMapCollisions(std::vector<Platform>& plats_)
 							std::cout << "Collision happened below need to push up " << std::endl;
 							resDir = ResolutionDir::Up;
 							break;
-
 						}
 					}
 					else if (this->prevOverlapIsY(plat))
@@ -312,70 +332,160 @@ void Player::handleMapCollisions(std::vector<Platform>& plats_)
 						}
 					}
 				}
+				
+				this->setPos({ this->getPos().x, tmpPos.y });
+
 				if (resDir == ResolutionDir::Up)
 				{
-					//this->standingOnPlatform(true);
-					float offsetX = plat.getPos().x - plat.getPrevPos().x;
-				
-			/*		if (!landed)
-					{*/
-						//pOffsetX = this->getPos().x - plat.getPos().x;
-					
-					if (!landed && !sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-					{
-						pOffsetX = (this->getPos().x + this->getBBSize().x / 2.f) - (plat.getPos().x + this->getBBSize().x / 2.f);
-						this->setPos({ this->getPos().x,  plat.getPos().y - this->getBBSize().y - 0.1f});
 
-						landed = true;
-					}
-					else if (!landed)
+				
+					//this->setPos({ this->getPos().x,  plat.getPos().y - this->getBBSize().y - 0.1f });
+					//this->setVelocity({ this->getVelocity().x, (plat.getPos().y - plat.getPrevPos().y) / gTime });
+					if (plat.getPos().y > plat.getPrevPos().y && plat.getVelocity().y >= 0.f)
 					{
-						this->setPos({ this->getPos().x,  plat.getPos().y - this->getBBSize().y - 0.1f });
-						landed = true;
+						plat.goingUp = false;
+						canJump = true;
+
+					}
+					 //this section collides like landing on a tile, eventually remove this completely
+					if (plat.getPos().y < plat.getPrevPos().y && plat.getVelocity().y <= 0.f && plat.goingUp == false)
+					{
+						plat.goingUp = true;
+						this->setPos({ this->getPrevPos().x , this->getPrevPos().y });
+						this->setPos({ this->getPos().x, this->getPos().y + ((plat.getPos().y - (this->getPos().y + this->getBBSize().y)) - 0.1f) });
+						//this->setVelocity({this->getVelocity().x,  this->getVelocity().y + plat.getVelocity().y});
+						this->onPlatform = true;
+						this->canJump = true;
+						this->setAffectedByGravity(true);
+						tmpFlag = true;
 					}
 					else
 					{
-						if (!sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+						if (tmpFlag)
 						{
-							this->setPos({ plat.getPos().x + offsetX + pOffsetX + this->getVelocity().x * gTime,  plat.getPos().y - this->getBBSize().y - 0.1f});
+							tmpFlag = false;
+						}
 
-							//this->setPos({ plat.getPos().x + this->getVelocity().x * gTime + (plat.getPos().x - this->getPos().x) * gTime,  plat.getPos().y - this->getBBSize().y - 0.1f });
+
+						if (plat.getVelocity().y > 0.f)
+						{
+							this->setPos({ this->getPos().x,  (plat.getPos().y - this->getBBSize().y - 0.1f + 1.f) });
+							this->setVelocity({ this->getVelocity().x + plat.getVelocity().x,0.f });
+							this->setAffectedByGravity(true);
 						}
 						else
 						{
-							landed = false;
-							this->setPos({ this->getPos().x,  plat.getPos().y - this->getBBSize().y - 0.1f});
 
-							//this->setPos({ this->getPos().x + offsetX + this->getVelocity().x * gTime,  plat.getPos().y - this->getBBSize().y - 0.1f });
+							if (plat.isAtTopOfPath())
+							{
+								this->setPos({ this->getPos().x,  (plat.getPos().y - this->getBBSize().y - 0.1f) + 5.f });
+								this->setVelocity({ this->getVelocity().x + plat.getVelocity().x, 74.f });
+								this->setAffectedByGravity(true);
+
+								this->onPlatform = true;
+								this->canJump = true;
+							}
+							else
+							{
+								this->setPos({ this->getPos().x,  (plat.getPos().y - this->getBBSize().y - 0.1f) });
+								// platform moving up
+								this->setVelocity({ this->getVelocity().x + plat.getVelocity().x,plat.getVelocity().y });
+								this->setAffectedByGravity(false);
+
+								this->onPlatform = true;
+								this->canJump = true;
+							}
+
 						}
+
+
+						this->setAffectedByGravity(true);
 					}
-					//landed = true;
-				//	}
+						if (plat.getVelocity().x < 0.f && left_down)
+						{
+							// platform player is standing on moving horizontally
+							this->setVelocity({(this->getVelocity().x + plat.getVelocity().x) / 2.f , this->getVelocity().y});
+							this->riding = true;
+						}
+						else if (plat.getVelocity().x > 0.f && left_down)
+						{
+							this->setVelocity({ (this->getVelocity().x - plat.getVelocity().x) / 2.f , this->getVelocity().y });
+							this->riding = true;
+						}
+						else if (plat.getVelocity().x < 0.f && right_down)
+						{
+							// platform player is standing on moving horizontally
+							this->setVelocity({ (this->getVelocity().x + plat.getVelocity().x) / 2.f , this->getVelocity().y });
+							this->riding = true;
+						}
+						else if (plat.getVelocity().x > 0.f && right_down)
+						{
+							this->setVelocity({ (this->getVelocity().x - plat.getVelocity().x) / 2.f , this->getVelocity().y });
+							this->riding = true;
+						}
+						else if (plat.getVelocity().x != 0 && !left_down && !right_down)
+						{
+							this->setVelocity({ plat.getVelocity().x , plat.getVelocity().y});
+							this->riding = true;
+						}
+
+
+					
+					 //mini section end
+
+					//float offsetX = plat.getPos().x - plat.getPrevPos().x;
+					//if (!landed && !sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+					//{
+					//	pOffsetX = (this->getPos().x + this->getBBSize().x / 2.f) - (plat.getPos().x + this->getBBSize().x / 2.f);
+					//	this->setPos({ this->getPos().x,  plat.getPos().y - this->getBBSize().y - 0.1f});
+					//	landed = true;
+					//}
+					//else if (!landed)
+					//{
+					//	this->setPos({ this->getPos().x,  plat.getPos().y - this->getBBSize().y - 0.1f });
+					//	landed = true;
+					//}
 					//else
 					//{
-						//this->setPos({ plat.getPos().x + offsetX + pOffsetX + this->getVelocity().x * gTime,  plat.getPos().y - this->getBBSize().y - 0.1f});
+					//	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+					//	{
+					//		this->setPos({ plat.getPos().x + offsetX + pOffsetX + this->getVelocity().x * gTime,  plat.getPos().y - this->getBBSize().y - 0.1f});
+					//	}
+					//	else
+					//	{
+					//		landed = false;
+					//		this->setPos({ this->getPos().x,  plat.getPos().y - this->getBBSize().y - 0.1f});	
+					//	}
 					//}
-					
-					this->setVelocity({ this->getVelocity().x , -1 * (this->getPos().y + this->getBBSize().y - plat.getPos().y)});//plat.getVelocity().y });
-
-					//this->setVelocity({  this->getVelocity().x, -1 * (this->getPos().y + this->getBBSize().y - plat.getPos().y)});//plat.getVelocity().y });
-					this->canJump = true;
-					//this->setAffectedByGravity(false);
+					//this->setVelocity({ this->getVelocity().x , -1 * (this->getPos().y + this->getBBSize().y - plat.getPos().y)});//plat.getVelocity().y });
 				}
 				else if (resDir == ResolutionDir::Down)
 				{
 					this->setPos({ this->getPos().x,  plat.getPos().y + plat.getBBSize().y + 0.1f });
 					this->setVelocity({ this->getVelocity().x, plat.getVelocity().y });
+					this->onPlatform = false;
+					this->setAffectedByGravity(true);
+					this->canJump = false;
 				}
 				else if (resDir == ResolutionDir::Left)
 				{
 					this->setPos({ plat.getPos().x - this->getBBSize().x - 0.1f , this->getPos().y });
 					this->setVelocity({ plat.getVelocity().x, this->getVelocity().y });
+					this->onPlatform = false;
+					this->setAffectedByGravity(true);
+					this->canJump = false;
+
+					
 				}
 				else if (resDir == ResolutionDir::Right)
 				{
 					this->setPos({ plat.getPos().x + plat.getBBSize().x + 0.1f,  this->getPos().y });
 					this->setVelocity({ plat.getVelocity().x, this->getVelocity().y });
+					this->onPlatform = false;
+					this->setAffectedByGravity(true);
+					this->canJump = false;
+
+
 				}
 			}
 		}

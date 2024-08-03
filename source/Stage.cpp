@@ -16,12 +16,6 @@ void Stage::manipulate(lua_State* L)
 	{
 		if (m->update())
 		{
-			
-
-
-				//L["IssueNextTask"](m->plat);
-				//L["IssueNextHorizTask"]( &m->dyno, dynamic_cast<DynBullet*>(m->dyno)->maxDist, m->dyno->pos.y);
-
 				lua_getglobal(L, "IssueNextTask");
 				if (lua_isfunction(L, -1))
 				{
@@ -32,63 +26,11 @@ void Stage::manipulate(lua_State* L)
 						// script bad
 					}
 				}
-		
-
-
-				//	L["IssueNextTask"](m->dyno, dynamic_cast<DynBullet*>(m->dyno)->maxDist, m->dyno->pos.y);
-
-
-
-
-
-
-
-
-			/*	sol::protected_function func = L["IssueNextTask"];
-				if (func.valid())
-				{
-
-				}
-				else
-				{
-
-
-
-				}*/
-
-				//lua_getglobal(L, "IssueNextTask");
-				//if (L, lua_isfunction(L, -1))
-				//{
-				//	lua_pushlightuserdata(L, this);
-				//	lua_pushlightuserdata(L, m->dyno);
-				//	if (!mylua::CheckLua(L, lua_pcall(L, 2, 1, 0)))
-				//	{
-				//		// script bad
-				//	}
-				//}
-			
 		}
 	}
 
 
 	cleanupManipluators(mManipulators);
-
-	//bool found = false;
-	//auto it = std::find_if(mManipulators.begin(), mManipulators.end(), [&found](Manipulator* m)->bool { if (m->complete == true) found = true; return found; });
-	//return found;
-
-	//bool found = false;
-	//	 if (found)
-	//	{
-	//		delete (*it);
-	//		*it = nullptr;
-	//		mManipulators.erase(it);
-	//		mManipulators.shrink_to_fit();
-
-	//		it = std::find_if(mManipulators.begin(), mManipulators.end(), [&found](Manipulator* m)->bool  { if (m->complete == true) found = true; return found; });
-	//	}
-	//std::erase_if(mManipulators, [](Manipulator* m)
-		//{ return m->complete; });
 }
 
 void Stage::update(lua_State* L)
@@ -97,13 +39,15 @@ void Stage::update(lua_State* L)
 	for (auto& plat : platforms )
 	{
 		plat.update();
+		//plat.setControlledByScript(false);
+		//plat.tickMovement();
+		//plat.setControlledByScript(true);
 	}
 }
 
 void Stage::cleanupManipluators(std::vector<Manipulator*>& vec)
 {
 	bool scrubbed = false;
-
 	while (!scrubbed)
 	{
 		scrubbed = true;
@@ -111,7 +55,6 @@ void Stage::cleanupManipluators(std::vector<Manipulator*>& vec)
 		{
 			scrubbed = false;
 		}
-
 		if (scrubbed == false)
 		{
 			bool found = false;
@@ -134,9 +77,7 @@ void Stage::cleanupManipluators(std::vector<Manipulator*>& vec)
 
 void Stage::destroyAllManipluators(std::vector<Manipulator*>& vec)
 {
-
 	bool scrubbed = false;
-
 	while (!scrubbed)
 	{
 		if (vec.size() > 0 && vec.begin() != vec.end())
@@ -172,17 +113,14 @@ Stage::Stage(int numPlatforms_)
 	platforms.clear();
 	platforms.shrink_to_fit();
 	platforms.reserve(numPlatforms);
-
 	mManipulators.clear();
 	mNewManipulators.clear();
-	
 }
 
 Stage::~Stage()
 {
 	destroyAllManipluators(mManipulators);
 	destroyAllManipluators(mNewManipulators);
-
 	bool found = false;
 	auto it = std::find_if(mManipulators.begin(), mManipulators.end(), [&found](Manipulator* m)->bool { if (m->complete == true) found = true; return found; });
 	while (found)
@@ -205,8 +143,6 @@ void Stage::input()
 
 void Stage::render()
 {
-
-
 	for (auto& plat : platforms)
 	{
 		plat.render();
@@ -224,6 +160,7 @@ void Stage::moveObject(Platform& dyno,float x, float time)
 	if (tmp != nullptr)
 	{
 		mNewManipulators.emplace_back(new ManInterpPos{ &dyno, x, time });
+
 	}
 	tmp = nullptr;
 }
@@ -234,6 +171,10 @@ void Stage::moveObjectUp(Platform& dyno, float y, float time)
 	if (tmp != nullptr)
 	{
 		mNewManipulators.emplace_back(new ManInterpPosY{ &dyno, y, time });
+		dyno.setPrevPos(dyno.getPos());
+		if (y < dyno.getPos().y)
+			dyno.setMinY(y);
+		// else set as max y
 	}
 	tmp = nullptr;
 }
@@ -249,8 +190,6 @@ Platform* Stage::createPlatform(int id_, sf::IntRect irect_, sf::FloatRect bbox_
 void Stage::retry(Platform& plat)
 {
 	auto it = std::find_if(mManipulators.begin(), mManipulators.end(), [&plat](Manipulator* m)->bool { return m->plat == &plat; });
-
-	//auto it = std::find_if(mManipulators.begin(), mManipulators.end(), [&](const Manipulator& m) { return m.plat == &plat; });
 	if (it != mManipulators.end())
 	{
 		(*it)->complete = false;
@@ -262,9 +201,12 @@ Stage::ManInterpPos::ManInterpPos(Platform* obj, float x, float time)
 {
 	plat = obj;
 	startPos = {plat->getPos().x, plat->getPos().y} ;
-	targetPos = { x, plat->getPos().y};
+	targetPos = { x, plat->getPos().y };
+	//elapsed = -1 *  (1.f / 60.f);
+	//auto sudoPrevPos = olc::vf2d{ (targetPos.x - startPos.x) * (elapsed / completionTime) + startPos.x, (targetPos.y - startPos.y) * (elapsed / completionTime) + startPos.y };
+	//plat->setPrevPos(sudoPrevPos);
+	//elapsed = 0.f;
 	completionTime = time;
-
 }
 
 
@@ -272,14 +214,16 @@ bool Stage::ManInterpPos::update()
 {
 	elapsed += gTime;
 	plat->setPrevPos(plat->getPos());
-	plat->setPos( {(targetPos.x - startPos.x) * (elapsed / completionTime) + startPos.x, (targetPos.y - startPos.y) * (elapsed / completionTime) + startPos.y});
+	auto p = olc::vf2d{ (targetPos.x - startPos.x) * (elapsed / completionTime) + startPos.x, (targetPos.y - startPos.y) * (elapsed / completionTime) + startPos.y };
+	plat->setVelocity({(p.x - plat->getPrevPos().x) / gTime, 0.f});
 
+	//plat->setPos( {(targetPos.x - startPos.x) * (elapsed / completionTime) + startPos.x, (targetPos.y - startPos.y) * (elapsed / completionTime) + startPos.y});
 	if (elapsed >= completionTime)
 	{
+		plat->setVelocity({ 0.f,0.f });
 		plat->setPos({ targetPos.x, targetPos.y });
 		complete = true;
 	}
-
 	return complete;
 }
 
@@ -293,12 +237,19 @@ Stage::ManInterpPosY::ManInterpPosY(Platform* obj, float y, float time) : elapse
 
 bool Stage::ManInterpPosY::update()
 {
+	//elapsed += gTime;
+	//plat->setPrevPos(plat->getPos());
+	//plat->setPos({ (targetPos.x - startPos.x) * (elapsed / completionTime) + startPos.x, (targetPos.y - startPos.y) * (elapsed / completionTime) + startPos.y });
+
 	elapsed += gTime;
-	plat->setPrevPos(plat->getPos());
-	plat->setPos({ (targetPos.x - startPos.x) * (elapsed / completionTime) + startPos.x, (targetPos.y - startPos.y) * (elapsed / completionTime) + startPos.y });
+	
+		plat->setPrevPos(plat->getPos());
+		auto p = olc::vf2d{ (targetPos.x - startPos.x) * (elapsed / completionTime) + startPos.x, (targetPos.y - startPos.y) * (elapsed / completionTime) + startPos.y };
+		plat->setVelocity({ 0.f,  (p.y - plat->getPrevPos().y) / gTime });
 
 	if (elapsed >= completionTime)
 	{
+		plat->setVelocity({ 0.f,0.f });
 		plat->setPos({ targetPos.x, targetPos.y });
 		complete = true;
 	}
