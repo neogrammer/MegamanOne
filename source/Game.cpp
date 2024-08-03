@@ -72,6 +72,8 @@ void Game::input()
 
 Game::Game()
 {
+	std::cout << "Loading..." << std::endl;
+
 	lua = luaL_newstate();
 	luaL_openlibs(lua);
 
@@ -107,6 +109,9 @@ Game::Game()
 		throw std::runtime_error("Nope, Bad Lua");
 
 	}
+
+	createWorld();
+	std::cout << "Load Complete" << std::endl;
 }
 
 Game::~Game()
@@ -117,9 +122,7 @@ Game::~Game()
 
 void Game::run()
 {
-	std::cout << "Loading..." << std::endl;
-	createWorld();
-	std::cout << "Load Complete" << std::endl;
+	
 	aPlayer.setPos({ 680.f, -100.f });
 	aPlayer.setVelocity({ 0.f, 0.f });
 	frameTimer.restart();

@@ -6,6 +6,11 @@
 #include <ActionMap.h>
 #include <vector>
 
+enum class MachineType
+{
+	Player
+};
+
 enum class OriginPtType
 {
 	Center,
@@ -69,7 +74,7 @@ struct Cfg
 	// Resource Enums 
 	enum class Textures : int { PlayerAtlas, Tileset1, FlyPad, China, BGSpace, Count };
 	enum class Fonts : int { Count };
-	enum class Music : int { Count };
+	enum class Music : int { Stage1, Count };
 	enum class Sounds : int { Count };
 
 	// inputs the player will be able to use

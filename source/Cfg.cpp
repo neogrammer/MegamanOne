@@ -21,7 +21,7 @@ void Cfg::Initialize()
 
 void Cfg::initMusic()
 {
-    /*  music.load(Music::Intro, "assets/sounds/music/tetrisc.wav"); */
+     music.load((int)Music::Stage1, "assets/music/stage1.mp3");
 }
 
 void Cfg::initSounds()

@@ -2,9 +2,14 @@
 #define PLAYER_H__
 #include <ASprite.h>
 #include <Tile.h>
+#include <memory>
+#include <MachineHandler.h>
+
 class Platform;
+
 class Player : public ASprite
 {
+	std::unique_ptr<MachineHandler> fsmHandler{};
 
 	struct AnimData
 	{
@@ -72,6 +77,8 @@ public:
 	Player& operator=(const Player&) = default;
 	Player(Player&&) = default;
 	Player& operator=(Player&&) = default;
+
+	
 
 	void input();
 	void update();

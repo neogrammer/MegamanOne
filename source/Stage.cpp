@@ -115,6 +115,10 @@ Stage::Stage(int numPlatforms_)
 	platforms.reserve(numPlatforms);
 	mManipulators.clear();
 	mNewManipulators.clear();
+
+	stage1Music = &Cfg::music.get((int)Cfg::Music::Stage1);
+	stage1Music->play();
+	stage1Music->setVolume(20);
 }
 
 Stage::~Stage()

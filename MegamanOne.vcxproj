@@ -26,10 +26,16 @@
     <ClInclude Include="headers\ASprite.h" />
     <ClInclude Include="headers\Cfg.h" />
     <ClInclude Include="headers\draw_shape.h" />
+    <ClInclude Include="headers\duck_fold.h" />
     <ClInclude Include="headers\Dynamic.h" />
     <ClInclude Include="headers\FlyPad.h" />
+    <ClInclude Include="headers\FSM.h" />
+    <ClInclude Include="headers\fsm_events.h" />
+    <ClInclude Include="headers\FSM_Player.h" />
+    <ClInclude Include="headers\fsm_states.h" />
     <ClInclude Include="headers\Game.h" />
     <ClInclude Include="headers\globals.h" />
+    <ClInclude Include="headers\MachineHandler.h" />
     <ClInclude Include="headers\physics.h" />
     <ClInclude Include="headers\Platform.h" />
     <ClInclude Include="headers\Player.h" />
@@ -55,6 +61,7 @@
     <ClCompile Include="source\FlyPad.cpp" />
     <ClCompile Include="source\Game.cpp" />
     <ClCompile Include="source\globals.cpp" />
+    <ClCompile Include="source\MachineHandler.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\physics.cpp" />
     <ClCompile Include="source\Platform.cpp" />
@@ -69,6 +76,7 @@
     <None Include="assets\data\bboxes\player\player.bbox" />
     <None Include="assets\data\tilemaps\tilemap1\zone1.map" />
     <None Include="assets\data\tilesets\tileset1.tst" />
+    <None Include="assets\music\stage1.m4a" />
     <None Include="assets\scripts\StageSetup.lua" />
     <None Include="assets\scripts\tilesets.lua" />
     <None Include="headers\tpl\ActionMap.tpl" />
@@ -82,6 +90,9 @@
     <Image Include="assets\textures\tilesets\tileset1.png" />
     <Image Include="assets\textures\tilesets\tileset1_32x32.png" />
     <Image Include="assets\textures\tilesets\tileset1_50x50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="assets\music\stage1.mp3" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

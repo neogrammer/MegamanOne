@@ -2,6 +2,9 @@
 #include <Player.h>
 #include <Physics.h>
 #include <Platform.h>
+#include <duck_fold.h>
+#include <assert.h>
+
 using namespace olc::utils::geom2d;
 
 void Player::loadAnimations()
@@ -19,7 +22,38 @@ void Player::loadAnimations()
 	this->animMap[std::pair("idle", true)].frames = loadAnimation(3, 3, 0, 14, 0);
 	this->animMap[std::pair("idle", true)].animDelay = 0.3f;
 	this->animMap[std::pair("idle", true)].pauseDelay = 0.f;
+	
+	this->animMap.emplace(std::pair{ "falling", false }, AnimData{});
+	this->animMap[std::pair("falling", false)].frames = loadAnimation(1, 10, 9, 5, 0);
+	this->animMap[std::pair("falling", false)].animDelay = 0.3f;
+	this->animMap[std::pair("falling", false)].pauseDelay = 0.f;
+	this->animMap[std::pair("falling", false)].looping = false;
+
+	// left animations
+	this->animMap.emplace(std::pair{ "falling", true }, AnimData{});
+	this->animMap[std::pair("falling", true)].frames = loadAnimation(1, 10, 9, 18, 0);
+	this->animMap[std::pair("falling", true)].animDelay = 0.3f;
+	this->animMap[std::pair("falling", true)].pauseDelay = 0.f;
+	this->animMap[std::pair("falling", true)].looping = false;
+
+	this->animMap.emplace(std::pair{ "landing", false }, AnimData{});
+	this->animMap[std::pair("landing", false)].frames = loadAnimation(3, 13, 10, 5, 0);
+	this->animMap[std::pair("landing", false)].animDelay = 0.06f;
+	this->animMap[std::pair("landing", false)].pauseDelay = 0.f;
+	this->animMap[std::pair("landing", false)].looping = false;
+	// left animations
+	this->animMap.emplace(std::pair{ "landing", true }, AnimData{});
+	this->animMap[std::pair("landing", true)].frames = loadAnimation(3, 13, 10, 18, 0);
+	this->animMap[std::pair("landing", true)].animDelay = 0.06f;
+	this->animMap[std::pair("landing", true)].pauseDelay = 0.f;
+	this->animMap[std::pair("landing", true)].looping = false;
+
+
+
 	this->loadBBoxes();
+
+	this->currentAnim = "falling";
+
 }
 
 std::vector<sf::IntRect> Player::loadAnimation(int numFrames, int  pitch, int startCol, int startRow, int pitchColBegin)
@@ -108,6 +142,10 @@ Player::Player(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, ol
 	: ASprite{ tex_, texRect_, bbox_, SpriteType::Player, pos_, animDir_, bAffectedByGravity_ }
 {
 	loadAnimations();
+
+	fsmHandler = std::make_unique<MachineHandler>(MachineType::Player);
+	dispatch(fsmHandler->getMachine(), evt_Fell {});
+	
 }
 
 void Player::input()
@@ -200,6 +238,25 @@ void Player::input()
 
 void Player::update()
 {
+	if (!fsmHandler->getMachine().wasJustChanged())
+	{
+		if (this->animMap[std::pair(this->currentAnim, this->facingLeft)].isOnLastFrame())
+		{
+			dispatch(this->fsmHandler->getMachine(), evt_AnimationFinished{});
+		}
+	}
+
+	currentAnim = fsmHandler->getMachine().getCurrentState();
+	assert(animMap.find(std::pair(currentAnim, facingLeft)) != animMap.end());
+	if (fsmHandler->getMachine().wasJustChanged())
+	{
+		this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+		this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+		fsmHandler->getMachine().setJustChanged(false);
+	}
+
+
+
 	// Handle animation frame switching and pause at the start of an animation if it has a pause delay of more than 0.f
 	this->pauseElapsed += gTime;
 	if (this->pauseElapsed >= this->animMap[std::pair(this->currentAnim, this->facingLeft)].pauseDelay && this->animPaused == true)
@@ -215,6 +272,7 @@ void Player::update()
 			{
 				index = 0;
 				this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+				this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
 			}
 		}
 	}
@@ -230,16 +288,26 @@ void Player::update()
 		if (this->elapsed >= this->animMap[std::pair(this->currentAnim, this->facingLeft)].animDelay)
 		{
 			this->elapsed = 0.f;
-			this->animMap[std::pair(this->currentAnim, this->facingLeft)].animate();
-			this->index = this->animMap[std::pair(this->currentAnim, this->facingLeft)].index;
-
-			if (this->animMap[std::pair(this->currentAnim, this->facingLeft)].onLastFrame)
+			if (this->animMap[std::pair(this->currentAnim, this->facingLeft)].isOnLastFrame() && !this->animMap[std::pair(this->currentAnim, this->facingLeft)].looping)
 			{
-				this->animPaused = true;
-				this->pauseElapsed = 0.f;
+				// do nothing
+			}
+			else
+			{
+				this->animMap[std::pair(this->currentAnim, this->facingLeft)].animate();
+				this->index = this->animMap[std::pair(this->currentAnim, this->facingLeft)].index;
+				this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = this->index;
+
+				if (this->animMap[std::pair(this->currentAnim, this->facingLeft)].onLastFrame)
+				{
+					this->animPaused = true;
+					this->pauseElapsed = 0.f;
+				}
 			}
 		}
 	}
+
+
 
 	bbox = animMap[std::pair(currentAnim, facingLeft)].bboxes[index];
 	texRect = animMap[std::pair(currentAnim, facingLeft)].frames[index];
@@ -337,7 +405,7 @@ void Player::handleMapCollisions(std::vector<Platform>& plats_)
 
 				if (resDir == ResolutionDir::Up)
 				{
-
+						dispatch(this->fsmHandler->getMachine(), evt_Landed{});
 				
 					//this->setPos({ this->getPos().x,  plat.getPos().y - this->getBBSize().y - 0.1f });
 					//this->setVelocity({ this->getVelocity().x, (plat.getPos().y - plat.getPrevPos().y) / gTime });
@@ -579,6 +647,9 @@ void Player::handleMapCollisions(std::vector<Tile>& tiles)
 				}
 				if (resDir == ResolutionDir::Up)
 				{
+					dispatch(this->fsmHandler->getMachine(), evt_Landed{});
+
+
 					this->setPos({ this->getPos().x,  tile.getPos().y - this->getBBSize().y - 0.1f });
 					this->setVelocity({ this->getVelocity().x, tile.getVelocity().y });
 					this->canJump = true;
@@ -616,6 +687,8 @@ bool Player::isTileBelow(std::vector<Tile>& tiles)
 		{
 			if (this->prevOverlapIsX(tile) && !this->prevOverlapIsY(tile))
 			{
+				dispatch(this->fsmHandler->getMachine(), evt_Landed{});
+
 				collided = true;
 				break;
 
@@ -623,6 +696,11 @@ bool Player::isTileBelow(std::vector<Tile>& tiles)
 			}
 		}
 	}
+
+	if (collided == false)
+		dispatch(this->fsmHandler->getMachine(), evt_Fell{});
+
+
 	return collided;
 }
 

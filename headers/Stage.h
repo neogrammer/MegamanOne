@@ -2,9 +2,10 @@
 #define STAGE_H__
 #include <vector>
 #include <Platform.h>
+
 class Stage
 {
-
+	sf::Music* stage1Music{ nullptr };
 	int stageID{ 1 };
 
 	int numPlatforms{};
