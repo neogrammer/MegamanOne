@@ -188,7 +188,7 @@ void Player::loadAnimations()
 	this->animMap[std::pair("landingAndShooting", false)].pauseDelay = 0.f;
 	this->animMap[std::pair("landingAndShooting", false)].looping = false;
 	// left animations
-	this->animMap.emplace(std::pair{ "landingAndshooting", true }, AnimData{});
+	this->animMap.emplace(std::pair{ "landingAndShooting", true }, AnimData{});
 	this->animMap[std::pair("landingAndShooting", true)].numFrames = loadAnimation(this->animMap[std::pair("landingAndShooting", true)].frames, 1, 1, 0, 19, 14);
 	this->animMap[std::pair("landingAndShooting", true)].animDelay = 0.05f;
 	this->animMap[std::pair("landingAndShooting", true)].pauseDelay = 0.f;
@@ -472,30 +472,24 @@ void Player::input()
 		}
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	if (shooting)
 	{
-		shooting = true;
-
-		dispatch(this->fsmHandler->getMachine(), evt_StartedShooting{});
-
-		if (fsmHandler->getMachine().wasJustChanged())
+		shootWaitElapsed += gTime;
+		if (shootWaitElapsed >= shootWaitDelay)
 		{
-			fsmHandler->getMachine().setJustChanged(false);
-			this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
-			this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
-			currentAnim = fsmHandler->getMachine().getCurrentState();
-			this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
-			this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
-			this->index = 0;
-			elapsed = 0.f;
-			pauseElapsed = 0.f;
-			animPaused = true;
+			shooting = false;
 		}
 	}
-	else
+	if (!shooting)
 	{
-		shooting = false;
+		if (!shootAnimHolding)
+		{
+			canShoot = true;
+		}
+	}
 
+	if (!shootAnimHolding)
+	{
 		dispatch(this->fsmHandler->getMachine(), evt_StoppedShooting{});
 
 		if (fsmHandler->getMachine().wasJustChanged())
@@ -511,6 +505,57 @@ void Player::input()
 			pauseElapsed = 0.f;
 			animPaused = true;
 		}
+	}
+
+	if (shootAnimHolding)
+	{
+		shootAnimHoldElapsed += gTime;
+		if (shootAnimHoldElapsed >= shootAnimDelay)
+		{
+			shootAnimHolding = false;
+			
+		}
+		
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	{
+		shootAnimHolding = true;
+		shootAnimHoldElapsed = 0.f;
+
+		if (canShoot)
+		{
+			if (!shooting)
+			{
+				shootWaitElapsed = 0.f;
+				
+				justShot = true;
+				shooting = true;
+				canShoot = false;
+				shootAnimHolding = true;
+				dispatch(this->fsmHandler->getMachine(), evt_StartedShooting{});
+
+				if (fsmHandler->getMachine().wasJustChanged())
+				{
+					fsmHandler->getMachine().setJustChanged(false);
+					this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+					this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+					currentAnim = fsmHandler->getMachine().getCurrentState();
+					this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+					this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+					this->index = 0;
+					elapsed = 0.f;
+					pauseElapsed = 0.f;
+					animPaused = true;
+				}
+			}
+		}
+
+	}
+	else
+	{
+
+		
 
 	}
 

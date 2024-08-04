@@ -68,9 +68,16 @@ class Player : public ASprite
 	bool hasBBoxesSet(const std::string& animname, bool facingleft);
 	std::map<std::pair<std::string, bool>, AnimData> animMap{};
 public:
+	bool justShot{ false };
+	bool shooting{ false };
+	float shootWaitElapsed{0.f};
+	float shootAnimHoldElapsed{ 0.f };
+	float shootAnimDelay{ 0.15f };
+	float shootWaitDelay{ 0.15f };
+	bool canShoot{ true };
+	bool shootAnimHolding{ false };
 	bool jumping{ false };
 	bool falling{ false };
-	bool shooting{ false };
 	bool riding{ false };
 	Player() = default;
 	Player(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, olc::v_2d<float> pos_ = { 0.f,0.f }, AnimDirType animDir_ = AnimDirType::Uni, bool bAffectedByGravity_ = false);
