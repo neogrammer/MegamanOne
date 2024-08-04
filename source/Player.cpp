@@ -24,27 +24,27 @@ void Player::loadAnimations()
 	this->animMap[std::pair("idle", true)].pauseDelay = 0.f;
 	
 	this->animMap.emplace(std::pair{ "falling", false }, AnimData{});
-	this->animMap[std::pair("falling", false)].numFrames = loadAnimation(this->animMap[std::pair("falling", false)].frames, 1, 1, 0, 5, 9);
+	this->animMap[std::pair("falling", false)].numFrames = loadAnimation(this->animMap[std::pair("falling", false)].frames, 3, 3, 0, 5, 9);
 	this->animMap[std::pair("falling", false)].animDelay = 0.3f;
 	this->animMap[std::pair("falling", false)].pauseDelay = 0.f;
 	this->animMap[std::pair("falling", false)].looping = false;
 
 	// left animations
 	this->animMap.emplace(std::pair{ "falling", true }, AnimData{});
-	this->animMap[std::pair("falling", true)].numFrames = loadAnimation(this->animMap[std::pair("falling", true)].frames, 1, 1, 0, 18, 9);
+	this->animMap[std::pair("falling", true)].numFrames = loadAnimation(this->animMap[std::pair("falling", true)].frames, 3, 3, 0, 18, 9);
 	this->animMap[std::pair("falling", true)].animDelay = 0.3f;
 	this->animMap[std::pair("falling", true)].pauseDelay = 0.f;
 	this->animMap[std::pair("falling", true)].looping = false;
 
 	this->animMap.emplace(std::pair{ "landing", false }, AnimData{});
-	this->animMap[std::pair("landing", false)].numFrames = loadAnimation(this->animMap[std::pair("landing", false)].frames, 2, 2, 0, 5, 10);
-	this->animMap[std::pair("landing", false)].animDelay = 0.06f;
+	this->animMap[std::pair("landing", false)].numFrames = loadAnimation(this->animMap[std::pair("landing", false)].frames, 1, 1, 0, 5, 14);
+	this->animMap[std::pair("landing", false)].animDelay = 0.05f;
 	this->animMap[std::pair("landing", false)].pauseDelay = 0.f;
 	this->animMap[std::pair("landing", false)].looping = false;
 	// left animations
 	this->animMap.emplace(std::pair{ "landing", true }, AnimData{});
-	this->animMap[std::pair("landing", true)].numFrames = loadAnimation(this->animMap[std::pair("landing", true)].frames, 2, 2, 0, 18, 10);
-	this->animMap[std::pair("landing", true)].animDelay = 0.06f;
+	this->animMap[std::pair("landing", true)].numFrames = loadAnimation(this->animMap[std::pair("landing", true)].frames, 1, 1, 0, 18, 14);
+	this->animMap[std::pair("landing", true)].animDelay = 0.05f;
 	this->animMap[std::pair("landing", true)].pauseDelay = 0.f;
 	this->animMap[std::pair("landing", true)].looping = false;
 
@@ -256,7 +256,7 @@ void Player::input()
 
 void Player::update()
 {
-	if (!fsmHandler->getMachine().wasJustChanged())
+	if (!fsmHandler->getMachine().wasJustChanged() && elapsed > this->animMap[std::pair(this->currentAnim, this->facingLeft)].animDelay)
 	{
 		if (this->animMap[std::pair(this->currentAnim, this->facingLeft)].isOnLastFrame())
 		{
@@ -270,7 +270,9 @@ void Player::update()
 	{
 		this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
 		this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+		this->index = 0;
 		fsmHandler->getMachine().setJustChanged(false);
+		elapsed = 0.f;
 	}
 
 
@@ -291,6 +293,7 @@ void Player::update()
 				index = 0;
 				this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
 				this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+				elapsed = 0.f;
 			}
 		}
 	}
@@ -305,17 +308,18 @@ void Player::update()
 
 		if (this->elapsed >= this->animMap[std::pair(this->currentAnim, this->facingLeft)].animDelay)
 		{
-			this->elapsed = 0.f;
+			
 			if (this->animMap[std::pair(this->currentAnim, this->facingLeft)].isOnLastFrame() && !this->animMap[std::pair(this->currentAnim, this->facingLeft)].looping)
 			{
 				// do nothing
+				fsmHandler->getMachine().setJustChanged(false);
 			}
 			else
 			{
+				this->elapsed = 0.f;
 				this->animMap[std::pair(this->currentAnim, this->facingLeft)].animate();
 				this->index = this->animMap[std::pair(this->currentAnim, this->facingLeft)].index;
 				this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = this->index;
-
 				if (this->animMap[std::pair(this->currentAnim, this->facingLeft)].onLastFrame)
 				{
 					this->animPaused = true;
