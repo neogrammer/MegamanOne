@@ -30,6 +30,20 @@ public:
 		return state_Running{};
 	}
 
+	std::optional<PlayerStateVar> On_Event(state_StartingRun& s, const evt_Jumped& e)
+	{
+		justChanged_ = true;
+		FSM<FSM_Player, PlayerStateVar>::currentState_ = "jumping";
+		return state_Jumping{};
+	}
+
+	std::optional<PlayerStateVar> On_Event(state_Running& s, const evt_Jumped& e)
+	{
+		justChanged_ = true;
+		FSM<FSM_Player, PlayerStateVar>::currentState_ = "jumping";
+		return state_Jumping{};
+	}
+
 	std::optional<PlayerStateVar> On_Event(state_StartingRun& s, const evt_StoppedMoving& e)
 	{
 		justChanged_ = true;
@@ -44,14 +58,21 @@ public:
 		return state_Standing{};
 	}
 
-	std::optional<PlayerStateVar> On_Event(state_Running& s, const evt_Jumped& e)
+
+	std::optional<PlayerStateVar> On_Event(state_Running& s, const evt_Fell& e)
 	{
 		justChanged_ = true;
-		FSM<FSM_Player, PlayerStateVar>::currentState_ = "jumping";
-		return state_Jumping{};
+		FSM<FSM_Player, PlayerStateVar>::currentState_ = "falling";
+		return state_Falling{};
+	}
+	std::optional<PlayerStateVar> On_Event(state_Jumping& s, const evt_ReachedJumpPeak& e)
+	{
+		justChanged_ = true;
+		FSM<FSM_Player, PlayerStateVar>::currentState_ = "peakingJump";
+		return state_PeakingJump{};
 	}
 
-	std::optional<PlayerStateVar> On_Event(state_Jumping& s, const evt_ReachedJumpPeak& e)
+	std::optional<PlayerStateVar> On_Event(state_PeakingJump& s, const evt_Fell& e)
 	{
 		justChanged_ = true;
 		FSM<FSM_Player, PlayerStateVar>::currentState_ = "falling";

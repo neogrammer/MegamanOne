@@ -72,6 +72,30 @@ void Player::loadAnimations()
 	this->animMap[std::pair("running", true)].pauseDelay = 0.f;
 	this->animMap[std::pair("running", true)].looping = true;
 
+	this->animMap.emplace(std::pair{ "jumping", false }, AnimData{});
+	this->animMap[std::pair("jumping", false)].numFrames = loadAnimation(this->animMap[std::pair("jumping", false)].frames, 4, 4, 0, 5, 0);
+	this->animMap[std::pair("jumping", false)].animDelay = 0.16f;
+	this->animMap[std::pair("jumping", false)].pauseDelay = 0.f;
+	this->animMap[std::pair("jumping", false)].looping = false;
+	// left animations
+	this->animMap.emplace(std::pair{ "jumping", true }, AnimData{});
+	this->animMap[std::pair("jumping", true)].numFrames = loadAnimation(this->animMap[std::pair("jumping", true)].frames, 4, 4, 0, 18, 0);
+	this->animMap[std::pair("jumping", true)].animDelay = 0.16f;
+	this->animMap[std::pair("jumping", true)].pauseDelay = 0.f;
+	this->animMap[std::pair("jumping", true)].looping = false;
+
+	this->animMap.emplace(std::pair{ "peakingJump", false }, AnimData{});
+	this->animMap[std::pair("peakingJump", false)].numFrames = loadAnimation(this->animMap[std::pair("peakingJump", false)].frames, 1, 1, 0, 5, 5);
+	this->animMap[std::pair("peakingJump", false)].animDelay = 0.3f;
+	this->animMap[std::pair("peakingJump", false)].pauseDelay = 0.f;
+	this->animMap[std::pair("peakingJump", false)].looping = false;
+	// left animations
+	this->animMap.emplace(std::pair{ "peakingJump", true }, AnimData{});
+	this->animMap[std::pair("peakingJump", true)].numFrames = loadAnimation(this->animMap[std::pair("peakingJump", true)].frames, 1, 1, 0, 18, 5);
+	this->animMap[std::pair("peakingJump", true)].animDelay = 0.3f;
+	this->animMap[std::pair("peakingJump", true)].pauseDelay = 0.f;
+	this->animMap[std::pair("peakingJump", true)].looping = false;
+
 
 	this->loadBBoxes();
 
