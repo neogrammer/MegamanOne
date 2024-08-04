@@ -96,6 +96,103 @@ void Player::loadAnimations()
 	this->animMap[std::pair("peakingJump", true)].pauseDelay = 0.f;
 	this->animMap[std::pair("peakingJump", true)].looping = false;
 
+	this->animMap.emplace(std::pair{ "brandishing", false }, AnimData{});
+	this->animMap[std::pair("brandishing", false)].numFrames = loadAnimation(this->animMap[std::pair("brandishing", false)].frames, 3, 3, 0, 1, 8);
+	this->animMap[std::pair("brandishing", false)].animDelay = 0.05f;
+	this->animMap[std::pair("brandishing", false)].pauseDelay = 0.f;
+	this->animMap[std::pair("brandishing", false)].looping = false;
+	// left animations
+	this->animMap.emplace(std::pair{ "brandishing", true }, AnimData{});
+	this->animMap[std::pair("brandishing", true)].numFrames = loadAnimation(this->animMap[std::pair("brandishing", true)].frames, 3, 3, 0, 14, 8);
+	this->animMap[std::pair("brandishing", true)].animDelay = 0.05f;
+	this->animMap[std::pair("brandishing", true)].pauseDelay = 0.f;
+	this->animMap[std::pair("brandishing", true)].looping = false;
+
+	this->animMap.emplace(std::pair{ "shooting", false }, AnimData{});
+	this->animMap[std::pair("shooting", false)].numFrames = loadAnimation(this->animMap[std::pair("shooting", false)].frames, 1, 1, 0, 1, 12);
+	this->animMap[std::pair("shooting", false)].animDelay = 0.05f;
+	this->animMap[std::pair("shooting", false)].pauseDelay = 1.f;
+	this->animMap[std::pair("shooting", false)].looping = true;
+	// left animations
+	this->animMap.emplace(std::pair{ "shooting", true }, AnimData{});
+	this->animMap[std::pair("shooting", true)].numFrames = loadAnimation(this->animMap[std::pair("shooting", true)].frames, 1, 1, 0, 14, 12);
+	this->animMap[std::pair("shooting", true)].animDelay = 0.05f;
+	this->animMap[std::pair("shooting", true)].pauseDelay = 1.f;
+	this->animMap[std::pair("shooting", true)].looping = true;
+
+	this->animMap.emplace(std::pair{ "startRunAndShooting", false }, AnimData{});
+	this->animMap[std::pair("startRunAndShooting", false)].numFrames = loadAnimation(this->animMap[std::pair("startRunAndShooting", false)].frames, 2, 2, 0, 3, 0);
+	this->animMap[std::pair("startRunAndShooting", false)].animDelay = 0.05f;
+	this->animMap[std::pair("startRunAndShooting", false)].pauseDelay = 0.f;
+	this->animMap[std::pair("startRunAndShooting", false)].looping = false;
+	// left animations
+	this->animMap.emplace(std::pair{ "startRunAndShooting", true }, AnimData{});
+	this->animMap[std::pair("startRunAndShooting", true)].numFrames = loadAnimation(this->animMap[std::pair("startRunAndShooting", true)].frames, 2, 2, 0, 16, 0);
+	this->animMap[std::pair("startRunAndShooting", true)].animDelay = 0.05f;
+	this->animMap[std::pair("startRunAndShooting", true)].pauseDelay = 0.f;
+	this->animMap[std::pair("startRunAndShooting", true)].looping = false;
+
+	this->animMap.emplace(std::pair{ "runningAndShooting", false }, AnimData{});
+	this->animMap[std::pair("runningAndShooting", false)].numFrames = loadAnimation(this->animMap[std::pair("runningAndShooting", false)].frames, 10, 10, 0, 3, 3);
+	this->animMap[std::pair("runningAndShooting", false)].animDelay = 0.05f;
+	this->animMap[std::pair("runningAndShooting", false)].pauseDelay = 0.f;
+	this->animMap[std::pair("runningAndShooting", false)].looping = true;
+	// left animations
+	this->animMap.emplace(std::pair{ "runningAndShooting", true }, AnimData{});
+	this->animMap[std::pair("runningAndShooting", true)].numFrames = loadAnimation(this->animMap[std::pair("runningAndShooting", true)].frames, 10, 10, 0, 16, 3);
+	this->animMap[std::pair("runningAndShooting", true)].animDelay = 0.05f;
+	this->animMap[std::pair("runningAndShooting", true)].pauseDelay = 0.f;
+	this->animMap[std::pair("runningAndShooting", true)].looping = true;
+
+
+	this->animMap.emplace(std::pair{ "jumpingAndShooting", false }, AnimData{});
+	this->animMap[std::pair("jumpingAndShooting", false)].numFrames = loadAnimation(this->animMap[std::pair("jumpingAndShooting", false)].frames, 4, 4, 0, 6, 0);
+	this->animMap[std::pair("jumpingAndShooting", false)].animDelay = 0.16f;
+	this->animMap[std::pair("jumpingAndShooting", false)].pauseDelay = 0.f;
+	this->animMap[std::pair("jumpingAndShooting", false)].looping = false;
+	// left animations
+	this->animMap.emplace(std::pair{ "jumpingAndShooting", true }, AnimData{});
+	this->animMap[std::pair("jumpingAndShooting", true)].numFrames = loadAnimation(this->animMap[std::pair("jumpingAndShooting", true)].frames, 4, 4, 0, 19, 0);
+	this->animMap[std::pair("jumpingAndShooting", true)].animDelay = 0.16f;
+	this->animMap[std::pair("jumpingAndShooting", true)].pauseDelay = 0.f;
+	this->animMap[std::pair("jumpingAndShooting", true)].looping = false;
+
+
+	this->animMap.emplace(std::pair{ "jumpPeakShooting", false }, AnimData{});
+	this->animMap[std::pair("jumpPeakShooting", false)].numFrames = loadAnimation(this->animMap[std::pair("jumpPeakShooting", false)].frames, 1, 1, 0, 6, 5);
+	this->animMap[std::pair("jumpPeakShooting", false)].animDelay = 0.16f;
+	this->animMap[std::pair("jumpPeakShooting", false)].pauseDelay = 0.f;
+	this->animMap[std::pair("jumpPeakShooting", false)].looping = false;
+	// left animations
+	this->animMap.emplace(std::pair{ "jumpPeakShooting", true }, AnimData{});
+	this->animMap[std::pair("jumpPeakShooting", true)].numFrames = loadAnimation(this->animMap[std::pair("jumpPeakShooting", true)].frames, 1, 1, 0, 19, 5);
+	this->animMap[std::pair("jumpPeakShooting", true)].animDelay = 0.16f;
+	this->animMap[std::pair("jumpPeakShooting", true)].pauseDelay = 0.f;
+	this->animMap[std::pair("jumpPeakShooting", true)].looping = false;
+
+	this->animMap.emplace(std::pair{ "fallingAndShooting", false }, AnimData{});
+	this->animMap[std::pair("fallingAndShooting", false)].numFrames = loadAnimation(this->animMap[std::pair("fallingAndShooting", false)].frames, 3, 3, 0, 6, 9);
+	this->animMap[std::pair("fallingAndShooting", false)].animDelay = 0.16f;
+	this->animMap[std::pair("fallingAndShooting", false)].pauseDelay = 0.f;
+	this->animMap[std::pair("fallingAndShooting", false)].looping = false;
+	// left animations
+	this->animMap.emplace(std::pair{ "fallingAndShooting", true }, AnimData{});
+	this->animMap[std::pair("fallingAndShooting", true)].numFrames = loadAnimation(this->animMap[std::pair("fallingAndShooting", true)].frames, 3, 3, 0, 19, 9);
+	this->animMap[std::pair("fallingAndShooting", true)].animDelay = 0.16f;
+	this->animMap[std::pair("fallingAndShooting", true)].pauseDelay = 0.f;
+	this->animMap[std::pair("fallingAndShooting", true)].looping = false;
+
+	this->animMap.emplace(std::pair{ "landingAndShooting", false }, AnimData{});
+	this->animMap[std::pair("landingAndShooting", false)].numFrames = loadAnimation(this->animMap[std::pair("landingAndShooting", false)].frames, 1, 1, 0, 6, 14);
+	this->animMap[std::pair("landingAndShooting", false)].animDelay = 0.05f;
+	this->animMap[std::pair("landingAndShooting", false)].pauseDelay = 0.f;
+	this->animMap[std::pair("landingAndShooting", false)].looping = false;
+	// left animations
+	this->animMap.emplace(std::pair{ "landingAndshooting", true }, AnimData{});
+	this->animMap[std::pair("landingAndShooting", true)].numFrames = loadAnimation(this->animMap[std::pair("landingAndShooting", true)].frames, 1, 1, 0, 19, 14);
+	this->animMap[std::pair("landingAndShooting", true)].animDelay = 0.05f;
+	this->animMap[std::pair("landingAndShooting", true)].pauseDelay = 0.f;
+	this->animMap[std::pair("landingAndShooting", true)].looping = false;
 
 	this->loadBBoxes();
 
@@ -373,6 +470,48 @@ void Player::input()
 			pauseElapsed = 0.f;
 			animPaused = true;
 		}
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	{
+		shooting = true;
+
+		dispatch(this->fsmHandler->getMachine(), evt_StartedShooting{});
+
+		if (fsmHandler->getMachine().wasJustChanged())
+		{
+			fsmHandler->getMachine().setJustChanged(false);
+			this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+			this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+			currentAnim = fsmHandler->getMachine().getCurrentState();
+			this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+			this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+			this->index = 0;
+			elapsed = 0.f;
+			pauseElapsed = 0.f;
+			animPaused = true;
+		}
+	}
+	else
+	{
+		shooting = false;
+
+		dispatch(this->fsmHandler->getMachine(), evt_StoppedShooting{});
+
+		if (fsmHandler->getMachine().wasJustChanged())
+		{
+			fsmHandler->getMachine().setJustChanged(false);
+			this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+			this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+			currentAnim = fsmHandler->getMachine().getCurrentState();
+			this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+			this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+			this->index = 0;
+			elapsed = 0.f;
+			pauseElapsed = 0.f;
+			animPaused = true;
+		}
+
 	}
 
 	//if (jump_down == false && getVelocity().y < -50.f && jumping)

@@ -70,7 +70,7 @@ class Player : public ASprite
 public:
 	bool jumping{ false };
 	bool falling{ false };
-
+	bool shooting{ false };
 	bool riding{ false };
 	Player() = default;
 	Player(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, olc::v_2d<float> pos_ = { 0.f,0.f }, AnimDirType animDir_ = AnimDirType::Uni, bool bAffectedByGravity_ = false);

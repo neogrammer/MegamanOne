@@ -90,3 +90,102 @@ peakingJump right
 1 
 peakingJump left
 42 45 60 78
+
+3 
+brandishing right
+32 45 60 78
+32 45 60 78
+32 45 60 78
+
+3 
+brandishing left
+42 45 60 78
+42 45 60 78
+42 45 60 78
+
+1 
+shooting right
+32 45 60 78
+
+1
+shooting left
+42 45 60 78
+
+
+2
+startRunAndShooting right
+32 45 60 78
+32 45 60 78
+
+2
+startRunAndShooting left
+42 45 60 78
+42 45 60 78
+
+10
+runningAndShooting right
+32 45 60 78
+32 45 60 78
+32 45 60 78
+32 45 60 78
+32 45 60 78
+32 45 60 78
+32 45 60 78
+32 45 60 78
+32 45 60 78
+32 45 60 78
+
+10 
+runningAndShooting left
+42 45 60 78
+42 45 60 78
+42 45 60 78
+42 45 60 78
+42 45 60 78
+42 45 60 78
+42 45 60 78
+42 45 60 78
+42 45 60 78
+42 45 60 78
+
+4
+jumpingAndShooting right
+32 45 60 78
+32 45 60 78
+32 45 60 78
+32 45 60 78
+
+4 
+jumpingAndShooting left
+42 45 60 78
+42 45 60 78
+42 45 60 78
+42 45 60 78
+
+1
+jumpPeakShooting right
+32 45 60 78
+
+1
+jumpPeakShooting left
+42 45 60 78
+
+3
+fallingAndShooting right
+32 45 60 78
+32 45 60 78
+32 45 60 78
+
+3
+fallingAndShooting left
+42 45 60 78
+42 45 60 78
+42 45 60 78
+
+1
+landingAndShooting right
+32 45 60 78
+
+1
+landingAndShooting left
+42 45 60 78
