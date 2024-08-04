@@ -19,8 +19,22 @@ public:
 	std::optional<PlayerStateVar> On_Event(state_Standing& s, const evt_StartedMoving& e)
 	{
 		justChanged_ = true;
+		FSM<FSM_Player, PlayerStateVar>::currentState_ = "startingRun";
+		return state_StartingRun{};
+	}
+
+	std::optional<PlayerStateVar> On_Event(state_StartingRun& s, const evt_AnimationFinished& e)
+	{
+		justChanged_ = true;
 		FSM<FSM_Player, PlayerStateVar>::currentState_ = "running";
 		return state_Running{};
+	}
+
+	std::optional<PlayerStateVar> On_Event(state_StartingRun& s, const evt_StoppedMoving& e)
+	{
+		justChanged_ = true;
+		FSM<FSM_Player, PlayerStateVar>::currentState_ = "idle";
+		return state_Standing{};
 	}
 
 	std::optional<PlayerStateVar> On_Event(state_Running& s, const evt_StoppedMoving& e)

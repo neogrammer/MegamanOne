@@ -48,6 +48,29 @@ void Player::loadAnimations()
 	this->animMap[std::pair("landing", true)].pauseDelay = 0.f;
 	this->animMap[std::pair("landing", true)].looping = false;
 
+	this->animMap.emplace(std::pair{ "startingRun", false }, AnimData{});
+	this->animMap[std::pair("startingRun", false)].numFrames = loadAnimation(this->animMap[std::pair("startingRun", false)].frames, 2, 2, 0, 2, 0);
+	this->animMap[std::pair("startingRun", false)].animDelay = 0.05f;
+	this->animMap[std::pair("startingRun", false)].pauseDelay = 0.f;
+	this->animMap[std::pair("startingRun", false)].looping = false;
+	// left animations
+	this->animMap.emplace(std::pair{ "startingRun", true }, AnimData{});
+	this->animMap[std::pair("startingRun", true)].numFrames = loadAnimation(this->animMap[std::pair("startingRun", true)].frames, 2, 2, 0, 15, 0);
+	this->animMap[std::pair("startingRun", true)].animDelay = 0.05f;
+	this->animMap[std::pair("startingRun", true)].pauseDelay = 0.f;
+	this->animMap[std::pair("startingRun", true)].looping = false;
+
+	this->animMap.emplace(std::pair{ "running", false }, AnimData{});
+	this->animMap[std::pair("running", false)].numFrames = loadAnimation(this->animMap[std::pair("running", false)].frames, 10, 10, 0, 2, 3);
+	this->animMap[std::pair("running", false)].animDelay = 0.05f;
+	this->animMap[std::pair("running", false)].pauseDelay = 0.f;
+	this->animMap[std::pair("running", false)].looping = true;
+	// left animations
+	this->animMap.emplace(std::pair{ "running", true }, AnimData{});
+	this->animMap[std::pair("running", true)].numFrames = loadAnimation(this->animMap[std::pair("running", true)].frames, 10, 10, 0, 15, 3);
+	this->animMap[std::pair("running", true)].animDelay = 0.05f;
+	this->animMap[std::pair("running", true)].pauseDelay = 0.f;
+	this->animMap[std::pair("running", true)].looping = true;
 
 
 	this->loadBBoxes();
@@ -174,6 +197,7 @@ void Player::input()
 		{
 			// first moment of push
 			right_pressed = true;
+			dispatch(this->fsmHandler->getMachine(), evt_StartedMoving{});
 		}
 		else
 		{
@@ -199,6 +223,7 @@ void Player::input()
 		{
 			// first moment of push
 			left_pressed = true;
+			dispatch(this->fsmHandler->getMachine(), evt_StartedMoving{});
 		}
 		else
 		{
@@ -245,6 +270,7 @@ void Player::input()
 	if (left_down == false && right_down == false)
 	{
 		setVelocity({ 0.f, getVelocity().y });
+		dispatch(this->fsmHandler->getMachine(), evt_StoppedMoving{});
 	}
 
 	if (jump_down == false && getVelocity().y < -50.f && !onPlatform)
@@ -329,7 +355,7 @@ void Player::update()
 		}
 	}
 
-
+	index = animMap[std::pair(currentAnim, facingLeft)].index;
 
 	bbox = animMap[std::pair(currentAnim, facingLeft)].bboxes[index];
 	texRect = animMap[std::pair(currentAnim, facingLeft)].frames[index];
