@@ -68,6 +68,9 @@ class Player : public ASprite
 	bool hasBBoxesSet(const std::string& animname, bool facingleft);
 	std::map<std::pair<std::string, bool>, AnimData> animMap{};
 public:
+	bool jumping{ false };
+	bool falling{ false };
+
 	bool riding{ false };
 	Player() = default;
 	Player(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, olc::v_2d<float> pos_ = { 0.f,0.f }, AnimDirType animDir_ = AnimDirType::Uni, bool bAffectedByGravity_ = false);

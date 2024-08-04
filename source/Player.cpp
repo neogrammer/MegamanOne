@@ -25,14 +25,14 @@ void Player::loadAnimations()
 	
 	this->animMap.emplace(std::pair{ "falling", false }, AnimData{});
 	this->animMap[std::pair("falling", false)].numFrames = loadAnimation(this->animMap[std::pair("falling", false)].frames, 3, 3, 0, 5, 9);
-	this->animMap[std::pair("falling", false)].animDelay = 0.3f;
+	this->animMap[std::pair("falling", false)].animDelay = 0.1f;
 	this->animMap[std::pair("falling", false)].pauseDelay = 0.f;
 	this->animMap[std::pair("falling", false)].looping = false;
 
 	// left animations
 	this->animMap.emplace(std::pair{ "falling", true }, AnimData{});
 	this->animMap[std::pair("falling", true)].numFrames = loadAnimation(this->animMap[std::pair("falling", true)].frames, 3, 3, 0, 18, 9);
-	this->animMap[std::pair("falling", true)].animDelay = 0.3f;
+	this->animMap[std::pair("falling", true)].animDelay = 0.1f;
 	this->animMap[std::pair("falling", true)].pauseDelay = 0.f;
 	this->animMap[std::pair("falling", true)].looping = false;
 
@@ -210,6 +210,20 @@ Player::Player(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, ol
 
 	fsmHandler = std::make_unique<MachineHandler>(MachineType::Player);
 	dispatch(fsmHandler->getMachine(), evt_Fell {});
+
+	if (fsmHandler->getMachine().wasJustChanged())
+	{
+		fsmHandler->getMachine().setJustChanged(false);
+		this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+		this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+		currentAnim = fsmHandler->getMachine().getCurrentState();
+		this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+		this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+		this->index = 0;
+		elapsed = 0.f;
+		pauseElapsed = 0.f;
+		animPaused = true;
+	}
 	
 }
 
@@ -221,7 +235,7 @@ void Player::input()
 		{
 			// first moment of push
 			right_pressed = true;
-			dispatch(this->fsmHandler->getMachine(), evt_StartedMoving{});
+			
 		}
 		else
 		{
@@ -229,6 +243,23 @@ void Player::input()
 		}
 
 		right_down = true;
+
+		dispatch(this->fsmHandler->getMachine(), evt_StartedMoving{});
+
+		if (fsmHandler->getMachine().wasJustChanged())
+		{
+			fsmHandler->getMachine().setJustChanged(false);
+			this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+			this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+			currentAnim = fsmHandler->getMachine().getCurrentState();
+			this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+			this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+			this->index = 0;
+			elapsed = 0.f;
+			pauseElapsed = 0.f;
+			animPaused = true;
+		}
+
 		facingLeft = false;
 		if (this->getVelocity().x <= MaxSpeed)
 		{
@@ -247,13 +278,30 @@ void Player::input()
 		{
 			// first moment of push
 			left_pressed = true;
-			dispatch(this->fsmHandler->getMachine(), evt_StartedMoving{});
+			
 		}
 		else
 		{
 			left_pressed = false;
 		}
 		left_down = true;
+
+
+		dispatch(this->fsmHandler->getMachine(), evt_StartedMoving{});
+
+		if (fsmHandler->getMachine().wasJustChanged())
+		{
+			fsmHandler->getMachine().setJustChanged(false);
+			this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+			this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+			currentAnim = fsmHandler->getMachine().getCurrentState();
+			this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+			this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+			this->index = 0;
+			elapsed = 0.f;
+			pauseElapsed = 0.f;
+			animPaused = true;
+		}
 		facingLeft = true;
 		if (this->getVelocity().x >= -MaxSpeed)
 		{
@@ -277,7 +325,23 @@ void Player::input()
 			setVelocity({ getVelocity().x, JumpForce });
 			this->setAffectedByGravity(true);
 			this->tickMovement();
+			dispatch(fsmHandler->getMachine(), evt_Jumped{});
 
+			if (fsmHandler->getMachine().wasJustChanged())
+			{
+				fsmHandler->getMachine().setJustChanged(false);
+				this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+				this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+				currentAnim = fsmHandler->getMachine().getCurrentState();
+				this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+				this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+				this->index = 0;
+				elapsed = 0.f;
+				pauseElapsed = 0.f;
+				animPaused = true;
+			}
+			jumping = true;
+			falling = false;
 		}
 		else
 		{
@@ -295,36 +359,134 @@ void Player::input()
 	{
 		setVelocity({ 0.f, getVelocity().y });
 		dispatch(this->fsmHandler->getMachine(), evt_StoppedMoving{});
+
+		if (fsmHandler->getMachine().wasJustChanged())
+		{
+			fsmHandler->getMachine().setJustChanged(false);
+			this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+			this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+			currentAnim = fsmHandler->getMachine().getCurrentState();
+			this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+			this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+			this->index = 0;
+			elapsed = 0.f;
+			pauseElapsed = 0.f;
+			animPaused = true;
+		}
 	}
 
-	if (jump_down == false && getVelocity().y < -50.f && !onPlatform)
-	{
-		setVelocity({ getVelocity().x, -50.f });
-	}
+	//if (jump_down == false && getVelocity().y < -50.f && jumping)
+	//{
+
+	//	setVelocity({ getVelocity().x, -50.f });
+	//	dispatch(fsmHandler->getMachine(), evt_ReachedJumpPeak{});
+
+	//	if (fsmHandler->getMachine().wasJustChanged())
+	//	{
+	//		fsmHandler->getMachine().setJustChanged(false);
+	//		currentAnim = fsmHandler->getMachine().getCurrentState();
+	//		this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+	//		this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+	//		this->index = 0;
+	//		elapsed = 0.f;
+	//		pauseElapsed = 0.f;
+	//		animPaused = true;
+	//	}
+	//	jumping = false;
+	//	falling = false;
+
+	//}
 
 }
 
 void Player::update()
 {
+	currentAnim = fsmHandler->getMachine().getCurrentState();
+	if (fsmHandler->getMachine().wasJustChanged())
+	{
+		fsmHandler->getMachine().setJustChanged(false);
+		this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+		this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+		currentAnim = fsmHandler->getMachine().getCurrentState();
+		this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+		this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+		this->index = 0;
+		elapsed = 0.f;
+		pauseElapsed = 0.f;
+		animPaused = true;
+	}
+
+	if (jumping == true)
+	{
+		if (getVelocity().y > -50)
+		{
+			jumping = false;
+			falling = false;
+			dispatch(fsmHandler->getMachine(), evt_ReachedJumpPeak{});
+
+			if (fsmHandler->getMachine().wasJustChanged())
+			{
+				fsmHandler->getMachine().setJustChanged(false);
+				this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+				this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+				currentAnim = fsmHandler->getMachine().getCurrentState();
+				this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+				this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+				this->index = 0;
+				elapsed = 0.f;
+				pauseElapsed = 0.f;
+				animPaused = true;
+			}
+		}
+	}
+
+	if (currentAnim == "peakingJump")
+	{
+		if (getVelocity().y > 50.f)
+		{
+			falling = true;
+			jumping = false;
+			dispatch(fsmHandler->getMachine(), evt_Fell{});
+
+			if (fsmHandler->getMachine().wasJustChanged())
+			{
+				fsmHandler->getMachine().setJustChanged(false);
+				this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+				this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+				currentAnim = fsmHandler->getMachine().getCurrentState();
+				this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+				this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+				this->index = 0;
+				elapsed = 0.f;
+				pauseElapsed = 0.f;
+				animPaused = true;
+			}
+		}
+	}
+
+
+
 	if (!fsmHandler->getMachine().wasJustChanged() && elapsed > this->animMap[std::pair(this->currentAnim, this->facingLeft)].animDelay)
 	{
 		if (this->animMap[std::pair(this->currentAnim, this->facingLeft)].isOnLastFrame())
 		{
 			dispatch(this->fsmHandler->getMachine(), evt_AnimationFinished{});
+
+			if (fsmHandler->getMachine().wasJustChanged())
+			{
+				fsmHandler->getMachine().setJustChanged(false);
+				this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+				this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+				currentAnim = fsmHandler->getMachine().getCurrentState();
+				this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+				this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+				this->index = 0;
+				elapsed = 0.f;
+				pauseElapsed = 0.f;
+				animPaused = true;
+			}
 		}
 	}
-
-	currentAnim = fsmHandler->getMachine().getCurrentState();
-	assert(animMap.find(std::pair(currentAnim, facingLeft)) != animMap.end());
-	if (fsmHandler->getMachine().wasJustChanged())
-	{
-		this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
-		this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
-		this->index = 0;
-		fsmHandler->getMachine().setJustChanged(false);
-		elapsed = 0.f;
-	}
-
 
 
 	// Handle animation frame switching and pause at the start of an animation if it has a pause delay of more than 0.f
@@ -334,40 +496,50 @@ void Player::update()
 		this->elapsed = std::min(this->pauseElapsed - gTime, 0.f);
 		this->animPaused = false;
 	}
-	if (this->animPaused)
-	{
-		if (pauseElapsed > this->animMap[std::pair(this->currentAnim, this->facingLeft)].animDelay)
-		{
-			if (this->animMap[std::pair(this->currentAnim, this->facingLeft)].looping)
-			{
-				index = 0;
-				this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
-				this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
-				elapsed = 0.f;
-			}
-		}
-	}
+	//if (this->animPaused)
+	//{
+	//	if (pauseElapsed > this->animMap[std::pair(this->currentAnim, this->facingLeft)].pauseDelay)
+	//	{
+	//		if (this->animMap[std::pair(this->currentAnim, this->facingLeft)].looping)
+	//		{
+	//			index = 0;
+	//			this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+	//			this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+	//			elapsed = 0.f;
+	//			pauseElapsed = 0.f;
+	//			animPaused = true;
+	//		}
+	//	}
+	//}
 
 	if (this->animPaused == false)
 	{
 		this->elapsed += gTime;
-		if (this->index < 0 || this->index > this->animMap[std::pair(this->currentAnim, this->facingLeft)].numFrames)
-		{
-			throw std::runtime_error("Oh no! index for dynamic is out of range of the current animation selected to run");
-		}
+		//if (this->index < 0 || this->index >= this->animMap[std::pair(this->currentAnim, this->facingLeft)].numFrames)
+		//{
+		//	this->index = this->animMap[std::pair(this->currentAnim, this->facingLeft)].index;
+		//	this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = index;
+		//	elapsed = 0.f;
+		//	pauseElapsed = 0.f;
+		//	animPaused = true;
+		//	fsmHandler->getMachine().setJustChanged(false);
+		//	//throw std::runtime_error("Oh no! index for dynamic is out of range of the current animation selected to run");
+		//}
 
 		if (this->elapsed >= this->animMap[std::pair(this->currentAnim, this->facingLeft)].animDelay)
 		{
-			
-			if (this->animMap[std::pair(this->currentAnim, this->facingLeft)].isOnLastFrame() && !this->animMap[std::pair(this->currentAnim, this->facingLeft)].looping)
-			{
-				// do nothing
-				fsmHandler->getMachine().setJustChanged(false);
-			}
-			else
-			{
 				this->elapsed = 0.f;
 				this->animMap[std::pair(this->currentAnim, this->facingLeft)].animate();
+
+				if (this->animMap[std::pair(this->currentAnim, this->facingLeft)].isOnLastFrame())
+				{
+					dispatch(fsmHandler->getMachine(), evt_AnimationFinished{});
+					currentAnim = fsmHandler->getMachine().getCurrentState();
+				}
+				if (fsmHandler->getMachine().wasJustChanged())
+				{
+					this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+				}
 				this->index = this->animMap[std::pair(this->currentAnim, this->facingLeft)].index;
 				this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = this->index;
 				if (this->animMap[std::pair(this->currentAnim, this->facingLeft)].onLastFrame)
@@ -375,11 +547,11 @@ void Player::update()
 					this->animPaused = true;
 					this->pauseElapsed = 0.f;
 				}
-			}
+			
 		}
 	}
 
-	index = animMap[std::pair(currentAnim, facingLeft)].index;
+//	index = animMap[std::pair(currentAnim, facingLeft)].index;
 
 	bbox = animMap[std::pair(currentAnim, facingLeft)].bboxes[index];
 	texRect = animMap[std::pair(currentAnim, facingLeft)].frames[index];
@@ -477,8 +649,24 @@ void Player::handleMapCollisions(std::vector<Platform>& plats_)
 
 				if (resDir == ResolutionDir::Up)
 				{
+					if (currentAnim == "falling")
+					{
+						
 						dispatch(this->fsmHandler->getMachine(), evt_Landed{});
-				
+						if (fsmHandler->getMachine().wasJustChanged())
+						{
+							fsmHandler->getMachine().setJustChanged(false);
+							this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+							this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+							currentAnim = fsmHandler->getMachine().getCurrentState();
+							this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+							this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+							this->index = 0;
+							elapsed = 0.f;
+							pauseElapsed = 0.f;
+							animPaused = true;
+						}
+					}
 					//this->setPos({ this->getPos().x,  plat.getPos().y - this->getBBSize().y - 0.1f });
 					//this->setVelocity({ this->getVelocity().x, (plat.getPos().y - plat.getPrevPos().y) / gTime });
 					if (plat.getPos().y > plat.getPrevPos().y && plat.getVelocity().y >= 0.f)
@@ -606,6 +794,28 @@ void Player::handleMapCollisions(std::vector<Platform>& plats_)
 					this->onPlatform = false;
 					this->setAffectedByGravity(true);
 					this->canJump = false;
+
+					if (this->fsmHandler->getMachine().getCurrentState() == "peakingJump" || this->jumping || this->fsmHandler->getMachine().getCurrentState() == "jumping")
+					{
+							falling = true;
+							jumping = false;
+							dispatch(fsmHandler->getMachine(), evt_ReachedJumpPeak{}, evt_Fell{});
+
+							if (fsmHandler->getMachine().wasJustChanged())
+							{
+								fsmHandler->getMachine().setJustChanged(false);
+								this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+								this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+								currentAnim = fsmHandler->getMachine().getCurrentState();
+								this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+								this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+								this->index = 0;
+								elapsed = 0.f;
+								pauseElapsed = 0.f;
+								animPaused = true;
+							}
+					}
+
 				}
 				else if (resDir == ResolutionDir::Left)
 				{
@@ -721,6 +931,20 @@ void Player::handleMapCollisions(std::vector<Tile>& tiles)
 				{
 					dispatch(this->fsmHandler->getMachine(), evt_Landed{});
 
+					if (fsmHandler->getMachine().wasJustChanged())
+					{
+						fsmHandler->getMachine().setJustChanged(false);
+						this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+						this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+						currentAnim = fsmHandler->getMachine().getCurrentState();
+						this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+						this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+						this->index = 0;
+						elapsed = 0.f;
+						pauseElapsed = 0.f;
+						animPaused = true;
+					}
+
 
 					this->setPos({ this->getPos().x,  tile.getPos().y - this->getBBSize().y - 0.1f });
 					this->setVelocity({ this->getVelocity().x, tile.getVelocity().y });
@@ -731,6 +955,28 @@ void Player::handleMapCollisions(std::vector<Tile>& tiles)
 				{
 					this->setPos({ this->getPos().x,  tile.getPos().y + tile.getBBSize().y + 0.1f });
 					this->setVelocity({ this->getVelocity().x, tile.getVelocity().y });
+
+					if (this->fsmHandler->getMachine().getCurrentState() == "peakingJump" || this->jumping || this->fsmHandler->getMachine().getCurrentState() == "jumping")
+					{
+						falling = true;
+						jumping = false;
+						dispatch(fsmHandler->getMachine(), evt_ReachedJumpPeak{}, evt_Fell{});
+
+						if (fsmHandler->getMachine().wasJustChanged())
+						{
+							fsmHandler->getMachine().setJustChanged(false);
+							this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+							this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+							currentAnim = fsmHandler->getMachine().getCurrentState();
+							this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+							this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+							this->index = 0;
+							elapsed = 0.f;
+							pauseElapsed = 0.f;
+							animPaused = true;
+						}
+					}
+
 				}
 				else if (resDir == ResolutionDir::Left)
 				{
@@ -761,6 +1007,20 @@ bool Player::isTileBelow(std::vector<Tile>& tiles)
 			{
 				dispatch(this->fsmHandler->getMachine(), evt_Landed{});
 
+				if (fsmHandler->getMachine().wasJustChanged())
+				{
+					fsmHandler->getMachine().setJustChanged(false);
+					this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+					this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+					currentAnim = fsmHandler->getMachine().getCurrentState();
+					this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+					this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+					this->index = 0;
+					elapsed = 0.f;
+					pauseElapsed = 0.f;
+					animPaused = true;
+				}
+
 				collided = true;
 				break;
 
@@ -769,9 +1029,24 @@ bool Player::isTileBelow(std::vector<Tile>& tiles)
 		}
 	}
 
-	if (collided == false)
+	if (collided == false && !(onPlatform || riding))
+	{
 		dispatch(this->fsmHandler->getMachine(), evt_Fell{});
 
+		if (fsmHandler->getMachine().wasJustChanged())
+		{
+			fsmHandler->getMachine().setJustChanged(false);
+			this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+			this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+			currentAnim = fsmHandler->getMachine().getCurrentState();
+			this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
+			this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
+			this->index = 0;
+			elapsed = 0.f;
+			pauseElapsed = 0.f;
+			animPaused = true;
+		}
+	}
 
 	return collided;
 }
@@ -797,6 +1072,7 @@ void Player::AnimData::animate()
 	{
 		index = numFrames - 1;
 		onLastFrame = true;
+		
 	}
 	else if (index + 1 >= numFrames && this->looping == true)
 	{
