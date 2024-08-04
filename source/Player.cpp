@@ -14,36 +14,36 @@ void Player::loadAnimations()
 	this->facingLeft = false;
 	// right animations
 	this->animMap.emplace(std::pair{ "idle", false }, AnimData{});
-	this->animMap[std::pair("idle", false)].frames = loadAnimation(3, 3, 0, 1, 0);
+	this->animMap[std::pair("idle", false)].numFrames = loadAnimation(this->animMap[std::pair("idle", false)].frames, 3, 3, 0, 1, 0);
 	this->animMap[std::pair("idle", false)].animDelay = 0.3f;
 	this->animMap[std::pair("idle", false)].pauseDelay = 0.f;
 	// left animations
 	this->animMap.emplace(std::pair{ "idle", true }, AnimData{});
-	this->animMap[std::pair("idle", true)].frames = loadAnimation(3, 3, 0, 14, 0);
+	this->animMap[std::pair("idle", true)].numFrames = loadAnimation(this->animMap[std::pair("idle", true)].frames, 3, 3, 0, 14, 0);
 	this->animMap[std::pair("idle", true)].animDelay = 0.3f;
 	this->animMap[std::pair("idle", true)].pauseDelay = 0.f;
 	
 	this->animMap.emplace(std::pair{ "falling", false }, AnimData{});
-	this->animMap[std::pair("falling", false)].frames = loadAnimation(1, 10, 9, 5, 0);
+	this->animMap[std::pair("falling", false)].numFrames = loadAnimation(this->animMap[std::pair("falling", false)].frames, 1, 1, 0, 5, 9);
 	this->animMap[std::pair("falling", false)].animDelay = 0.3f;
 	this->animMap[std::pair("falling", false)].pauseDelay = 0.f;
 	this->animMap[std::pair("falling", false)].looping = false;
 
 	// left animations
 	this->animMap.emplace(std::pair{ "falling", true }, AnimData{});
-	this->animMap[std::pair("falling", true)].frames = loadAnimation(1, 10, 9, 18, 0);
+	this->animMap[std::pair("falling", true)].numFrames = loadAnimation(this->animMap[std::pair("falling", true)].frames, 1, 1, 0, 18, 9);
 	this->animMap[std::pair("falling", true)].animDelay = 0.3f;
 	this->animMap[std::pair("falling", true)].pauseDelay = 0.f;
 	this->animMap[std::pair("falling", true)].looping = false;
 
 	this->animMap.emplace(std::pair{ "landing", false }, AnimData{});
-	this->animMap[std::pair("landing", false)].frames = loadAnimation(3, 13, 10, 5, 0);
+	this->animMap[std::pair("landing", false)].numFrames = loadAnimation(this->animMap[std::pair("landing", false)].frames, 2, 2, 0, 5, 10);
 	this->animMap[std::pair("landing", false)].animDelay = 0.06f;
 	this->animMap[std::pair("landing", false)].pauseDelay = 0.f;
 	this->animMap[std::pair("landing", false)].looping = false;
 	// left animations
 	this->animMap.emplace(std::pair{ "landing", true }, AnimData{});
-	this->animMap[std::pair("landing", true)].frames = loadAnimation(3, 13, 10, 18, 0);
+	this->animMap[std::pair("landing", true)].numFrames = loadAnimation(this->animMap[std::pair("landing", true)].frames, 2, 2, 0, 18, 10);
 	this->animMap[std::pair("landing", true)].animDelay = 0.06f;
 	this->animMap[std::pair("landing", true)].pauseDelay = 0.f;
 	this->animMap[std::pair("landing", true)].looping = false;
@@ -56,39 +56,52 @@ void Player::loadAnimations()
 
 }
 
-std::vector<sf::IntRect> Player::loadAnimation(int numFrames, int  pitch, int startCol, int startRow, int pitchColBegin)
+int Player::loadAnimation(std::vector<sf::IntRect>& correctVec, int numFrames, int  pitch, int startCol, int startRow, int pitchColBegin)
 {
 	int colsFirst = pitch - startCol;
 	float rowsAfter = ((float)numFrames - (float)colsFirst) / (float)pitch;
 	int rowsBetween = static_cast<int>(rowsAfter);
 	int colsLast = static_cast<int>(round((rowsAfter * (float)pitch) / this->texRect.getSize().x));
 
-	std::vector<sf::IntRect> temp = {};
-	temp.clear();
-	temp.reserve(numFrames);
 
-	// first row
-	for (int x = startCol + pitchColBegin; x < pitch; x++)
+	if (correctVec.size() > 0)
 	{
-		temp.emplace_back(sf::IntRect{ {x * (int)texRect.getSize().x, startRow * (int)texRect.getSize().y},{(int)texRect.getSize().x,(int)texRect.getSize().y} });
+		std::cout << "frames already exist in structure you are about to wipe, check that" << std::endl;
+		throw std::runtime_error("IntRect vector in animation already loaded bout to wipe");
+	}
+
+	correctVec.clear();
+	correctVec.reserve(numFrames);
+	int numFramesCreated = 0;
+	// first row
+	for (int x = pitchColBegin; x < pitchColBegin + colsFirst; x++)
+	{
+		correctVec.emplace_back(sf::IntRect{ {x * (int)texRect.getSize().x, startRow * (int)texRect.getSize().y},{(int)texRect.getSize().x,(int)texRect.getSize().y} });
+		numFramesCreated++;
 	}
 	//  middle full rows
 	for (int y = 1; y < rowsBetween; y++)
 	{
 		for (int x = pitchColBegin; x < pitch; x++)
 		{
-			temp.emplace_back(sf::IntRect{ {x * (int)texRect.getSize().x, (startRow + y) * (int)texRect.getSize().y},{(int)texRect.getSize().x,(int)texRect.getSize().y} });
+			correctVec.emplace_back(sf::IntRect{ {x * (int)texRect.getSize().x, (startRow + y) * (int)texRect.getSize().y},{(int)texRect.getSize().x,(int)texRect.getSize().y} });
 		}
 	}
 	// final partial row
 	for (int x = pitchColBegin; x < colsLast; x++)
 	{
-		temp.emplace_back(sf::IntRect{ {x * (int)texRect.getSize().x, (startRow + rowsBetween + 1) * (int)texRect.getSize().y },{ (int)texRect.getSize().x,(int)texRect.getSize().y} });
+		correctVec.emplace_back(sf::IntRect{ {x * (int)texRect.getSize().x, (startRow + rowsBetween + 1) * (int)texRect.getSize().y },{ (int)texRect.getSize().x,(int)texRect.getSize().y} });
 	}
 	//handled like a pimp
 	this->numAnims++;
 
-	return temp;
+	if (numFrames != numFramesCreated)
+	{
+		std::cout << "frames created do not match the number of frames that were passed into the loadAnimation function" << std::endl;
+		throw std::runtime_error("Check frames");
+	}
+
+	return numFramesCreated;
 }
 
 void Player::loadBBoxes()
@@ -104,6 +117,12 @@ void Player::loadBBoxes()
 			file >> animname >> facingleft;
 			bool left = ((facingleft == "left") ? true : false);
 
+			if (this->animMap[std::pair(animname, left)].numFrames == this->animMap[std::pair(animname, left)].bboxes.size() && this->animMap[std::pair(animname, left)].bboxes.size() > (size_t)0)
+			{
+				std::cout << "animMap : " << animname << " , " << facingleft << " bboxes already has a size equal to the amount of frames you are about to clear and reserve, this must be an oversight, check your .bbox file" << std::endl;
+				throw std::runtime_error("Check bboxes");
+			}
+
 			this->animMap[std::pair(animname, left)].bboxes.clear();
 			this->animMap[std::pair(animname, left)].bboxes.reserve(numberOfFrames);
 			for (int i = 0; i < numberOfFrames; i++)
@@ -111,7 +130,6 @@ void Player::loadBBoxes()
 				int l{}, t{}, w{}, h{};
 				file >> l >> t >> w >> h;
 				this->animMap[std::pair(animname, left)].bboxes.emplace_back(sf::IntRect{ {l,t},{w,h} });
-				this->animMap[std::pair(animname, left)].numFrames++;
 			}
 			if (!hasBBoxesSet(animname, left))
 			{

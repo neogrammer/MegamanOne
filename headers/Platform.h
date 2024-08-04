@@ -45,7 +45,7 @@ class Platform : public ASprite
 	float maxX{ 0.f };
 
 	void loadAnimations();
-	std::vector<sf::IntRect> loadAnimation(int numFrames, int  pitch, int startCol = 0, int startRow = 0, int pitchColBegin = 0);
+	int loadAnimation(std::vector<sf::IntRect>& correctVec, int numFrames, int  pitch, int startCol = 0, int startRow = 0, int pitchColBegin = 0);
 	void loadBBoxes();
 	bool hasBBoxesSet(const std::string& animname, bool facingleft);
 	std::map<std::pair<std::string, bool>, AnimData> animMap{};
