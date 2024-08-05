@@ -80,6 +80,9 @@
     <None Include="assets\music\stage1.m4a" />
     <None Include="assets\scripts\StageSetup.lua" />
     <None Include="assets\scripts\tilesets.lua" />
+    <None Include="assets\sounds\busterShotNormal.ogg" />
+    <None Include="assets\sounds\jump.ogg" />
+    <None Include="assets\sounds\land.ogg" />
     <None Include="headers\tpl\ActionMap.tpl" />
     <None Include="headers\tpl\ActionTarget.tpl" />
     <None Include="headers\tpl\ResourceManager.tpl" />

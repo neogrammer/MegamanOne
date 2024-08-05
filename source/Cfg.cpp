@@ -1,6 +1,6 @@
 #include <pch.h>
 #include <ResourceManager.h>
-
+#include <globals.h>
 
 ResourceManager<sf::Texture, int> Cfg::textures = {};
 ResourceManager<sf::Font, int> Cfg::fonts = {};
@@ -16,6 +16,8 @@ void Cfg::Initialize()
     initMusic();
     initSounds();
 	initPlayerInputs();
+
+
  
 }
 
@@ -26,6 +28,24 @@ void Cfg::initMusic()
 
 void Cfg::initSounds()
 {
+	sounds.load((int)Sounds::BusterShotNormal, "assets/sounds/busterShotNormal.ogg");
+	sounds.load((int)Sounds::Jump, "assets/sounds/jump.ogg");
+	sounds.load((int)Sounds::Land, "assets/sounds/land.ogg");
+	auto smpCount = sounds.get((int)Sounds::BusterShotNormal).getSampleCount();
+	std::cout << smpCount << std::endl;
+	shootSound.setBuffer(sounds.get((int)Sounds::BusterShotNormal));
+	shootSound.setAttenuation(0.f);
+	shootSound.setRelativeToListener(false);
+	shootSound.setVolume(80);
+	jumpSound.setBuffer(sounds.get((int)Sounds::Jump));
+	jumpSound.setAttenuation(0.f);
+	jumpSound.setVolume(50.f);
+	jumpSound.setRelativeToListener(false);
+	landSound.setBuffer(sounds.get((int)Sounds::Land));
+	landSound.setAttenuation(0.f);
+	landSound.setRelativeToListener(false);
+
+	landSound.setVolume(80);
 
 }
 

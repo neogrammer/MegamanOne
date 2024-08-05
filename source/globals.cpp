@@ -7,6 +7,10 @@ unsigned int gWH = {};
 sf::Vector2f mpos = {};
 bool gWndFull = false;
 
+sf::Sound shootSound = {};
+sf::Sound jumpSound = {};
+sf::Sound landSound = {};
+
 float gTime = 0.f;
 
 void wndw::CreateWindow(std::string title_, unsigned int w_, unsigned int h_)
@@ -31,4 +35,20 @@ bool scr::CheckLua(lua_State* L, int r)
 		return false;
 	}
 	return true;
+}
+
+void snd::Play(std::string soundName_)
+{
+	if (soundName_ == "shoot")
+	{
+		shootSound.play();
+	}
+	if (soundName_ == "jump")
+	{
+		jumpSound.play();
+	}	
+	if (soundName_ == "land")
+	{
+		landSound.play();
+	}
 }

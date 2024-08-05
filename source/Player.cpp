@@ -436,6 +436,9 @@ void Player::input()
 
 			if (fsmHandler->getMachine().wasJustChanged())
 			{
+				snd::Play("jump");
+
+				
 				fsmHandler->getMachine().setJustChanged(false);
 				this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
 				this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
@@ -608,6 +611,8 @@ void Player::update()
 		if (numLiveBullets < maxLiveBullets)
 		{
 			shoot(ProjectileType::BusterBullet, true);
+			snd::Play("shoot");
+
 			numLiveBullets++;
 		}
 		justShot = false;
@@ -886,6 +891,9 @@ void Player::handleMapCollisions(std::vector<Platform>& plats_)
 						dispatch(this->fsmHandler->getMachine(), evt_Landed{});
 						if (fsmHandler->getMachine().wasJustChanged())
 						{
+							
+							snd::Play("land");
+
 							fsmHandler->getMachine().setJustChanged(false);
 							this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
 							this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
@@ -1164,6 +1172,11 @@ void Player::handleMapCollisions(std::vector<Tile>& tiles)
 
 					if (fsmHandler->getMachine().wasJustChanged())
 					{
+
+						
+						snd::Play("land");
+
+
 						fsmHandler->getMachine().setJustChanged(false);
 						this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
 						this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;
@@ -1236,10 +1249,15 @@ bool Player::isTileBelow(std::vector<Tile>& tiles)
 		{
 			if (this->prevOverlapIsX(tile) && !this->prevOverlapIsY(tile))
 			{
+				
 				dispatch(this->fsmHandler->getMachine(), evt_Landed{});
 
 				if (fsmHandler->getMachine().wasJustChanged())
 				{
+
+					snd::Play("land");
+
+
 					fsmHandler->getMachine().setJustChanged(false);
 					this->animMap[std::pair(this->currentAnim, this->facingLeft)].index = 0;
 					this->animMap[std::pair(this->currentAnim, !this->facingLeft)].index = 0;

@@ -32,7 +32,7 @@ class Projectile
 	bool isFriendly{ true };
 
 	float animTimeElapsed{ 0.f };
-	float animDelay{ 0.2f };
+	float animDelay{ 0.05f };
 	int numFrames{ 1 };
 	int index{ 0 };
 

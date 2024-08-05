@@ -91,7 +91,7 @@ struct Cfg
 	enum class Textures : int { PlayerAtlas, Tileset1, FlyPad, China, BGSpace, BusterBullet, Count };
 	enum class Fonts : int { Count };
 	enum class Music : int { Stage1, Count };
-	enum class Sounds : int { Count };
+	enum class Sounds : int { BusterShotNormal, Jump, Land, Count };
 
 	// inputs the player will be able to use
 	enum PlayerInputs : int

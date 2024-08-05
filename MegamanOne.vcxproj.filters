@@ -112,6 +112,9 @@
     <Filter Include="assets\textures\projectiles">
       <UniqueIdentifier>{eb8a0b0d-bdcb-4d6f-a0d4-497840948e74}</UniqueIdentifier>
     </Filter>
+    <Filter Include="assets\sounds">
+      <UniqueIdentifier>{083252c4-ba9c-40e2-ac84-d796f0ada719}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\ServiceLocator.h">
@@ -288,6 +291,15 @@
     </None>
     <None Include="assets\data\aabbs\busterBullet.aabb">
       <Filter>assets\data\aabbs</Filter>
+    </None>
+    <None Include="assets\sounds\busterShotNormal.ogg">
+      <Filter>assets\sounds</Filter>
+    </None>
+    <None Include="assets\sounds\jump.ogg">
+      <Filter>assets\sounds</Filter>
+    </None>
+    <None Include="assets\sounds\land.ogg">
+      <Filter>assets\sounds</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
