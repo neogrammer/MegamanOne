@@ -1,6 +1,6 @@
 #include <pch.h>
 #include <Stage.h>
-
+#include <Projectile.h>
 void Stage::manipulate(lua_State* L)
 {
 	for (auto& m : mNewManipulators)
@@ -43,6 +43,8 @@ void Stage::update(lua_State* L)
 		//plat.tickMovement();
 		//plat.setControlledByScript(true);
 	}
+
+
 }
 
 void Stage::cleanupManipluators(std::vector<Manipulator*>& vec)

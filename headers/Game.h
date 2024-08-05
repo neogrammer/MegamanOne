@@ -6,9 +6,10 @@
 #include <SFML/Graphics/View.hpp>
 #include<Cfg.h>
 #include <SFML/System/Clock.hpp>
-
+#include <vector>
 struct lua_State;
 class Tilemap;
+#include <Projectile.h>
 
 class Game
 {

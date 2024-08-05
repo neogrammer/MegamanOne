@@ -1,8 +1,8 @@
 #ifndef TILE_H__
 #define TILE_H__
 
-#include <ASprite.h>
-
+#include "ASprite.h"
+class Projectile;
 class Tile : public ASprite
 {
 public:

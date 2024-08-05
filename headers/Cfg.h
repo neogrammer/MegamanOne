@@ -40,6 +40,22 @@ enum class AnimDirType
 	NotSet
 };
 
+enum class TravelDir
+{
+	Horizontal,
+	Vertical,
+	Directed,
+	Scripted,
+	Path,
+	NotSet
+};
+
+enum class ProjectileType
+{
+	Base,
+	BusterBullet
+};
+
 enum class ResolutionDir
 {
 	Up,
@@ -72,7 +88,7 @@ struct Cfg
 	static void Initialize();
 
 	// Resource Enums 
-	enum class Textures : int { PlayerAtlas, Tileset1, FlyPad, China, BGSpace, Count };
+	enum class Textures : int { PlayerAtlas, Tileset1, FlyPad, China, BGSpace, BusterBullet, Count };
 	enum class Fonts : int { Count };
 	enum class Music : int { Stage1, Count };
 	enum class Sounds : int { Count };

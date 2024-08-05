@@ -4,6 +4,11 @@
 #include <Platform.h>
 #include <duck_fold.h>
 #include <assert.h>
+#include <algorithm>
+#include <Tilemap.h>
+#include <Projectile.h>
+#include <Tile.h>
+#include <Projectile.h>
 
 using namespace olc::utils::geom2d;
 
@@ -300,6 +305,11 @@ bool Player::hasBBoxesSet(const std::string& animname, bool facingleft)
 	return false;
 }
 
+bool Player::isFacingLeft()
+{
+	return facingLeft;
+}
+
 Player::Player(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, olc::v_2d<float> pos_, AnimDirType animDir_, bool bAffectedByGravity_)
 	: ASprite{ tex_, texRect_, bbox_, SpriteType::Player, pos_, animDir_, bAffectedByGravity_ }
 {
@@ -585,6 +595,15 @@ void Player::input()
 
 void Player::update()
 {
+	if (justShot)
+	{
+		shoot(ProjectileType::BusterBullet, true);
+		justShot = false;
+	}
+
+	std::remove_if(getProjectiles().begin(), getProjectiles().end(), [](Projectile& p) {
+		return p.isMarkedForDeletion() == true;  });
+
 	currentAnim = fsmHandler->getMachine().getCurrentState();
 	if (fsmHandler->getMachine().wasJustChanged())
 	{

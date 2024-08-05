@@ -6,6 +6,10 @@
 #include <Cfg.h>
 #include <memory>
 
+class Tile;
+class Projectile;
+class Tilemap;
+
 class ASprite
 {
 	struct AnimData
@@ -34,8 +38,11 @@ class ASprite
 		void stop();
 		void pause();
 		void resume();
+
 	};
 
+	int health{ 10 };
+	int healthMax{ 10 };
 
 	olc::v_2d<float> bbPos{};
 	olc::v_2d<float> prevPos{};
@@ -48,6 +55,10 @@ class ASprite
 	bool bControlledByScript{false};
 	bool showBoundingBox{ false };
 	AnimDirType animDir{ AnimDirType::NotSet };
+	std::vector<Projectile> projectiles{};
+
+
+
 public:
 	// these will be changed to a heinous animation map from the depths of hell
 	sf::IntRect texRect{};
@@ -59,6 +70,11 @@ public:
 	ASprite& operator=(const ASprite&) = default;
 	ASprite(ASprite&&) = default;
 	ASprite& operator=(ASprite&&) = default;
+	
+	inline std::vector<Projectile>& getProjectiles() { return projectiles; }
+
+	void shoot(ProjectileType type_, bool friendly_);
+
 
 	ASprite(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, SpriteType type_ = SpriteType::Basic, olc::v_2d<float> pos_ = { 0.f,0.f }, AnimDirType animDir_ = AnimDirType::Uni, bool bAffectedByGravity_ = false);
 	void setup(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, SpriteType type_ = SpriteType::Basic,  olc::v_2d<float> pos_ = { 0.f,0.f }, AnimDirType animDir_ = AnimDirType::Uni, bool bAffectedByGravity_ = false);
@@ -76,7 +92,7 @@ public:
 	bool prevOverlapIsY(ASprite& other);
 	bool prevOverlapIsX(ASprite& other);
 
-
+	virtual bool isFacingLeft(); 
 	olc::v_2d<float> getPos();
 	olc::v_2d<float> getPrevPos();
 	void setPrevPos(olc::v_2d<float> pos_);
@@ -98,6 +114,8 @@ public:
 
 	olc::utils::geom2d::ray<float> castRay(OriginPtType oType_, RayDirType dirType, olc::v_2d<float> target = { 0.f,0.f });
 	std::unique_ptr<sf::Sprite> getSpr();
+
+	void takeDamage(int dmg);
 
 };
 

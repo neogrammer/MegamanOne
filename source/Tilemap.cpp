@@ -2,6 +2,7 @@
 #include <Tilemap.h>
 #include <Tileset.h>
 #include <fstream>
+#include <Projectile.h>
 
 Tilemap::Tilemap(Cfg::Textures tex_, const std::string& tilesetName_, const std::string& mapName_, int zone)
 	: tileset{std::make_unique<Tileset>(tex_, tilesetName_)}

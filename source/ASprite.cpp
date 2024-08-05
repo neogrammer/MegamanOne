@@ -1,7 +1,20 @@
 #include <pch.h>
 #include <ASprite.h>
-
+#include <Projectile.h>
+#include <Tilemap.h>
 using namespace olc::utils::geom2d;
+
+void ASprite::shoot(ProjectileType type_, bool friendly_)
+{
+	switch (type_)
+	{
+	case ProjectileType::BusterBullet:
+		projectiles.emplace_back(Projectile{ Cfg::Textures::BusterBullet, "assets/data/aabbs/busterBullet.aabb", bbPos, (this->isFacingLeft()) ? -500.f : 500.f, TravelDir::Horizontal, type_, 1 });
+		break;
+	default:
+		break;
+	}
+}
 
 ASprite::ASprite(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, SpriteType type_, olc::v_2d<float> pos_, AnimDirType animDir_, bool bAffectedByGravity_)
 	: bbPos{pos_}
@@ -14,7 +27,9 @@ ASprite::ASprite(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, 
 	, texRect{texRect_}
 	, bbox{bbox_}
 	, prevPos{ pos_ }
-{}
+{
+	projectiles.clear();
+}
 
 void ASprite::setup(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, SpriteType type_, olc::v_2d<float> pos_, AnimDirType animDir_, bool bAffectedByGravity_)
 {
@@ -27,6 +42,7 @@ void ASprite::setup(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox
 	texRect = texRect_;
 	bbox = bbox_;
 	prevPos = pos_;
+	projectiles.clear();
 }
 olc::vi2d ASprite::getActualCollisionPt(olc::vf2d collPt_)
 {
@@ -87,6 +103,11 @@ bool ASprite::prevOverlapIsX(ASprite& other)
 		return true;
 	}
 	return false;
+}
+
+bool ASprite::isFacingLeft()
+{
+	bool isFacingLeft(); { return true; }
 }
 
 olc::v_2d<float> ASprite::getPos()
@@ -284,5 +305,28 @@ std::unique_ptr<sf::Sprite> ASprite::getSpr()
 	else
 	{
 		return nullptr;
+	}
+}
+
+void ASprite::takeDamage(int dmg)
+{
+	health -= dmg;
+
+
+	if (health <= 0)
+	{
+		health = 0;
+		// dead animation
+
+		// if enemy, mark for deletion
+
+		// if player lose game
+	}
+	else
+	{
+		// if enemy, change texture to all white for a split second, and keep the game going
+		
+		// if player
+		// hit animation, flash, and inactivate controls for a small period, then resume controls and keep invincible for a lil bit while the player recouperates
 	}
 }

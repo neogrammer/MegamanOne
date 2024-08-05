@@ -103,6 +103,15 @@
     <Filter Include="FSM">
       <UniqueIdentifier>{5a57e311-bd62-43d6-b1cb-96a82e590ce8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entities\projectiles">
+      <UniqueIdentifier>{188febad-ea61-41af-9b16-1fbb6ef3dadf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\data\aabbs">
+      <UniqueIdentifier>{4937fc1f-7139-428c-b7da-3935efeeb6b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\textures\projectiles">
+      <UniqueIdentifier>{eb8a0b0d-bdcb-4d6f-a0d4-497840948e74}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\ServiceLocator.h">
@@ -147,9 +156,6 @@
     <ClInclude Include="headers\Player.h">
       <Filter>Entities\asprites</Filter>
     </ClInclude>
-    <ClInclude Include="headers\FlyPad.h">
-      <Filter>Entities\asprites\platforms</Filter>
-    </ClInclude>
     <ClInclude Include="headers\Platform.h">
       <Filter>Entities\asprites</Filter>
     </ClInclude>
@@ -186,6 +192,9 @@
     <ClInclude Include="headers\MachineHandler.h">
       <Filter>Managers</Filter>
     </ClInclude>
+    <ClInclude Include="headers\Projectile.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -221,9 +230,6 @@
     <ClCompile Include="source\Player.cpp">
       <Filter>Entities\asprites</Filter>
     </ClCompile>
-    <ClCompile Include="source\FlyPad.cpp">
-      <Filter>Entities\asprites\platforms</Filter>
-    </ClCompile>
     <ClCompile Include="source\Platform.cpp">
       <Filter>Entities\asprites</Filter>
     </ClCompile>
@@ -244,6 +250,9 @@
     </ClCompile>
     <ClCompile Include="source\MachineHandler.cpp">
       <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Projectile.cpp">
+      <Filter>Entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -277,6 +286,9 @@
     <None Include="assets\music\stage1.m4a">
       <Filter>assets\music</Filter>
     </None>
+    <None Include="assets\data\aabbs\busterBullet.aabb">
+      <Filter>assets\data\aabbs</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\textures\actors\player\player_atlas1.png">
@@ -296,6 +308,9 @@
     </Image>
     <Image Include="assets\textures\backgrounds\space\bgSpace.png">
       <Filter>assets\textures\backgrounds\space</Filter>
+    </Image>
+    <Image Include="assets\textures\projectiles\busterBullet.png">
+      <Filter>assets\textures\projectiles</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>

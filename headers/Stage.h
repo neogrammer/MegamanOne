@@ -2,7 +2,7 @@
 #define STAGE_H__
 #include <vector>
 #include <Platform.h>
-
+class Projectile;
 class Stage
 {
 	sf::Music* stage1Music{ nullptr };

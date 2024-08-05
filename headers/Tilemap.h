@@ -5,6 +5,7 @@
 #include <Tile.h>
 #include <string>
 #include <memory>
+class Projectile;
 class Tileset;
 class Tilemap
 {

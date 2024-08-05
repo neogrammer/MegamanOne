@@ -1,12 +1,14 @@
 #ifndef PLAYER_H__
 #define PLAYER_H__
 #include <ASprite.h>
-#include <Tile.h>
+
 #include <memory>
 #include <MachineHandler.h>
 
+class Tile;
+class Tilemap;
 class Platform;
-
+class Projectile;
 class Player : public ASprite
 {
 	std::unique_ptr<MachineHandler> fsmHandler{};
@@ -68,6 +70,8 @@ class Player : public ASprite
 	bool hasBBoxesSet(const std::string& animname, bool facingleft);
 	std::map<std::pair<std::string, bool>, AnimData> animMap{};
 public:
+	bool isFacingLeft() override;
+
 	bool justShot{ false };
 	bool shooting{ false };
 	float shootWaitElapsed{0.f};

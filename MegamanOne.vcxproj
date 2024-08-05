@@ -28,7 +28,6 @@
     <ClInclude Include="headers\draw_shape.h" />
     <ClInclude Include="headers\duck_fold.h" />
     <ClInclude Include="headers\Dynamic.h" />
-    <ClInclude Include="headers\FlyPad.h" />
     <ClInclude Include="headers\FSM.h" />
     <ClInclude Include="headers\fsm_events.h" />
     <ClInclude Include="headers\FSM_Player.h" />
@@ -39,6 +38,7 @@
     <ClInclude Include="headers\physics.h" />
     <ClInclude Include="headers\Platform.h" />
     <ClInclude Include="headers\Player.h" />
+    <ClInclude Include="headers\Projectile.h" />
     <ClInclude Include="headers\ResourceManager.h" />
     <ClInclude Include="headers\ServiceLocator.h" />
     <ClInclude Include="headers\Stage.h" />
@@ -58,7 +58,6 @@
     <ClCompile Include="source\Cfg.cpp" />
     <ClCompile Include="source\draw_shape.cpp" />
     <ClCompile Include="source\Dynamic.cpp" />
-    <ClCompile Include="source\FlyPad.cpp" />
     <ClCompile Include="source\Game.cpp" />
     <ClCompile Include="source\globals.cpp" />
     <ClCompile Include="source\MachineHandler.cpp" />
@@ -66,12 +65,14 @@
     <ClCompile Include="source\physics.cpp" />
     <ClCompile Include="source\Platform.cpp" />
     <ClCompile Include="source\Player.cpp" />
+    <ClCompile Include="source\Projectile.cpp" />
     <ClCompile Include="source\Stage.cpp" />
     <ClCompile Include="source\Tile.cpp" />
     <ClCompile Include="source\Tilemap.cpp" />
     <ClCompile Include="source\Tileset.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="assets\data\aabbs\busterBullet.aabb" />
     <None Include="assets\data\bboxes\platforms\fly_pad.bbox" />
     <None Include="assets\data\bboxes\player\player.bbox" />
     <None Include="assets\data\tilemaps\tilemap1\zone1.map" />
@@ -87,6 +88,7 @@
     <Image Include="assets\textures\actors\player\player_atlas1.png" />
     <Image Include="assets\textures\backgrounds\space\bgSpace.png" />
     <Image Include="assets\textures\platforms\fly_pad67x40.png" />
+    <Image Include="assets\textures\projectiles\busterBullet.png" />
     <Image Include="assets\textures\tilesets\tileset1.png" />
     <Image Include="assets\textures\tilesets\tileset1_32x32.png" />
     <Image Include="assets\textures\tilesets\tileset1_50x50.png" />

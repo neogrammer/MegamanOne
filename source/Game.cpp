@@ -17,6 +17,19 @@ void Game::update()
 	aPlayer.handleMapCollisions(stage.getPlats());
 	aPlayer.tickMovement();
 
+	std::vector<ASprite*> sprites{};
+	sprites.emplace_back(new ASprite{});
+	ASprite& aSpr = *sprites[0];
+
+	sprites[0] = nullptr;
+
+	for (auto& p : aPlayer.getProjectiles())
+	{
+		p.updateCheckHandle(aPlayer, sprites, tmap->getSolidTiles());
+	}
+	sprites[0] = &aSpr;
+
+	delete sprites[0];
 
 	bgOffset += 10.f * gTime;
 
@@ -56,6 +69,12 @@ void Game::render()
 	}
 	tmap->render();
 	stage.render();
+	for (auto& p : aPlayer.getProjectiles())
+	{
+		if (p.isMarkedForDeletion()) continue;
+
+		p.render();
+	}
 	aPlayer.render();
 }
 

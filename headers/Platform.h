@@ -1,6 +1,7 @@
 #ifndef PLATFORM_H__
 #define PLATFORM_H_
 #include <ASprite.h>
+class Projectile;
 class Platform : public ASprite
 {
 
