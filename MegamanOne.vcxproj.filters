@@ -115,6 +115,15 @@
     <Filter Include="assets\sounds">
       <UniqueIdentifier>{083252c4-ba9c-40e2-ac84-d796f0ada719}</UniqueIdentifier>
     </Filter>
+    <Filter Include="assets\data\bboxes\enemies">
+      <UniqueIdentifier>{5980dda7-634b-41d5-bc3f-567c53e2ac1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\asprites\enemies">
+      <UniqueIdentifier>{f538dddf-90d9-4e6a-8524-cb2e14ad48f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\textures\actors\enemies">
+      <UniqueIdentifier>{e9f3e753-6d8c-4b68-931a-eb0b6ab0e1f8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\ServiceLocator.h">
@@ -198,6 +207,12 @@
     <ClInclude Include="headers\Projectile.h">
       <Filter>Entities</Filter>
     </ClInclude>
+    <ClInclude Include="headers\Enemy.h">
+      <Filter>Entities\asprites</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Snail.h">
+      <Filter>Entities\asprites\enemies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -257,6 +272,12 @@
     <ClCompile Include="source\Projectile.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
+    <ClCompile Include="source\Enemy.cpp">
+      <Filter>Entities\asprites</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Snail.cpp">
+      <Filter>Entities\asprites\enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="headers\tpl\ResourceManager.tpl">
@@ -301,6 +322,9 @@
     <None Include="assets\sounds\land.ogg">
       <Filter>assets\sounds</Filter>
     </None>
+    <None Include="assets\data\bboxes\enemies\snail.bbox">
+      <Filter>assets\data\bboxes\enemies</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\textures\actors\player\player_atlas1.png">
@@ -323,6 +347,9 @@
     </Image>
     <Image Include="assets\textures\projectiles\busterBullet.png">
       <Filter>assets\textures\projectiles</Filter>
+    </Image>
+    <Image Include="assets\textures\actors\enemies\snailAtlas.png">
+      <Filter>assets\textures\actors\enemies</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>

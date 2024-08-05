@@ -2,6 +2,8 @@
 #define STAGE_H__
 #include <vector>
 #include <Platform.h>
+#include <memory>
+class Enemy;
 class Projectile;
 class Stage
 {
@@ -10,7 +12,7 @@ class Stage
 
 	int numPlatforms{};
 	std::vector<Platform> platforms{};
-
+	std::vector<std::unique_ptr<Enemy>> enemies{};
 public:
 	struct Manipulator
 	{

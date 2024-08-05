@@ -1,6 +1,7 @@
 #include <pch.h>
 #include <Stage.h>
 #include <Projectile.h>
+#include <Snail.h>
 void Stage::manipulate(lua_State* L)
 {
 	for (auto& m : mNewManipulators)
@@ -44,7 +45,10 @@ void Stage::update(lua_State* L)
 		//plat.setControlledByScript(true);
 	}
 
-
+	for (auto& e : enemies)
+	{
+		e->update();
+	}
 }
 
 void Stage::cleanupManipluators(std::vector<Manipulator*>& vec)
@@ -121,6 +125,11 @@ Stage::Stage(int numPlatforms_)
 	stage1Music = &Cfg::music.get((int)Cfg::Music::Stage1);
 	stage1Music->play();
 	stage1Music->setVolume(20);
+
+	enemies.clear();
+	enemies.emplace_back(std::make_unique<Snail>());
+
+
 }
 
 Stage::~Stage()
@@ -145,6 +154,10 @@ void Stage::input()
 	{
 		plat.input();
 	}
+	for (auto& e : enemies)
+	{
+		e->input();
+	}
 }
 
 void Stage::render()
@@ -152,6 +165,11 @@ void Stage::render()
 	for (auto& plat : platforms)
 	{
 		plat.render();
+	}
+
+	for (auto& e : enemies)
+	{
+		e->render();
 	}
 }
 
@@ -230,6 +248,9 @@ bool Stage::ManInterpPos::update()
 		plat->setPos({ targetPos.x, targetPos.y });
 		complete = true;
 	}
+	
+
+
 	return complete;
 }
 

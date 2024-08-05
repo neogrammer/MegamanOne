@@ -9,6 +9,8 @@
 #include <vector>
 struct lua_State;
 class Tilemap;
+
+#include <Snail.h>
 #include <Projectile.h>
 
 class Game

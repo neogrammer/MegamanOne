@@ -28,6 +28,7 @@
     <ClInclude Include="headers\draw_shape.h" />
     <ClInclude Include="headers\duck_fold.h" />
     <ClInclude Include="headers\Dynamic.h" />
+    <ClInclude Include="headers\Enemy.h" />
     <ClInclude Include="headers\FSM.h" />
     <ClInclude Include="headers\fsm_events.h" />
     <ClInclude Include="headers\FSM_Player.h" />
@@ -41,6 +42,7 @@
     <ClInclude Include="headers\Projectile.h" />
     <ClInclude Include="headers\ResourceManager.h" />
     <ClInclude Include="headers\ServiceLocator.h" />
+    <ClInclude Include="headers\Snail.h" />
     <ClInclude Include="headers\Stage.h" />
     <ClInclude Include="headers\Tile.h" />
     <ClInclude Include="headers\Tilemap.h" />
@@ -58,6 +60,7 @@
     <ClCompile Include="source\Cfg.cpp" />
     <ClCompile Include="source\draw_shape.cpp" />
     <ClCompile Include="source\Dynamic.cpp" />
+    <ClCompile Include="source\Enemy.cpp" />
     <ClCompile Include="source\Game.cpp" />
     <ClCompile Include="source\globals.cpp" />
     <ClCompile Include="source\MachineHandler.cpp" />
@@ -66,6 +69,7 @@
     <ClCompile Include="source\Platform.cpp" />
     <ClCompile Include="source\Player.cpp" />
     <ClCompile Include="source\Projectile.cpp" />
+    <ClCompile Include="source\Snail.cpp" />
     <ClCompile Include="source\Stage.cpp" />
     <ClCompile Include="source\Tile.cpp" />
     <ClCompile Include="source\Tilemap.cpp" />
@@ -73,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\data\aabbs\busterBullet.aabb" />
+    <None Include="assets\data\bboxes\enemies\snail.bbox" />
     <None Include="assets\data\bboxes\platforms\fly_pad.bbox" />
     <None Include="assets\data\bboxes\player\player.bbox" />
     <None Include="assets\data\tilemaps\tilemap1\zone1.map" />
@@ -88,6 +93,7 @@
     <None Include="headers\tpl\ResourceManager.tpl" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="assets\textures\actors\enemies\snailAtlas.png" />
     <Image Include="assets\textures\actors\player\player_atlas1.png" />
     <Image Include="assets\textures\backgrounds\space\bgSpace.png" />
     <Image Include="assets\textures\platforms\fly_pad67x40.png" />
