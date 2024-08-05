@@ -17,6 +17,15 @@ Projectile::Projectile(const Projectile& o)
 	, tDir{ o.tDir }
 	, type{ o.type }
 	, damage{ o.damage }
+	, markedForDeletion{o.markedForDeletion}
+	, index{o.index}
+	, numFrames{ o.numFrames }
+	, distanceTravelled{ o.distanceTravelled }
+	, isFriendly{ o.isFriendly }
+	, animDelay{ o.animDelay }
+	, animTimeElapsed{ o.animTimeElapsed }
+	, frames_{}
+	, bboxes_{}
 {
 	frames_.clear();
 	bboxes_.clear();
@@ -31,6 +40,8 @@ Projectile::Projectile(const Projectile& o)
 
 Projectile& Projectile::operator=(const Projectile& o)
 {
+	if (&o == this) { return *this; }
+
 	tex = o.tex;
 	texRect = o.texRect;
 	bboxLocal = o.bboxLocal;
@@ -39,6 +50,15 @@ Projectile& Projectile::operator=(const Projectile& o)
 	tDir = o.tDir;
 	type = o.type;
 	damage = o.damage;
+	markedForDeletion = o.markedForDeletion;
+	index = o.index;
+	numFrames = o.numFrames;
+	distanceTravelled = o.distanceTravelled;
+	 isFriendly = o.isFriendly;
+	 animDelay = o.animDelay;
+	 animTimeElapsed = o.animTimeElapsed;
+	 frames_ = {};
+	 bboxes_ = {};
 
 	frames_.clear();
 	bboxes_.clear();
@@ -53,6 +73,75 @@ Projectile& Projectile::operator=(const Projectile& o)
 	return *this;
 }
 
+Projectile::Projectile(Projectile&& o) noexcept
+	: tex{ std::move(o.tex) }
+	, texRect{ std::move(o.texRect)}
+	, bboxLocal{ std::move(o.bboxLocal)}
+	, pos{ std::move(o.pos)}
+	, speed{ std::move(o.speed) }
+	, tDir{ std::move(o.tDir) }
+	, type{ std::move(o.type) }
+	, damage{ std::move(o.damage) }
+	, markedForDeletion{ std::move(o.markedForDeletion) }
+	, index{std::move(o.index)}
+	, numFrames{ std::move(o.numFrames)}
+	, distanceTravelled{ std::move(o.distanceTravelled)}
+	, isFriendly{ std::move(o.isFriendly)}
+	, animDelay{ std::move(o.animDelay)}
+	, animTimeElapsed{ std::move(o.animTimeElapsed)}
+	, frames_{}
+	, bboxes_{}
+{
+	frames_.clear();
+	bboxes_.clear();
+
+	frames_.resize(o.frames_.size());
+	bboxes_.resize(o.bboxes_.size());
+
+	for (int i = 0; i < frames_.size(); i++)
+	{
+		frames_[i] = std::move(o.frames_[i]);
+		bboxes_[i] = std::move(o.bboxes_[i]);
+	}
+}
+
+Projectile& Projectile::operator=(Projectile&& o) noexcept
+{
+	if (&o == this) { return *this; }
+
+	tex = std::move(o.tex);
+	texRect = std::move(o.texRect);
+	bboxLocal = std::move(o.bboxLocal);
+	pos = std::move(o.pos);
+	speed = std::move(o.speed);
+	tDir = std::move(o.tDir);
+	type = std::move(o.type);
+	damage = std::move(o.damage);
+	markedForDeletion = std::move(o.markedForDeletion);
+	index = std::move(o.index);
+	numFrames = std::move(o.numFrames);
+	distanceTravelled = std::move(o.distanceTravelled);
+	isFriendly = std::move(o.isFriendly);
+	animDelay = std::move(o.animDelay);
+	animTimeElapsed = std::move(o.animTimeElapsed);
+	frames_ = {};
+	bboxes_ = {};
+
+	frames_.clear();
+	bboxes_.clear();
+
+	frames_.resize(o.frames_.size());
+	bboxes_.resize(o.bboxes_.size());
+
+	for (int i = 0; i < frames_.size(); i++)
+	{
+		frames_[i] = std::move(o.frames_[i]);
+		bboxes_[i] = std::move(o.bboxes_[i]);
+	}
+
+	return *this;
+}
+
 Projectile::Projectile(Cfg::Textures tex_, const std::string& aabbFile, olc::v_2d<float> pos_, float speed_, TravelDir dir_, ProjectileType type_, int damage_)
 	: tex{tex_}
 	, texRect{}
@@ -62,6 +151,8 @@ Projectile::Projectile(Cfg::Textures tex_, const std::string& aabbFile, olc::v_2
 	, tDir{dir_}
 	, type{type_}
 	, damage{damage_}
+	, markedForDeletion{false}
+	, index{0}
 {
 
 	LoadAABB(aabbFile);

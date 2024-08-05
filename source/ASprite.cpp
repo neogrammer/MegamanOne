@@ -9,7 +9,7 @@ void ASprite::shoot(ProjectileType type_, bool friendly_)
 	switch (type_)
 	{
 	case ProjectileType::BusterBullet:
-		projectiles.emplace_back(Projectile{ Cfg::Textures::BusterBullet, "assets/data/aabbs/busterBullet.aabb", bbPos, (this->isFacingLeft()) ? -500.f : 500.f, TravelDir::Horizontal, type_, 1 });
+		projectiles.emplace_back(Projectile{ Cfg::Textures::BusterBullet, "assets/data/aabbs/busterBullet.aabb", (this->isFacingLeft()) ? olc::vf2d{bbPos.x - getBBOffset().x + 28, bbPos.y - getBBOffset().y + 67} : olc::vf2d{bbPos.x - getBBOffset().x + 99, bbPos.y - getBBOffset().y + 67} , (this->isFacingLeft()) ? -500.f : 500.f, TravelDir::Horizontal, type_, 1 });
 		break;
 	default:
 		break;

@@ -482,7 +482,7 @@ void Player::input()
 		}
 	}
 
-	if (shooting)
+	if (shooting || justShot)
 	{
 		shootWaitElapsed += gTime;
 		if (shootWaitElapsed >= shootWaitDelay)
@@ -537,14 +537,20 @@ void Player::input()
 		{
 			if (!shooting)
 			{
-				shootWaitElapsed = 0.f;
+				if (!justShot)
+				{
+					shootWaitElapsed = 0.f;
+					justShot = true;
+					canShoot = false;
+					shooting = true;
+				}
 				
-				justShot = true;
-				shooting = true;
-				canShoot = false;
-				shootAnimHolding = true;
+				
+				
+			
+			
 				dispatch(this->fsmHandler->getMachine(), evt_StartedShooting{});
-
+				
 				if (fsmHandler->getMachine().wasJustChanged())
 				{
 					fsmHandler->getMachine().setJustChanged(false);
@@ -595,14 +601,36 @@ void Player::input()
 
 void Player::update()
 {
-	if (justShot)
+	if (justShot && (fsmHandler->getMachine().getCurrentState() == "shooting" || fsmHandler->getMachine().getCurrentState() == "jumpingAndShooting" || fsmHandler->getMachine().getCurrentState() == "startRunAndShooting" || fsmHandler->getMachine().getCurrentState() == "jumpPeakShooting" || fsmHandler->getMachine().getCurrentState() == "landingAndShooting" || fsmHandler->getMachine().getCurrentState() == "fallingAndShooting"  || fsmHandler->getMachine().getCurrentState() == "runningAndShooting") && shootWaitElapsed >= shootWaitDelay)
 	{
-		shoot(ProjectileType::BusterBullet, true);
+		canShoot = true;
+		
+		if (numLiveBullets < maxLiveBullets)
+		{
+			shoot(ProjectileType::BusterBullet, true);
+			numLiveBullets++;
+		}
 		justShot = false;
 	}
 
-	std::remove_if(getProjectiles().begin(), getProjectiles().end(), [](Projectile& p) {
-		return p.isMarkedForDeletion() == true;  });
+	if (numLiveBullets > 0)
+	{
+		for (auto& b : getProjectiles())
+		{
+			if (b.isMarkedForDeletion())
+			{
+				continue;
+			}
+
+			if (b.aabb().top().end.x < 0.f || b.aabb().top().start.x > 1600.f)
+			{
+				b.setMarkedForDeletion(true);
+			}
+		}
+	}
+
+	auto erased = std::erase_if(getProjectiles(),  [](Projectile& p) { return p.isMarkedForDeletion() == true; });
+	numLiveBullets -= (int)erased;
 
 	currentAnim = fsmHandler->getMachine().getCurrentState();
 	if (fsmHandler->getMachine().wasJustChanged())
@@ -643,7 +671,7 @@ void Player::update()
 		}
 	}
 
-	if (currentAnim == "peakingJump")
+	if (currentAnim == "peakingJump" || currentAnim == "jumpPeakShooting")
 	{
 		if (getVelocity().y > 50.f)
 		{
@@ -852,7 +880,7 @@ void Player::handleMapCollisions(std::vector<Platform>& plats_)
 
 				if (resDir == ResolutionDir::Up)
 				{
-					if (currentAnim == "falling")
+					if (currentAnim == "falling" || currentAnim == "fallingAndShooting")
 					{
 						
 						dispatch(this->fsmHandler->getMachine(), evt_Landed{});
@@ -998,7 +1026,7 @@ void Player::handleMapCollisions(std::vector<Platform>& plats_)
 					this->setAffectedByGravity(true);
 					this->canJump = false;
 
-					if (this->fsmHandler->getMachine().getCurrentState() == "peakingJump" || this->jumping || this->fsmHandler->getMachine().getCurrentState() == "jumping")
+					if (this->fsmHandler->getMachine().getCurrentState() == "peakingJump" || this->jumping || this->fsmHandler->getMachine().getCurrentState() == "jumping" || this->fsmHandler->getMachine().getCurrentState() == "jumpingAndShooting" || this->fsmHandler->getMachine().getCurrentState() == "jumpPeakShooting")
 					{
 							falling = true;
 							jumping = false;

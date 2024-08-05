@@ -72,6 +72,8 @@ class Player : public ASprite
 public:
 	bool isFacingLeft() override;
 
+	int numLiveBullets{ 0 };
+	int maxLiveBullets{ 5 };
 	bool justShot{ false };
 	bool shooting{ false };
 	float shootWaitElapsed{0.f};

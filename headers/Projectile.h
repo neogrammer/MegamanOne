@@ -45,8 +45,8 @@ public:
 	virtual ~Projectile() = default;
 	Projectile(const Projectile& o);
 	Projectile& operator=(const Projectile& o);
-	Projectile(Projectile&&) = default;
-	Projectile& operator=(Projectile&&) = default;
+	Projectile(Projectile&& o) noexcept;
+	Projectile& operator=(Projectile&& o) noexcept;
 
 	Projectile(Cfg::Textures tex_,const std::string& aabbFile, olc::v_2d<float> pos_, float speed_ = 10.f, TravelDir dir_ = TravelDir::Horizontal, ProjectileType type_ = ProjectileType::Base, int damage_ = 1);
 	void setup(Cfg::Textures tex_,const  std::string& aabbFile, olc::v_2d<float> pos_, float speed_ = 10.f, TravelDir dir_ = TravelDir::Horizontal, ProjectileType type_ = ProjectileType::Base, int damage_ = 1);
@@ -58,7 +58,7 @@ public:
 	std::unique_ptr<sf::Sprite> getSpr();
 
 	inline bool isMarkedForDeletion() { return markedForDeletion; }
-
+	inline void setMarkedForDeletion(bool cond_) { markedForDeletion = cond_; }
 	void destoryAndDOT(ASprite& aSpr_);
 	void destroyAndAOE(ASprite& aSpr_);
 	void destroyAndHit(ASprite& aSpr_);
