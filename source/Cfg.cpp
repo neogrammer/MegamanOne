@@ -39,7 +39,7 @@ void Cfg::initSounds()
 	shootSound.setVolume(80);
 	jumpSound.setBuffer(sounds.get((int)Sounds::Jump));
 	jumpSound.setAttenuation(0.f);
-	jumpSound.setVolume(50.f);
+	jumpSound.setVolume(48.f);
 	jumpSound.setRelativeToListener(false);
 	landSound.setBuffer(sounds.get((int)Sounds::Land));
 	landSound.setAttenuation(0.f);
