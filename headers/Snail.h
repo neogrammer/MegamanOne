@@ -2,6 +2,7 @@
 #define SNAIL_H__
 
 #include <Enemy.h>
+class MoveCommand;
 
 class Projectile;
 

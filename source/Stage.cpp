@@ -2,6 +2,7 @@
 #include <Stage.h>
 #include <Projectile.h>
 #include <Snail.h>
+#include <MoveCommand.h>
 void Stage::manipulate(lua_State* L)
 {
 	for (auto& m : mNewManipulators)
@@ -128,6 +129,8 @@ Stage::Stage(int numPlatforms_)
 
 	enemies.clear();
 	enemies.emplace_back(std::make_unique<Snail>());
+	MoveData data{ {enemies.back()->getPos().x - 600.f, enemies.back()->getPos().y}, 12.f};
+	enemies.back()->pushCommand(CmdType::Move, reinterpret_cast<void*>(&data));
 
 
 }

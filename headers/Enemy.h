@@ -2,7 +2,11 @@
 #define ENEMY_H__
 #include <ASprite.h>
 #include <vector>
+#include <list>
+
+class Command;
 class Projectile;
+
 class Enemy : public ASprite
 {
 protected:
@@ -39,7 +43,7 @@ protected:
 	int index{ 0 };
 
 	std::map<std::pair<std::string, bool>, AnimData2> animMap{};
-
+	std::list<std::unique_ptr<Command>> cmdList{};
 public:
 	Enemy() = default;
 	Enemy(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, SpriteType type_ = SpriteType::Basic, olc::v_2d<float> pos_ = { 0.f,0.f }, AnimDirType animDir_ = AnimDirType::Uni, bool bAffectedByGravity_ = false);
@@ -58,6 +62,7 @@ public:
 	virtual void input() = 0;
 	virtual void update() = 0;
 
+	void pushCommand(CmdType cmd_, void* data_);
 
 };
 

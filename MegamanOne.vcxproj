@@ -25,6 +25,7 @@
     <ClInclude Include="headers\ActionTarget.h" />
     <ClInclude Include="headers\ASprite.h" />
     <ClInclude Include="headers\Cfg.h" />
+    <ClInclude Include="headers\Command.h" />
     <ClInclude Include="headers\draw_shape.h" />
     <ClInclude Include="headers\duck_fold.h" />
     <ClInclude Include="headers\Dynamic.h" />
@@ -36,6 +37,7 @@
     <ClInclude Include="headers\Game.h" />
     <ClInclude Include="headers\globals.h" />
     <ClInclude Include="headers\MachineHandler.h" />
+    <ClInclude Include="headers\MoveCommand.h" />
     <ClInclude Include="headers\physics.h" />
     <ClInclude Include="headers\Platform.h" />
     <ClInclude Include="headers\Player.h" />
@@ -65,6 +67,7 @@
     <ClCompile Include="source\globals.cpp" />
     <ClCompile Include="source\MachineHandler.cpp" />
     <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\MoveCommand.cpp" />
     <ClCompile Include="source\physics.cpp" />
     <ClCompile Include="source\Platform.cpp" />
     <ClCompile Include="source\Player.cpp" />

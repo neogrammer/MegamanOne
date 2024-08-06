@@ -1,16 +1,20 @@
 #include <pch.h>
 #include <Enemy.h>
 #include <Projectile.h>
+#include <MoveCommand.h>
 using namespace olc::utils::geom2d;
 
 Enemy::Enemy(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, SpriteType type_, olc::v_2d<float> pos_, AnimDirType animDir_, bool bAffectedByGravity_)
 	: ASprite{ tex_, texRect_, bbox_, type_, pos_, animDir_, bAffectedByGravity_ }
+	, cmdList{}
 {
+	cmdList.clear();
 }
 
 void Enemy::setup(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, SpriteType type_, olc::v_2d<float> pos_, AnimDirType animDir_, bool bAffectedByGravity_)
 {
 	ASprite::setup(tex_, texRect_, bbox_, type_, pos_, animDir_, bAffectedByGravity_);
+	cmdList.clear();
 }
 
 
@@ -118,6 +122,23 @@ bool Enemy::hasBBoxesSet(const std::string& animname, bool facingleft)
 bool Enemy::isFacingLeft()
 {
 	return facingLeft;
+}
+
+void Enemy::pushCommand(CmdType cmd_, void* data_)
+{
+	switch (cmd_)
+	{
+	case CmdType::Move:
+	{
+		MoveData* data = reinterpret_cast<MoveData*>(data_);
+		cmdList.emplace_back(std::make_unique<MoveCommand>(*this, data->target_, data->completeTime_));
+	}
+		break;
+
+	default:
+		break;
+	}
+	
 }
 
 

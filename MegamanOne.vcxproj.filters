@@ -124,6 +124,9 @@
     <Filter Include="assets\textures\actors\enemies">
       <UniqueIdentifier>{e9f3e753-6d8c-4b68-931a-eb0b6ab0e1f8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Command">
+      <UniqueIdentifier>{3bec7edf-9bf5-4915-ac13-175e5ec940b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\ServiceLocator.h">
@@ -213,6 +216,12 @@
     <ClInclude Include="headers\Snail.h">
       <Filter>Entities\asprites\enemies</Filter>
     </ClInclude>
+    <ClInclude Include="headers\Command.h">
+      <Filter>Command</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\MoveCommand.h">
+      <Filter>Command</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -277,6 +286,9 @@
     </ClCompile>
     <ClCompile Include="source\Snail.cpp">
       <Filter>Entities\asprites\enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="source\MoveCommand.cpp">
+      <Filter>Command</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

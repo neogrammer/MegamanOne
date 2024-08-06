@@ -75,6 +75,12 @@ enum class SpriteType
 	Basic
 };
 
+enum class CmdType
+{
+	Move,
+	Count
+};
+
 
 struct Cfg
 {
