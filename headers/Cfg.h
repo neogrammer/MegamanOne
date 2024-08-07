@@ -56,7 +56,7 @@ enum class ProjectileType
 	BusterBullet
 };
 
-enum class ResolutionDir
+enum class ResolutionDir : int
 {
 	Up,
 	Down,

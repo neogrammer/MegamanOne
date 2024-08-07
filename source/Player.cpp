@@ -336,6 +336,10 @@ Player::Player(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, ol
 
 void Player::input(sf::View& gview_)
 {
+	mapMoved = false;
+	mapMovedLeft = false;
+	mapMovedRight = false;
+	wasFacingLeft = facingLeft;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
 		if (!right_down)
@@ -373,11 +377,37 @@ void Player::input(sf::View& gview_)
 
 			if (gWnd.mapCoordsToPixel({ this->getPos().x, this->getPos().y }).x >= gWnd.mapPixelToCoords({ 800, 0 }).x + this->getVelocity().x * gTime)
 			{
-				this->setVelocity({ -250.f, this->getVelocity().y });
+				this->setVelocity({ 250.f, this->getVelocity().y });
+				storedVel = { 0.f, 0.f };
+				mapMoved = false;
 			}
 			else
 			{
-				if (gameView.getCenter().x < 800)
+
+				if (gameView.getCenter().x < 2400.f)
+				{
+					gview_.move({ 250.f * gTime,0.f });
+					mapMoved = true;
+					mapMovedLeft = true;
+					storedVel = { 250.f, 0.f };
+					sf::Vector2f tmp = { this->getPos().x, this->getPos().y };
+					sf::Vector2i tmpI = gWnd.mapCoordsToPixel({ this->getPos().x, this->getPos().y });
+					sf::Vector2f centerIX = gWnd.mapPixelToCoords({ 800 ,tmpI.y });
+					this->setPos({ centerIX.x - (this->getBBSize().x / 2.f) - this->getVelocity().x * gTime, this->getPos().y});
+					this->setVelocity({ 0.f, this->getVelocity().y });
+				}
+				else
+				{
+					storedVel = { 0.f, 0.f };
+					mapMoved = false;
+
+					this->setVelocity({ 250.f, this->getVelocity().y });
+				}
+			/*	if (gWnd.mapCoordsToPixel(sf::Vector2f{ this->getPos().x, this->getPos().y }).x  > 800.f)
+				{
+					this->setVelocity({ -250.f, this->getVelocity().y });
+				}*/
+			/*	if (gameView.getCenter().x < )
 				{
 					gview_.move({ 250.f * gTime,0.f });
 					sf::Vector2f tmp = { this->getPos().x, this->getPos().y };
@@ -389,9 +419,9 @@ void Player::input(sf::View& gview_)
 				}
 				else
 				{
-					this->setVelocity({ 250.f, this->getVelocity().y });
+					
 
-				}
+				}*/
 			}
 
 			/*if (gWnd.mapCoordsToPixel({ this->getPos().x, this->getPos().y }).x < gWnd.mapPixelToCoords({ 800, 0 }).x)
@@ -452,22 +482,28 @@ void Player::input(sf::View& gview_)
 				if (gWnd.mapCoordsToPixel({ this->getPos().x, this->getPos().y }).x > gWnd.mapPixelToCoords({ 800, 0 }).x)
 				{
 					this->setVelocity({ -250.f, this->getVelocity().y });
+					storedVel = { 0.f,0.f };
+					mapMoved = false;
 				}
 				else
 				{
 					if (gameView.getCenter().x > 800)
 					{
+						storedVel = { -250.f, 0.f };
 						gview_.move({ -250.f * gTime,0.f });
+						mapMoved = true;
+						mapMovedRight = true;
 						sf::Vector2f tmp = { this->getPos().x, this->getPos().y };
 						sf::Vector2i tmpI = gWnd.mapCoordsToPixel({ this->getPos().x, this->getPos().y });
 						sf::Vector2f centerIX = gWnd.mapPixelToCoords({ 800 ,tmpI.y });
-						this->setPos({ centerIX.x - (this->getBBSize().x / 2.f) - this->getVelocity().x * gTime, centerIX.y });
+						this->setPos({ centerIX.x - (this->getBBSize().x / 2.f) - this->getVelocity().x * gTime, this->getPos().y});
 						this->setVelocity({ 0.f, this->getVelocity().y });
 					}
 					else
 					{
-
+						storedVel = { 0.f,0.f };
 						this->setVelocity({ -250.f, this->getVelocity().y });
+						mapMoved = false;
 					}
 				}
 
@@ -857,8 +893,6 @@ void Player::update()
 void Player::handleMapCollisions(std::vector<Platform>& plats_)
 {
 	ResolutionDir resDir = ResolutionDir::None;
-	std::vector<olc::vf2d> aVec;
-	aVec.clear();
 	olc::vf2d tmpPos = this->getPos();
 	if (this->onPlatform && !this->riding)
 	{
@@ -878,8 +912,9 @@ void Player::handleMapCollisions(std::vector<Platform>& plats_)
 		if (Physics::RectVsRect(plat.bbRect(), this->bbRect()))
 		{
 
-
-			aVec = intersects(plat.bbRect(), this->bbRect());
+			rect<float> bbRect = plat.bbRect();
+			rect<float> playerBBRect = this->bbRect();
+			auto aVec = intersects(bbRect, playerBBRect);
 
 		
 
@@ -922,14 +957,14 @@ void Player::handleMapCollisions(std::vector<Platform>& plats_)
 						// this is the point we want to shoot a ray through
 						// resolve on the x
 						num = i;
-						if (this->getVelocity().x < 0.f)
+						if (this->getVelocity().x < 0.f || storedVel.x < 0.f)
 						{
 							// collision happened on the left side
 							std::cout << "Collision happened on the left" << std::endl;
 							resDir = ResolutionDir::Right;
 							break;
 						}
-						else if (this->getVelocity().x > 0.f)
+						else if (this->getVelocity().x > 0.f || storedVel.x > 0.f)
 						{
 							// collision happened on the right side
 							std::cout << "Collision happened on the right" << std::endl;
@@ -1166,19 +1201,29 @@ bool Player::isTileBelow(std::vector<Platform>& plats)
 void Player::handleMapCollisions(std::vector<Tile>& tiles)
 {
 	ResolutionDir resDir = ResolutionDir::None;
-	std::vector<olc::vf2d> aVec;
-	aVec.clear();
 
 
 
+	resVec.clear();
+	std::pair<Tile*, std::pair<sf::FloatRect, ResolutionDir> > toAdd{};
+	Tile* firstTile = nullptr;
+	ResolutionDir firstResDir = ResolutionDir::None;
 
 	for (auto& tile : tiles)
 	{
-		if (Physics::RectVsRect(tile.bbRect(), this->bbRect()))
+ 		if (Physics::RectVsRect(tile.bbRect(), this->bbRect()))
 		{
-			aVec = intersects(tile.bbRect(), this->bbRect());
+			firstTile = &tile;
+			sf::FloatRect tileFloatRect = { {tile.getPos().x, tile.getPos().y},{tile.getBBSize().x,tile.getBBSize().y} };
+			sf::FloatRect playerFloatRect = { {this->getPos().x, this->getPos().y},{this->getBBSize().x,this->getBBSize().y} };
+			sf::FloatRect overlapRect{};
+			tileFloatRect.intersects(playerFloatRect, overlapRect);
+
+			auto aVec = intersects(tile.bbRect(), this->bbRect());
 			if (aVec.size() > 0)
 			{
+
+
 				int num{ 0 };
 				for (int i = 0; i < aVec.size(); i++)
 				{
@@ -1192,14 +1237,26 @@ void Player::handleMapCollisions(std::vector<Tile>& tiles)
 							// collision happened above
 							std::cout << "Collision happened above" << std::endl;
 							resDir = ResolutionDir::Down;
-							break;
+							if (firstResDir == ResolutionDir::None)
+							{
+								firstResDir = resDir;
+							}
+							toAdd = std::pair<Tile*, std::pair<sf::FloatRect, ResolutionDir> >{ &tile, {overlapRect, ResolutionDir::Down} };
+							resVec.push_back(toAdd);
+							
 						}
 						else if (this->getVelocity().y > 0.f)
 						{
 							// collision happened below
 							std::cout << "Collision happened below need to push up " << std::endl;
 							resDir = ResolutionDir::Up;
-							break;
+							if (firstResDir == ResolutionDir::None)
+							{
+								firstResDir = resDir;
+							}
+							toAdd = std::pair<Tile*, std::pair<sf::FloatRect, ResolutionDir> >{ &tile, {overlapRect, ResolutionDir::Up} };
+							resVec.push_back(toAdd);
+							
 
 						}
 					}
@@ -1208,23 +1265,137 @@ void Player::handleMapCollisions(std::vector<Tile>& tiles)
 						// this is the point we want to shoot a ray through
 						// resolve on the x
 						num = i;
-						if (this->getVelocity().x < 0.f)
+						if (this->getVelocity().x < 0.f || storedVel.x < 0.f)
 						{
-							// collision happened on the left side
-							std::cout << "Collision happened on the left" << std::endl;
-							resDir = ResolutionDir::Right;
-							break;
+							if (!wasFacingLeft)
+							{
+								//player up against wall and turned around collision on the other side
+								// collision happened on the left side
+								std::cout << "Collision happened on the left" << std::endl;
+								resDir = ResolutionDir::Left;
+								if (firstResDir == ResolutionDir::None)
+								{
+									firstResDir = resDir;
+								}
+								toAdd = std::pair<Tile*, std::pair<sf::FloatRect, ResolutionDir> >{ &tile, {overlapRect, ResolutionDir::Left} };
+								resVec.push_back(toAdd);
+							}
+							else
+							{
+								// collision happened on the left side
+								std::cout << "Collision happened on the left" << std::endl;
+								resDir = ResolutionDir::Right;
+								if (firstResDir == ResolutionDir::None)
+								{
+									firstResDir = resDir;
+								}
+								toAdd = std::pair<Tile*, std::pair<sf::FloatRect, ResolutionDir> >{ &tile, {overlapRect, ResolutionDir::Right} };
+								resVec.push_back(toAdd);
+							}
 						}
-						else if (this->getVelocity().x > 0.f)
+						else if (this->getVelocity().x > 0.f || storedVel.x > 0.f)
 						{
-							// collision happened on the right side
-							std::cout << "Collision happened on the right" << std::endl;
-							resDir = ResolutionDir::Left;
-							break;
+							if (wasFacingLeft)
+							{
+
+								// collision happened on the right side
+								std::cout << "Collision happened on the right" << std::endl;
+								resDir = ResolutionDir::Right;
+								if (firstResDir == ResolutionDir::None)
+								{
+									firstResDir = resDir;
+								}
+								toAdd = std::pair<Tile*, std::pair<sf::FloatRect, ResolutionDir> >{ &tile, {overlapRect, ResolutionDir::Right} };
+								resVec.push_back(toAdd);
+							}
+							else
+							{
+								// collision happened on the right side
+								std::cout << "Collision happened on the right" << std::endl;
+								resDir = ResolutionDir::Left;
+								if (firstResDir == ResolutionDir::None)
+								{
+									firstResDir = resDir;
+								}
+								toAdd = std::pair<Tile*, std::pair<sf::FloatRect, ResolutionDir> >{ &tile, {overlapRect, ResolutionDir::Left} };
+								resVec.push_back(toAdd);
+							}
 						}
 					}
 				}
-				if (resDir == ResolutionDir::Up)
+			}
+		}
+	}
+	// if some magic with resVec sees we are colliding with a walk and a floor or a ceiling ans a wall, then handle special
+	int resUpCount=0;
+	int resDownCount=0;
+	int resLeftCount=0;
+	int resRightCount=0;
+
+	for (int i = 0; i < resVec.size(); i++)
+	{
+		switch (resVec[i].second.second)
+		{
+		case ResolutionDir::Up:
+		{
+			resUpCount++;
+		}
+			break;
+		case ResolutionDir::Down:
+		{
+			resDownCount++;
+		}
+			break;
+		case ResolutionDir::Left:
+		{
+			resLeftCount++;
+		}
+			break;
+		case ResolutionDir::Right:
+		{
+			resRightCount++;
+		}
+			break;
+		default:
+			break;
+		}
+		// lets sort the elements by resolutiondir groups and count each
+		
+	}
+
+	// display the counts of resolution directions for each tile collision to the player
+	if (resUpCount > 0 || resDownCount > 0 || resLeftCount > 0 || resRightCount > 0)
+	{
+		if (mapMoved)
+		{
+			if (mapMovedRight)
+			{
+				if (resRightCount > 0)
+				{
+					gameView.move({ 250.f * gTime, 0.f });
+					mapMovedRight = false;
+				}
+			}
+
+			if (mapMovedLeft)
+			{
+				if (resLeftCount > 0)
+				{
+					gameView.move({ -250.f * gTime, 0.f });
+					mapMovedLeft = false;
+				}
+			}
+		}
+		std::cout << "resUp:" << resUpCount << "\nresDown:" << resDownCount << "\nresLeft:" << resLeftCount << "\nresRight: " << resRightCount << std::endl;
+	}
+
+
+	if (firstTile != nullptr)
+	{
+	Tile& tile = *firstTile;
+
+				// else do this junk
+				if (firstResDir == ResolutionDir::Up)
 				{
 					dispatch(this->fsmHandler->getMachine(), evt_Landed{});
 
@@ -1253,7 +1424,7 @@ void Player::handleMapCollisions(std::vector<Tile>& tiles)
 					this->canJump = true;
 					this->setAffectedByGravity(false);
 				}
-				else if (resDir == ResolutionDir::Down)
+				else if (firstResDir == ResolutionDir::Down)
 				{
 					this->setPos({ this->getPos().x,  tile.getPos().y + tile.getBBSize().y + 0.1f });
 					this->setVelocity({ this->getVelocity().x, tile.getVelocity().y });
@@ -1280,20 +1451,19 @@ void Player::handleMapCollisions(std::vector<Tile>& tiles)
 					}
 
 				}
-				else if (resDir == ResolutionDir::Left)
+				else if (firstResDir == ResolutionDir::Left)
 				{
 					this->setPos({ tile.getPos().x - this->getBBSize().x - 0.1f , this->getPos().y });
 					this->setVelocity({ tile.getVelocity().x, this->getVelocity().y });
 				}
-				else if (resDir == ResolutionDir::Right)
+				else if (firstResDir == ResolutionDir::Right)
 				{
 					this->setPos({ tile.getPos().x + tile.getBBSize().x + 0.1f,  this->getPos().y });
 					this->setVelocity({ tile.getVelocity().x, this->getVelocity().y });
 				}
 			}
-		}
-	}
 }
+
 
 bool Player::isTileBelow(std::vector<Tile>& tiles)
 {

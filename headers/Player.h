@@ -71,7 +71,7 @@ class Player : public ASprite
 	std::map<std::pair<std::string, bool>, AnimData> animMap{};
 public:
 	bool isFacingLeft() override;
-
+	bool wasFacingLeft{ false };
 	int numLiveBullets{ 0 };
 	int maxLiveBullets{ 5 };
 	bool justShot{ false };
@@ -93,8 +93,13 @@ public:
 	Player& operator=(const Player&) = default;
 	Player(Player&&) = default;
 	Player& operator=(Player&&) = default;
+	olc::vf2d storedVel{ 0.f,0.f };
+	bool mapMoved{ false };
+	bool mapMovedLeft{ false };
+	bool mapMovedRight{ false };
 
 	
+	std::vector<std::pair<Tile*, std::pair<sf::FloatRect, ResolutionDir> > > resVec{};
 
 	void input(sf::View& gview_);
 	void update();

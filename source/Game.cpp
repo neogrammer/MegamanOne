@@ -40,7 +40,7 @@ void Game::update()
 
 void Game::render()
 {
-	gWnd.setView(gameView);
+	gWnd.setView(gWnd.getDefaultView());
 	sf::Sprite bg{};
 	bg.setTexture(Cfg::textures.get((int)Cfg::Textures::BGSpace));
 	bg.move({ bgOffset,0.f });
@@ -52,8 +52,8 @@ void Game::render()
 		//create another background size.x to the left of the bgOffset
 		sf::Sprite bgLeft{};
 		bgLeft.setTexture(Cfg::textures.get((int)Cfg::Textures::BGSpace));
-		bgLeft.setPosition({ bgOffset - bgLeft.getTexture()->getSize().x, 0.f });
 
+		bgLeft.setPosition({ bgOffset - bgLeft.getTexture()->getSize().x, 0.f });
 		gWnd.draw(bgLeft);
 		if (bgLeft.getPosition().x >= currLeft)
 		{
@@ -63,23 +63,21 @@ void Game::render()
 			gWnd.draw(bgLeftLeft);
 			if (bgLeftLeft.getPosition().x >= currLeft)
 			{
-				bgOffset = 0.0f;
+				bgOffset = 0;
 				bg.setPosition({ currLeft, 0.f });
-
 			}
-
 		}
 	}
+	gWnd.setView(gameView);
+
 	tmap->render();
 	stage.render();
 	for (auto& p : aPlayer.getProjectiles())
 	{
 		if (p.isMarkedForDeletion()) continue;
-
 		p.render();
 	}
 	aPlayer.render();
-
 	sf::RectangleShape display;
 	display.setSize({ 300.f,200.f });
 	display.setFillColor(sf::Color::Black);
@@ -132,13 +130,13 @@ void Game::render()
 	t7.setString(std::to_string(aPlayer.getPos().x) + ' ' + std::to_string(aPlayer.getPos().y));
 	t7.setPosition({ gameView.getCenter().x - 450.f - 300.f, 210.f });
 	t7.setCharacterSize(24);
-	gWnd.draw(t1);
-	gWnd.draw(t2);
-	gWnd.draw(t3);
-	gWnd.draw(t4);
-	gWnd.draw(t5);
-	gWnd.draw(t6);
-	gWnd.draw(t7);
+	//gWnd.draw(t1);
+	//gWnd.draw(t2);
+	//gWnd.draw(t3);
+	//gWnd.draw(t4);
+	//gWnd.draw(t5);
+	//gWnd.draw(t6);
+	//gWnd.draw(t7);
 
 
 
