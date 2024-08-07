@@ -101,4 +101,5 @@ void Cfg::initPlayerInputs()
 
 void Cfg::initFonts()
 {
+	fonts.load((int)Fonts::Font1, "assets/fonts/frisky_puppy.ttf");
 }

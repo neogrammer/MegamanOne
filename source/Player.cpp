@@ -334,7 +334,7 @@ Player::Player(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, ol
 	
 }
 
-void Player::input()
+void Player::input(sf::View& gview_)
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
@@ -370,8 +370,43 @@ void Player::input()
 		facingLeft = false;
 		if (this->getVelocity().x <= MaxSpeed)
 		{
-			this->setVelocity({ 250.f, this->getVelocity().y });
-			//nowFacingRight
+
+			if (gWnd.mapCoordsToPixel({ this->getPos().x, this->getPos().y }).x >= gWnd.mapPixelToCoords({ 800, 0 }).x + this->getVelocity().x * gTime)
+			{
+				this->setVelocity({ -250.f, this->getVelocity().y });
+			}
+			else
+			{
+				if (gameView.getCenter().x < 800)
+				{
+					gview_.move({ 250.f * gTime,0.f });
+					sf::Vector2f tmp = { this->getPos().x, this->getPos().y };
+					sf::Vector2i tmpI = gWnd.mapCoordsToPixel({ this->getPos().x + this->getVelocity().x * gTime, this->getPos().y });
+					sf::Vector2f centerIX = gWnd.mapPixelToCoords({ 800 ,tmpI.y });
+					this->setPos({ centerIX.x , centerIX.y });
+
+					this->setVelocity({ 0.f, this->getVelocity().y });
+				}
+				else
+				{
+					this->setVelocity({ 250.f, this->getVelocity().y });
+
+				}
+			}
+
+			/*if (gWnd.mapCoordsToPixel({ this->getPos().x, this->getPos().y }).x < gWnd.mapPixelToCoords({ 800, 0 }).x)
+			{
+				this->setVelocity({ 250.f, this->getVelocity().y });
+			}
+			else
+			{
+				gview_.move({250.f * gTime,0.f });
+				sf::Vector2f tmp = { this->getPos().x, this->getPos().y };
+				sf::Vector2i tmpI = gWnd.mapCoordsToPixel({ this->getPos().x, this->getPos().y });
+				sf::Vector2f centerIX = gWnd.mapPixelToCoords({ 800 ,tmpI.y });
+				this->setPos({ centerIX.x, centerIX.y });
+			}*/
+
 		}
 		onPlatform = false;
 	}
@@ -410,12 +445,35 @@ void Player::input()
 			animPaused = true;
 		}
 		facingLeft = true;
-		if (this->getVelocity().x >= -MaxSpeed)
-		{
-			this->setVelocity({ -250.f, this->getVelocity().y });
-			//nowFacingLeft
-		}
-		onPlatform = false;
+		
+			if (this->getVelocity().x >= -MaxSpeed)
+			{
+				
+				if (gWnd.mapCoordsToPixel({ this->getPos().x, this->getPos().y }).x > gWnd.mapPixelToCoords({ 800, 0 }).x)
+				{
+					this->setVelocity({ -250.f, this->getVelocity().y });
+				}
+				else
+				{
+					if (gameView.getCenter().x > 800)
+					{
+						gview_.move({ -250.f * gTime,0.f });
+						sf::Vector2f tmp = { this->getPos().x, this->getPos().y };
+						sf::Vector2i tmpI = gWnd.mapCoordsToPixel({ this->getPos().x, this->getPos().y });
+						sf::Vector2f centerIX = gWnd.mapPixelToCoords({ 800 ,tmpI.y });
+						this->setPos({ centerIX.x - (this->getBBSize().x / 2.f) - this->getVelocity().x * gTime, centerIX.y });
+						this->setVelocity({ 0.f, this->getVelocity().y });
+					}
+					else
+					{
+
+						this->setVelocity({ -250.f, this->getVelocity().y });
+					}
+				}
+
+				//nowFacingLeft
+			}
+			onPlatform = false;
 	}
 	else
 	{

@@ -206,6 +206,9 @@ void ASprite::render()
 		bounds.setFillColor(sf::Color(255, 0, 0, 130));
 		gWnd.draw(bounds);
 	}
+
+
+
 }
 void ASprite::setControlledByScript(bool cond_)
 {

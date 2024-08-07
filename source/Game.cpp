@@ -5,7 +5,9 @@
 
 void Game::createWorld()
 {
+	
 	wndw::CreateWindow("MegamanOne", 1600U, 900U);
+
 }
 
 void Game::update()
@@ -38,12 +40,13 @@ void Game::update()
 
 void Game::render()
 {
-	gWnd.setView(worldSpace_);
+	gWnd.setView(gameView);
 	sf::Sprite bg{};
 	bg.setTexture(Cfg::textures.get((int)Cfg::Textures::BGSpace));
 	bg.move({ bgOffset,0.f });
 
-	auto currLeft = worldSpace_.getCenter().x - 800.f;
+	auto currLeft = gameView.getCenter().x - 800.f;
+
 	if (bgOffset >= currLeft)
 	{
 		//create another background size.x to the left of the bgOffset
@@ -76,11 +79,75 @@ void Game::render()
 		p.render();
 	}
 	aPlayer.render();
+
+	sf::RectangleShape display;
+	display.setSize({ 300.f,200.f });
+	display.setFillColor(sf::Color::Black);
+	display.setOutlineColor(sf::Color::White);
+	display.setOutlineThickness(3);
+	display.setPosition({ gameView.getCenter().x - 450.f - 300.f - 10.f, 50.f });
+
+	gWnd.draw(display);
+
+	sf::Text t1;
+	t1.setFont(Cfg::fonts.get((int)Cfg::Fonts::Font1));
+	t1.setCharacterSize(24);
+	t1.setFillColor(sf::Color::White);
+	t1.setString(std::to_string(aPlayer.getPos().x) + ' ' +  std::to_string(aPlayer.getPos().y));
+	t1.setPosition({ gameView.getCenter().x - 450.f - 300.f, 60.f});
+
+	sf::Text t2;
+	t2.setFont(Cfg::fonts.get((int)Cfg::Fonts::Font1));
+	t2.setCharacterSize(24);
+	t2.setFillColor(sf::Color::White);
+	t2.setString(std::to_string(aPlayer.getPrevPos().x) + ' ' + std::to_string(aPlayer.getPrevPos().y));
+	t2.setPosition({ gameView.getCenter().x - 450.f - 300.f, 85.f });
+	sf::Text t3;
+	t3.setFont(Cfg::fonts.get((int)Cfg::Fonts::Font1));
+	t3.setFillColor(sf::Color::White);
+	t3.setCharacterSize(24);
+	t3.setString(std::to_string(aPlayer.getPos().x) + ' ' + std::to_string(aPlayer.getPos().y));
+	t3.setPosition({ gameView.getCenter().x - 450.f - 300.f, 110.f});
+	sf::Text t4;
+	t4.setFont(Cfg::fonts.get((int)Cfg::Fonts::Font1));
+	t4.setFillColor(sf::Color::White);
+	t4.setString(std::to_string(aPlayer.getPos().x) + ' ' + std::to_string(aPlayer.getPos().y));
+	t4.setPosition({ gameView.getCenter().x - 450.f - 300.f, 135.f});
+	t4.setCharacterSize(24);
+	sf::Text t5;
+	t5.setFont(Cfg::fonts.get((int)Cfg::Fonts::Font1));
+	t5.setCharacterSize(24);
+	t5.setFillColor(sf::Color::White);
+	t5.setString(std::to_string(aPlayer.getPos().x) + ' ' + std::to_string(aPlayer.getPos().y));
+	t5.setPosition({ gameView.getCenter().x - 450.f - 300.f, 160.f });
+	sf::Text t6;
+	t6.setFont(Cfg::fonts.get((int)Cfg::Fonts::Font1));
+	t6.setFillColor(sf::Color::White);
+	t6.setCharacterSize(24);
+	t6.setString(std::to_string(aPlayer.getPos().x) + ' ' + std::to_string(aPlayer.getPos().y));
+	t6.setPosition({ gameView.getCenter().x - 450.f - 300.f,  185.f });
+	sf::Text t7;
+	t7.setFont(Cfg::fonts.get((int)Cfg::Fonts::Font1));
+	t7.setFillColor(sf::Color::White);
+	t7.setString(std::to_string(aPlayer.getPos().x) + ' ' + std::to_string(aPlayer.getPos().y));
+	t7.setPosition({ gameView.getCenter().x - 450.f - 300.f, 210.f });
+	t7.setCharacterSize(24);
+	gWnd.draw(t1);
+	gWnd.draw(t2);
+	gWnd.draw(t3);
+	gWnd.draw(t4);
+	gWnd.draw(t5);
+	gWnd.draw(t6);
+	gWnd.draw(t7);
+
+
+
+
 }
 
 void Game::input()
 {
-	aPlayer.input();
+	aPlayer.input(gameView);
 	if (aPlayer.getVelocity().x != 0.f && !aPlayer.isTileBelow(tmap->getSolidTiles()) && !aPlayer.isTileBelow(stage.getPlats()))
 	{
 		aPlayer.setAffectedByGravity(true);

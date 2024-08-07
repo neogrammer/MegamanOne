@@ -96,7 +96,7 @@ public:
 
 	
 
-	void input();
+	void input(sf::View& gview_);
 	void update();
 
 	void handleMapCollisions(std::vector<Tile>& tiles);

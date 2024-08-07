@@ -5,14 +5,13 @@
 #include "Snail.h"
 
 Snail::Snail()
-	: Enemy{ Cfg::Textures::SnailEnemy, { {0,0},{70,46} }, { {15.f,16.f},{20.f,30.f} }, SpriteType::Enemy, { 1300.f, 900.f - 50.f - 30.f }, AnimDirType::Left, false }
+	: Enemy{ Cfg::Textures::SnailEnemy, { {0,0},{70,46} }, { {15.f,16.f},{20.f,30.f} }, SpriteType::Enemy, { 1300.f, 900.f - 50.f - 40.f }, AnimDirType::Left, false }
 {
-
 	this->currentAnim = "idle";
 	this->facingLeft = false;
 	// right animations
 	this->animMap.emplace(std::pair{ "walk", false }, AnimData2{});
-	this->animMap[std::pair("walk", false)].numFrames = loadAnimation(this->animMap[std::pair("walk", false)].frames, 8, 8, 0, 1, 0);
+	this->animMap[std::pair("walk", false)].numFrames = loadAnimation(this->animMap[std::pair("walk", false)].frames, 8, 8, 0, 5, 0);
 	this->animMap[std::pair("walk", false)].animDelay = 0.3f;
 	this->animMap[std::pair("walk", false)].pauseDelay = 0.f;
 	// left animations
@@ -134,6 +133,7 @@ void Snail::update()
 		}
 	}
 
+	
 	// Handle animation frame switching and pause at the start of an animation if it has a pause delay of more than 0.f
 	this->pauseElapsed += gTime;
 	if (this->pauseElapsed >= this->animMap[std::pair(this->currentAnim, this->facingLeft)].pauseDelay && this->animPaused == true)

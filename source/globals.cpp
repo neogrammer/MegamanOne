@@ -7,6 +7,7 @@ unsigned int gWH = {};
 sf::Vector2f mpos = {};
 bool gWndFull = false;
 
+sf::View gameView = {};
 sf::Sound shootSound = {};
 sf::Sound jumpSound = {};
 sf::Sound landSound = {};
@@ -22,7 +23,7 @@ void wndw::CreateWindow(std::string title_, unsigned int w_, unsigned int h_)
 		gWnd.create({ gWW,gWH,32U }, title_, sf::Style::Fullscreen, gWndSettings);
 	else if (gWndFull == false)
 		gWnd.create({ gWW,gWH,32U }, title_, sf::Style::Close, gWndSettings);
-
+	gameView = gWnd.getDefaultView();
 }
 
 

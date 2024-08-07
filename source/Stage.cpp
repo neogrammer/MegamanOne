@@ -49,6 +49,14 @@ void Stage::update(lua_State* L)
 	for (auto& e : enemies)
 	{
 		e->update();
+		if (e->cmdList.empty())
+		{
+
+			e->setPos(e->getPos());
+			e->facingLeft = false;
+			MoveData dat = { { e->getPos().x + 600.f, e->getPos().y}, 12.f};
+			e->pushCommand(CmdType::Move, reinterpret_cast<void*>(&dat));
+		}
 	}
 }
 
@@ -131,6 +139,8 @@ Stage::Stage(int numPlatforms_)
 	enemies.emplace_back(std::make_unique<Snail>());
 	MoveData data{ {enemies.back()->getPos().x - 600.f, enemies.back()->getPos().y}, 12.f};
 	enemies.back()->pushCommand(CmdType::Move, reinterpret_cast<void*>(&data));
+	
+
 
 
 }
@@ -229,10 +239,6 @@ Stage::ManInterpPos::ManInterpPos(Platform* obj, float x, float time)
 	plat = obj;
 	startPos = {plat->getPos().x, plat->getPos().y} ;
 	targetPos = { x, plat->getPos().y };
-	//elapsed = -1 *  (1.f / 60.f);
-	//auto sudoPrevPos = olc::vf2d{ (targetPos.x - startPos.x) * (elapsed / completionTime) + startPos.x, (targetPos.y - startPos.y) * (elapsed / completionTime) + startPos.y };
-	//plat->setPrevPos(sudoPrevPos);
-	//elapsed = 0.f;
 	completionTime = time;
 }
 
@@ -267,10 +273,6 @@ Stage::ManInterpPosY::ManInterpPosY(Platform* obj, float y, float time) : elapse
 
 bool Stage::ManInterpPosY::update()
 {
-	//elapsed += gTime;
-	//plat->setPrevPos(plat->getPos());
-	//plat->setPos({ (targetPos.x - startPos.x) * (elapsed / completionTime) + startPos.x, (targetPos.y - startPos.y) * (elapsed / completionTime) + startPos.y });
-
 	elapsed += gTime;
 	
 		plat->setPrevPos(plat->getPos());

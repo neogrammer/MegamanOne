@@ -9,6 +9,8 @@ class Projectile;
 
 class Enemy : public ASprite
 {
+	friend class Snail;
+	friend class Stage;
 protected:
 	struct AnimData2
 	{

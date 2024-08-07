@@ -108,6 +108,10 @@
   <ItemGroup>
     <Media Include="assets\music\stage1.mp3" />
   </ItemGroup>
+  <ItemGroup>
+    <Font Include="assets\fonts\freedom.ttf" />
+    <Font Include="assets\fonts\frisky_puppy.ttf" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

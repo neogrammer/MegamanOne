@@ -58,12 +58,6 @@
     <Filter Include="assets\data">
       <UniqueIdentifier>{1c67241d-c0ca-479d-9461-67da7fc307ba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="assets\data\bboxes">
-      <UniqueIdentifier>{d1211efc-113a-4cd2-857a-b626fe10e411}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="assets\data\bboxes\player">
-      <UniqueIdentifier>{37a9b3a6-e391-4490-887d-34db131f9e9b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="assets\scripts">
       <UniqueIdentifier>{7d17166f-5ef9-49bd-bc88-2fabe936159e}</UniqueIdentifier>
     </Filter>
@@ -78,9 +72,6 @@
     </Filter>
     <Filter Include="assets\textures\platforms">
       <UniqueIdentifier>{4bdde5ac-b1cd-41f5-b148-e31c699a2a21}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="assets\data\bboxes\platforms">
-      <UniqueIdentifier>{97addcba-8c37-48ac-ae45-06e543fcde26}</UniqueIdentifier>
     </Filter>
     <Filter Include="Entities\asprites\platforms">
       <UniqueIdentifier>{0fe45d08-e0ea-4545-a60d-1a3cdabfd610}</UniqueIdentifier>
@@ -115,9 +106,6 @@
     <Filter Include="assets\sounds">
       <UniqueIdentifier>{083252c4-ba9c-40e2-ac84-d796f0ada719}</UniqueIdentifier>
     </Filter>
-    <Filter Include="assets\data\bboxes\enemies">
-      <UniqueIdentifier>{5980dda7-634b-41d5-bc3f-567c53e2ac1c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Entities\asprites\enemies">
       <UniqueIdentifier>{f538dddf-90d9-4e6a-8524-cb2e14ad48f3}</UniqueIdentifier>
     </Filter>
@@ -126,6 +114,21 @@
     </Filter>
     <Filter Include="Command">
       <UniqueIdentifier>{3bec7edf-9bf5-4915-ac13-175e5ec940b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\data\bboxes">
+      <UniqueIdentifier>{d1211efc-113a-4cd2-857a-b626fe10e411}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\data\bboxes\player">
+      <UniqueIdentifier>{37a9b3a6-e391-4490-887d-34db131f9e9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\data\bboxes\platforms">
+      <UniqueIdentifier>{97addcba-8c37-48ac-ae45-06e543fcde26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\data\bboxes\enemies">
+      <UniqueIdentifier>{5980dda7-634b-41d5-bc3f-567c53e2ac1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\fonts">
+      <UniqueIdentifier>{e76a9ac2-ee93-4399-8555-af26a419cc28}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -368,5 +371,13 @@
     <Media Include="assets\music\stage1.mp3">
       <Filter>assets\music</Filter>
     </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="assets\fonts\freedom.ttf">
+      <Filter>assets\fonts</Filter>
+    </Font>
+    <Font Include="assets\fonts\frisky_puppy.ttf">
+      <Filter>assets\fonts</Filter>
+    </Font>
   </ItemGroup>
 </Project>

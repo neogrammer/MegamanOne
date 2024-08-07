@@ -18,6 +18,7 @@ extern sf::Sound landSound;
 
 
 extern float gTime;
+extern sf::View gameView;
 
 namespace wndw
 {
