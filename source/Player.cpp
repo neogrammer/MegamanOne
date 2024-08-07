@@ -316,7 +316,7 @@ Player::Player(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, ol
 	loadAnimations();
 
 	fsmHandler = std::make_unique<MachineHandler>(MachineType::Player);
-	dispatch(fsmHandler->getMachine(), evt_Fell {});
+	dispatch(fsmHandler->getMachine(), evt_Fell{});
 
 	if (fsmHandler->getMachine().wasJustChanged())
 	{
@@ -331,6 +331,8 @@ Player::Player(Cfg::Textures tex_, sf::IntRect texRect_, sf::FloatRect bbox_, ol
 		pauseElapsed = 0.f;
 		animPaused = true;
 	}
+
+	setPos({800.f + (this->getBBSize().x / 2.f), 0.f});
 	
 }
 
@@ -340,6 +342,7 @@ void Player::input(sf::View& gview_)
 	mapMovedLeft = false;
 	mapMovedRight = false;
 	wasFacingLeft = facingLeft;
+	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
 		if (!right_down)
@@ -375,7 +378,7 @@ void Player::input(sf::View& gview_)
 		if (this->getVelocity().x <= MaxSpeed)
 		{
 
-			if (gWnd.mapCoordsToPixel({ this->getPos().x, this->getPos().y }).x >= gWnd.mapPixelToCoords({ 800, 0 }).x + this->getVelocity().x * gTime)
+			if (gWnd.mapCoordsToPixel({ this->getPos().x, this->getPos().y }).x >= gWnd.mapPixelToCoords({ 800 + (int)(this->getBBSize().x / 2.f), 0 }).x + this->getVelocity().x * gTime || this->getPos().x + (this->getBBSize().x / 2.f) < 800.f)
 			{
 				this->setVelocity({ 250.f, this->getVelocity().y });
 				storedVel = { 0.f, 0.f };
@@ -384,7 +387,7 @@ void Player::input(sf::View& gview_)
 			else
 			{
 
-				if (gameView.getCenter().x < 2400.f)
+				if (gameView.getCenter().x < 2400.f - (this->getBBSize().x / 2.f))
 				{
 					gview_.move({ 250.f * gTime,0.f });
 					mapMoved = true;
@@ -392,8 +395,8 @@ void Player::input(sf::View& gview_)
 					storedVel = { 250.f, 0.f };
 					sf::Vector2f tmp = { this->getPos().x, this->getPos().y };
 					sf::Vector2i tmpI = gWnd.mapCoordsToPixel({ this->getPos().x, this->getPos().y });
-					sf::Vector2f centerIX = gWnd.mapPixelToCoords({ 800 ,tmpI.y });
-					this->setPos({ centerIX.x - (this->getBBSize().x / 2.f) - this->getVelocity().x * gTime, this->getPos().y});
+					sf::Vector2f centerIX = gWnd.mapPixelToCoords({ 800 - (int)((float)this->getBBSize().x / 2.f) ,tmpI.y });
+					this->setPos({ centerIX.x, this->getPos().y});
 					this->setVelocity({ 0.f, this->getVelocity().y });
 				}
 				else
@@ -479,7 +482,7 @@ void Player::input(sf::View& gview_)
 			if (this->getVelocity().x >= -MaxSpeed)
 			{
 				
-				if (gWnd.mapCoordsToPixel({ this->getPos().x, this->getPos().y }).x > gWnd.mapPixelToCoords({ 800, 0 }).x)
+				if (gWnd.mapCoordsToPixel({ this->getPos().x, this->getPos().y }).x > gWnd.mapPixelToCoords({ 800 + (int)(this->getBBSize().x / 2.f) , 0 }).x || this->getPos().x + (this->getBBSize().x / 2.f) > 2400)
 				{
 					this->setVelocity({ -250.f, this->getVelocity().y });
 					storedVel = { 0.f,0.f };
@@ -487,7 +490,7 @@ void Player::input(sf::View& gview_)
 				}
 				else
 				{
-					if (gameView.getCenter().x > 800)
+					if (gameView.getCenter().x > 800.f + (this->getBBSize().x / 2.f))
 					{
 						storedVel = { -250.f, 0.f };
 						gview_.move({ -250.f * gTime,0.f });
@@ -495,8 +498,8 @@ void Player::input(sf::View& gview_)
 						mapMovedRight = true;
 						sf::Vector2f tmp = { this->getPos().x, this->getPos().y };
 						sf::Vector2i tmpI = gWnd.mapCoordsToPixel({ this->getPos().x, this->getPos().y });
-						sf::Vector2f centerIX = gWnd.mapPixelToCoords({ 800 ,tmpI.y });
-						this->setPos({ centerIX.x - (this->getBBSize().x / 2.f) - this->getVelocity().x * gTime, this->getPos().y});
+						sf::Vector2f centerIX = gWnd.mapPixelToCoords({ 800 - (int)((float)this->getBBSize().x / 2.f) ,tmpI.y });
+						this->setPos({ centerIX.x, this->getPos().y });
 						this->setVelocity({ 0.f, this->getVelocity().y });
 					}
 					else

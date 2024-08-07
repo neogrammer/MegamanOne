@@ -130,7 +130,7 @@ void Game::render()
 	t7.setString(std::to_string(aPlayer.getPos().x) + ' ' + std::to_string(aPlayer.getPos().y));
 	t7.setPosition({ gameView.getCenter().x - 450.f - 300.f, 210.f });
 	t7.setCharacterSize(24);
-	//gWnd.draw(t1);
+	gWnd.draw(t1);
 	//gWnd.draw(t2);
 	//gWnd.draw(t3);
 	//gWnd.draw(t4);
@@ -207,7 +207,7 @@ Game::~Game()
 void Game::run()
 {
 	
-	aPlayer.setPos({ 680.f, -100.f });
+	aPlayer.setPos({ 800.f - (aPlayer.getBBSize().x / 2.f), -100.f});
 	aPlayer.setVelocity({ 0.f, 0.f });
 	frameTimer.restart();
 	while (gWnd.isOpen())
