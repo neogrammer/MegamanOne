@@ -5,12 +5,18 @@ class DynoSprite : public BaseSprite
 {
 public:
 	DynoSprite();
+	explicit DynoSprite(olc::vf2d pos_);
 	virtual ~DynoSprite() override;
-	DynoSprite(const DynoSprite&) = delete;
-	DynoSprite& operator=(const DynoSprite&) = delete;
-	DynoSprite(DynoSprite&&) = delete;
-	DynoSprite& operator=(DynoSprite&&) = delete;
+	DynoSprite(const DynoSprite&) = default;
+	DynoSprite& operator=(const DynoSprite&) = default;
+	DynoSprite(DynoSprite&&) = default;
+	DynoSprite& operator=(DynoSprite&&) = default;
 
+	virtual void build(olc::vf2d pos = { 0.f,0.f }) override = 0;
+
+	virtual DynoSprite& operator()() override;
+
+	rec& getRec();
 };
 
 #endif

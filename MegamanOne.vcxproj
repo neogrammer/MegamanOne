@@ -43,6 +43,7 @@
     <ClInclude Include="headers\physics.h" />
     <ClInclude Include="headers\Platform.h" />
     <ClInclude Include="headers\Player.h" />
+    <ClInclude Include="headers\DynoPlayer.h" />
     <ClInclude Include="headers\Projectile.h" />
     <ClInclude Include="headers\ResourceManager.h" />
     <ClInclude Include="headers\ServiceLocator.h" />
@@ -52,6 +53,7 @@
     <ClInclude Include="headers\Tile.h" />
     <ClInclude Include="headers\Tilemap.h" />
     <ClInclude Include="headers\Tileset.h" />
+    <ClInclude Include="headers\StatTile.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
@@ -76,6 +78,7 @@
     <ClCompile Include="source\physics.cpp" />
     <ClCompile Include="source\Platform.cpp" />
     <ClCompile Include="source\Player.cpp" />
+    <ClCompile Include="source\DynoPlayer.cpp" />
     <ClCompile Include="source\Projectile.cpp" />
     <ClCompile Include="source\rec.cpp" />
     <ClCompile Include="source\Snail.cpp" />
@@ -84,6 +87,7 @@
     <ClCompile Include="source\Tile.cpp" />
     <ClCompile Include="source\Tilemap.cpp" />
     <ClCompile Include="source\Tileset.cpp" />
+    <ClCompile Include="source\StatTile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\data\aabbs\busterBullet.aabb" />

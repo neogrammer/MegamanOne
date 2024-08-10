@@ -240,6 +240,12 @@
     <ClInclude Include="headers\StatSprite.h">
       <Filter>Entities</Filter>
     </ClInclude>
+    <ClInclude Include="headers\StatTile.h">
+      <Filter>Entities\stat_sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\DynoPlayer.h">
+      <Filter>Entities\dyno_sprites</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -319,6 +325,12 @@
     </ClCompile>
     <ClCompile Include="source\StatSprite.cpp">
       <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="source\StatTile.cpp">
+      <Filter>Entities\stat_sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DynoPlayer.cpp">
+      <Filter>Entities\dyno_sprites</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
