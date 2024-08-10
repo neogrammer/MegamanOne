@@ -2,7 +2,8 @@
 #include <Game.h>
 #include <Tilemap.h>
 #include <Snail.h>
-
+#include <type_traits>
+#include <string>
 void Game::createWorld()
 {
 	
@@ -220,6 +221,7 @@ Game::Game()
 	}
 
 	std::cout << "Load Complete" << std::endl;
+	
 }
 
 Game::~Game()

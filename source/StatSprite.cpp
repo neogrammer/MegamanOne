@@ -16,10 +16,7 @@ StatSprite::~StatSprite()
 
 }
 
-StatSprite& StatSprite::operator()()
-{
-	return *this;
-}
+
 
 rec& StatSprite::getRec()
 {

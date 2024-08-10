@@ -21,6 +21,7 @@ public:
 	StatTile& operator()() override final;
 
 	rec& getRec();
+
 };
 
 #endif

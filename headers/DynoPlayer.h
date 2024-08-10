@@ -18,10 +18,9 @@ public:
 	void setPreBuild(Cfg::Textures texCopy_, olc::vi2d texRecPosCopy_);
 	void build(olc::vf2d pos = { 0.f,0.f }) override final;
 
-	DynoPlayer& operator()() override final;
+	DynoPlayer&operator()() override final;
 
 	rec& getRec();
-
 };
 
 #endif

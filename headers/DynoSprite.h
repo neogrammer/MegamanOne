@@ -14,7 +14,7 @@ public:
 
 	virtual void build(olc::vf2d pos = { 0.f,0.f }) override = 0;
 
-	virtual DynoSprite& operator()() override;
+	virtual DynoSprite& operator()() override = 0;
 
 	rec& getRec();
 };

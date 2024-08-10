@@ -34,9 +34,10 @@ void StatTile::build(olc::vf2d pos)
 	r.set(pos, { 50.f,50.f }, texCopy, texRecPosCopy);
 }
 
+
 StatTile& StatTile::operator()()
 {
-	return *this;
+	return *dynamic_cast<StatTile*>(this);
 }
 
 rec& StatTile::getRec()

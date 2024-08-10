@@ -36,10 +36,11 @@ void DynoPlayer::build(olc::vf2d pos)
 
 DynoPlayer& DynoPlayer::operator()()
 {
-	return *this;
+	return *dynamic_cast<DynoPlayer*>(this);
 }
 
 rec& DynoPlayer::getRec()
 {
 	return DynoSprite::getRec();
 }
+

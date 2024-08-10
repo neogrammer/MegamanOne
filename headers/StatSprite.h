@@ -14,9 +14,10 @@ public:
 
 	virtual void build(olc::vf2d pos = { 0.f,0.f }) override = 0;
 
-	virtual StatSprite& operator()() override;
+	virtual StatSprite& operator()() override = 0;
 
 	rec& getRec();
+
 };
 
 #endif

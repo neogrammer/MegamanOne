@@ -16,8 +16,9 @@ public:
 
 	// Builder Function
 	virtual void build(olc::vf2d pos = { 0.f,0.f }) = 0;
-	virtual BaseSprite& operator()();
+	virtual BaseSprite& operator()() = 0;
 	rec& getRec();
+
 	
 };
 
