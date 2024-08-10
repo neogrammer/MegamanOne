@@ -274,7 +274,7 @@ void Projectile::tickMovement()
 {
 	if (tDir == TravelDir::Horizontal)
 	{
-		pos.x += speed * gTime;
+		this->pos.x += speed * gTime;
 		distanceTravelled += abs(speed * gTime);
 	}
 

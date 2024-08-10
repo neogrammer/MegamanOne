@@ -72,6 +72,7 @@
     <ClCompile Include="source\Platform.cpp" />
     <ClCompile Include="source\Player.cpp" />
     <ClCompile Include="source\Projectile.cpp" />
+    <ClCompile Include="source\rec.cpp" />
     <ClCompile Include="source\Snail.cpp" />
     <ClCompile Include="source\Stage.cpp" />
     <ClCompile Include="source\Tile.cpp" />
@@ -111,6 +112,9 @@
   <ItemGroup>
     <Font Include="assets\fonts\freedom.ttf" />
     <Font Include="assets\fonts\frisky_puppy.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="headers\rec.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

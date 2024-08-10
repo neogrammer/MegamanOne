@@ -14,9 +14,11 @@ void Game::update()
 {
 	stage.update(lua);
 
+	aPlayer.applyExternalForces();
 	aPlayer.update();
 	aPlayer.handleMapCollisions(tmap->getSolidTiles());
 	aPlayer.handleMapCollisions(stage.getPlats());
+
 	aPlayer.tickMovement();
 
 	std::vector<ASprite*> sprites{};
@@ -70,14 +72,14 @@ void Game::render()
 	}
 	gWnd.setView(gameView);
 
-	tmap->render();
-	stage.render();
+	//tmap->render();
+	//stage.render();
 	for (auto& p : aPlayer.getProjectiles())
 	{
 		if (p.isMarkedForDeletion()) continue;
-		p.render();
+		//p.render();
 	}
-	aPlayer.render();
+	//aPlayer.render();
 	sf::RectangleShape display;
 	display.setSize({ 300.f,200.f });
 	display.setFillColor(sf::Color::Black);
@@ -85,7 +87,7 @@ void Game::render()
 	display.setOutlineThickness(3);
 	display.setPosition({ gameView.getCenter().x - 450.f - 300.f - 10.f, 50.f });
 
-	gWnd.draw(display);
+	//gWnd.draw(display);
 
 	sf::Text t1;
 	t1.setFont(Cfg::fonts.get((int)Cfg::Fonts::Font1));
@@ -104,7 +106,7 @@ void Game::render()
 	t3.setFont(Cfg::fonts.get((int)Cfg::Fonts::Font1));
 	t3.setFillColor(sf::Color::White);
 	t3.setCharacterSize(24);
-	t3.setString(std::to_string(aPlayer.getPos().x) + ' ' + std::to_string(aPlayer.getPos().y));
+	t3.setString(std::to_string(aPlayer.getVelocity().x) + ' ' + std::to_string(aPlayer.getVelocity().y));
 	t3.setPosition({ gameView.getCenter().x - 450.f - 300.f, 110.f});
 	sf::Text t4;
 	t4.setFont(Cfg::fonts.get((int)Cfg::Fonts::Font1));
@@ -130,7 +132,7 @@ void Game::render()
 	t7.setString(std::to_string(aPlayer.getPos().x) + ' ' + std::to_string(aPlayer.getPos().y));
 	t7.setPosition({ gameView.getCenter().x - 450.f - 300.f, 210.f });
 	t7.setCharacterSize(24);
-	gWnd.draw(t1);
+	//gWnd.draw(t1);
 	//gWnd.draw(t2);
 	//gWnd.draw(t3);
 	//gWnd.draw(t4);
@@ -145,16 +147,17 @@ void Game::render()
 
 void Game::input()
 {
-	aPlayer.input(gameView);
-	if (aPlayer.getVelocity().x != 0.f && !aPlayer.isTileBelow(tmap->getSolidTiles()) && !aPlayer.isTileBelow(stage.getPlats()))
+	aPlayer.input(gameView, tmap->getSolidTiles());
+	/*if (aPlayer.getVelocity().x != 0.f && !aPlayer.isTileBelow(tmap->getSolidTiles()) && !aPlayer.isTileBelow(stage.getPlats()))
 	{
 		aPlayer.setAffectedByGravity(true);
 		aPlayer.setCanJump(false);
-	}
+	}*/
 	stage.input();
 }
 
 Game::Game()
+	: objs{}
 {
 	std::cout << "Loading..." << std::endl;
 
@@ -207,6 +210,87 @@ Game::~Game()
 void Game::run()
 {
 	
+	objs.clear();
+	/*{
+		rec pr;
+		pr.set({ 400.f, 400.f }, { 124.f, 180.f }, TexType::Player, { 0.f,0.f });
+		objs.push_back(pr);
+	}
+	objs.reserve(static_cast<std::vector<rec, std::allocator<rec>>::size_type>(1) + 30);
+	for (int i = 1; i < 20; i++)
+	{
+		objs.emplace_back(rec{});
+		objs[i].set({ ((float)i * 64.f) + 200.f, 900.f - 256.f }, { 64.f,64.f }, TexType::Tile, { 0.f,0.f });
+	}
+	for (int i = 20; i < 25; i++)
+	{
+		objs.emplace_back(rec{});
+		objs[i].set({ 200.f,  900.f - 256.f - (((i - 20) + 1) * 64.f) }, { 64.f,64.f }, TexType::Tile, { 0.f,0.f });
+	}
+	for (int i = 25; i < 30; i++)
+	{
+		objs.emplace_back(rec{});
+		objs[i].set({ 200.f + (19.f * 64.f),  900.f - 256.f - (((i - 25) + 1) * 64.f) }, { 64.f,64.f }, TexType::Tile, { 0.f,0.f });
+	}
+	olc::vf2d mpos;
+	float dt = 0;
+	sf::Clock frameTimer;
+	while (wnd.isOpen())
+	{
+		dt = frameTimer.restart().asSeconds();
+		sf::Event e;
+		while (wnd.pollEvent(e))
+		{
+			if (e.type == sf::Event::KeyReleased && e.key.code == sf::Keyboard::Escape)
+			{
+				wnd.close();
+			}
+		}
+		if (wnd.isOpen())
+		{
+			mpos = olc::vf2d{ (float)sf::Mouse::getPosition(wnd).x, (float)sf::Mouse::getPosition(wnd).y };
+			aRay myRay{ {objs[0].pos}, {mpos} };
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+				objs[0].vel += myRay.dir() * 100.f * dt;
+			}
+			olc::vf2d cp;
+			olc::vi2d cn;
+			float ct;
+			std::vector<std::pair<int, float> > z;
+			for (int i = 1; i < objs.size(); i++)
+			{
+				rec target;
+				target.set({ objs[i].pos.x, objs[i].pos.y }, { 64.f, 64.f }, TexType::NotSet, { 0.f,0.f });
+				if (DynamicRectVsRect(objs[0], target, cp, cn, ct, dt))
+				{
+					z.push_back({ i, ct });
+				}
+			}
+			std::sort(z.begin(), z.end(), [](const std::pair<int, float>& a, const std::pair<int, float>& b)
+				{
+					return a.second < b.second;
+				});
+			for (auto j : z)
+			{
+				rec target;
+				target.set({ objs[j.first].pos.x, objs[j.first].pos.y }, { 64.f, 64.f }, TexType::NotSet, { 0.f,0.f });
+				if (DynamicRectVsRect(objs[0], target, cp, cn, ct, dt))
+				{
+					objs[0].vel += cn * olc::vf2d{ std::abs(objs[0].vel.x), std::abs(objs[0].vel.y) } *(1 - ct);
+				}
+			}
+			objs[0].pos += objs[0].vel * dt;
+
+			wnd.clear();
+			for (auto& o : objs)
+			{
+				wnd.draw(*spr(o));
+			}
+			wnd.display();
+		}
+	}*/
+
 	aPlayer.setPos({ 800.f - (aPlayer.getBBSize().x / 2.f), -100.f});
 	aPlayer.setVelocity({ 0.f, 0.f });
 	frameTimer.restart();
@@ -226,10 +310,13 @@ void Game::run()
 			auto num = sf::Mouse::getPosition(gWnd);
 			mpos = (sf::Vector2f)num;
 
-			input();
+			//input();
 			update();
 			
+			
 			gWnd.clear(sf::Color(47, 147, 247, 255));
+
+
 			render();
 			gWnd.display();
 		}

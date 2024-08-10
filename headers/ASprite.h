@@ -59,6 +59,7 @@ class ASprite
 
 
 
+
 public:
 	// these will be changed to a heinous animation map from the depths of hell
 	sf::IntRect texRect{};
@@ -94,7 +95,12 @@ public:
 
 	virtual bool isFacingLeft(); 
 	olc::v_2d<float> getPos();
+	olc::v_2d<float> getBBCenter();
 	olc::v_2d<float> getPrevPos();
+	olc::v_2d<float> getNextPos();
+	olc::utils::geom2d::rect<float> getBroadRect();
+	olc::utils::geom2d::rect<float> getNextRect();
+
 	void setPrevPos(olc::v_2d<float> pos_);
 	olc::v_2d<float> getBBOffset();
 	olc::v_2d<float> getBBSize();
@@ -108,7 +114,9 @@ public:
 	void changeDirection(AnimDirType animDir_);
 	void  applyGravity(float grav_);
 	void render();
+	void applyExternalForces();
 	void tickMovement();
+
 	void setControlledByScript(bool cond_);
 	bool isControlledByScript();
 

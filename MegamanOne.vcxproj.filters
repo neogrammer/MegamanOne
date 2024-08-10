@@ -293,6 +293,9 @@
     <ClCompile Include="source\MoveCommand.cpp">
       <Filter>Command</Filter>
     </ClCompile>
+    <ClCompile Include="source\rec.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="headers\tpl\ResourceManager.tpl">
@@ -379,5 +382,10 @@
     <Font Include="assets\fonts\frisky_puppy.ttf">
       <Filter>assets\fonts</Filter>
     </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="headers\rec.h">
+      <Filter>Core</Filter>
+    </Text>
   </ItemGroup>
 </Project>

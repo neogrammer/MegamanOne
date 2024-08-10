@@ -164,7 +164,10 @@ void Snail::update()
 		}
 	}
 
-
+	if (index > animMap[std::pair(currentAnim, facingLeft)].bboxes.size() || index > animMap[std::pair(currentAnim, facingLeft)].frames.size())
+	{
+		index = (int)animMap[std::pair(currentAnim, facingLeft)].bboxes.size() - 1;
+	}
 	bbox = animMap[std::pair(currentAnim, facingLeft)].bboxes[index];
 	texRect = animMap[std::pair(currentAnim, facingLeft)].frames[index];
 }

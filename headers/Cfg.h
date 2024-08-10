@@ -5,6 +5,7 @@
 #include <ResourceManager.h>
 #include <ActionMap.h>
 #include <vector>
+#include <3rdParty/olcUTIL_Geometry2D.h>
 
 enum class MachineType
 {
@@ -81,6 +82,38 @@ enum class CmdType
 	Count
 };
 
+enum class TexType
+{
+	Player,
+	Tile,
+	NotSet
+};
+
+
+
+struct aRay
+{
+	olc::vf2d origin;
+	olc::vf2d endPt;
+	aRay(olc::vf2d start, olc::vf2d end)
+	{
+		origin = start;
+		endPt = end;
+	}
+	olc::vf2d D()
+	{
+		return endPt - origin;
+	}
+	olc::vf2d orig()
+	{
+		return origin;
+	}
+	olc::vf2d dir()
+	{
+		return D().norm();
+	}
+};
+
 
 struct Cfg
 {
@@ -126,5 +159,6 @@ private:
     static void initTextures();
 	static void initPlayerInputs();
 };
+
 
 #endif

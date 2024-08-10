@@ -97,11 +97,16 @@ public:
 	bool mapMoved{ false };
 	bool mapMovedLeft{ false };
 	bool mapMovedRight{ false };
+	void undoMapMovement(sf::View& gview_);
+	void resolveBothAxes(const olc::utils::geom2d::rect<float>& r, ResolutionDir resDir, ResolutionDir resDir2);
+	void resolveOneAxis(const olc::utils::geom2d::rect<float>& r, ResolutionDir resDir);
+	void resolve(const olc::utils::geom2d::rect<float>& r, olc::vi2d& norm);
+	bool checkBelow(std::vector<Tile>& tiles);
 
 	
-	std::vector<std::pair<Tile*, std::pair<sf::FloatRect, ResolutionDir> > > resVec{};
+	std::vector<std::pair<Tile*, std::pair<olc::vf2d, ResolutionDir> > > resVec{};
 
-	void input(sf::View& gview_);
+	void input(sf::View& gview_, std::vector<Tile>& tiles);
 	void update();
 
 	void handleMapCollisions(std::vector<Tile>& tiles);

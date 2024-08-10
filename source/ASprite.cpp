@@ -115,9 +115,29 @@ olc::v_2d<float> ASprite::getPos()
     return bbPos;
 }
 
+olc::v_2d<float> ASprite::getBBCenter()
+{
+	return {bbPos + (getBBSize() / 2.f)};
+}
+
 olc::v_2d<float> ASprite::getPrevPos()
 {
 	return prevPos;
+}
+
+olc::v_2d<float> ASprite::getNextPos()
+{
+	return (bbPos + (vel * gTime));
+}
+
+rect<float> ASprite::getBroadRect()
+{
+	return {{((vel.x < 0) ? bbPos.x + (vel.x * gTime) : bbPos.x), ((vel.y < 0) ? bbPos.y + (vel.y * gTime) : bbPos.y)}, { getBBSize().x + fabs(vel.x * gTime), getBBSize().y + fabs(vel.y * gTime) }};
+}
+
+rect<float> ASprite::getNextRect()
+{
+	return { {getNextPos()}, {getBBSize()}};
 }
 
 void ASprite::setPrevPos(olc::v_2d<float> pos_)
@@ -210,6 +230,13 @@ void ASprite::render()
 
 
 }
+void ASprite::applyExternalForces()
+{
+	if (isAffectedByGravity())
+	{
+		applyGravity(900.f);
+	}
+}
 void ASprite::setControlledByScript(bool cond_)
 {
 	bControlledByScript = cond_;
@@ -220,12 +247,9 @@ bool ASprite::isControlledByScript()
 }
 void ASprite::tickMovement()
 {
+	
 	if (!bControlledByScript)
 	{
-		if (isAffectedByGravity())
-		{
-			applyGravity(900.f);
-		}
 		prevPos = bbPos;
 		bbPos += vel * gTime;
 	}
@@ -302,7 +326,7 @@ std::unique_ptr<sf::Sprite> ASprite::getSpr()
 		std::unique_ptr<sf::Sprite> tmp = std::make_unique<sf::Sprite>();
 		tmp->setTexture(Cfg::textures.get((int)tex));
 		tmp->setTextureRect(texRect);
-		tmp->setPosition(sf::Vector2f{ bbPos.x - getBBOffset().x, bbPos.y - getBBOffset().y });
+		tmp->setPosition(sf::Vector2f{ getPos().x - getBBOffset().x, getPos().y - getBBOffset().y});
 		return std::move(tmp);
 	}
 	else
