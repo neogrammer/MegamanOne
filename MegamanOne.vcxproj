@@ -24,11 +24,13 @@
     <ClInclude Include="headers\ActionMap.h" />
     <ClInclude Include="headers\ActionTarget.h" />
     <ClInclude Include="headers\ASprite.h" />
+    <ClInclude Include="headers\BaseSprite.h" />
     <ClInclude Include="headers\Cfg.h" />
     <ClInclude Include="headers\Command.h" />
     <ClInclude Include="headers\draw_shape.h" />
     <ClInclude Include="headers\duck_fold.h" />
     <ClInclude Include="headers\Dynamic.h" />
+    <ClInclude Include="headers\DynoSprite.h" />
     <ClInclude Include="headers\Enemy.h" />
     <ClInclude Include="headers\FSM.h" />
     <ClInclude Include="headers\fsm_events.h" />
@@ -46,6 +48,7 @@
     <ClInclude Include="headers\ServiceLocator.h" />
     <ClInclude Include="headers\Snail.h" />
     <ClInclude Include="headers\Stage.h" />
+    <ClInclude Include="headers\StatSprite.h" />
     <ClInclude Include="headers\Tile.h" />
     <ClInclude Include="headers\Tilemap.h" />
     <ClInclude Include="headers\Tileset.h" />
@@ -59,9 +62,11 @@
     </ClCompile>
     <ClCompile Include="source\Action.cpp" />
     <ClCompile Include="source\ASprite.cpp" />
+    <ClCompile Include="source\BaseSprite.cpp" />
     <ClCompile Include="source\Cfg.cpp" />
     <ClCompile Include="source\draw_shape.cpp" />
     <ClCompile Include="source\Dynamic.cpp" />
+    <ClCompile Include="source\DynoSprite.cpp" />
     <ClCompile Include="source\Enemy.cpp" />
     <ClCompile Include="source\Game.cpp" />
     <ClCompile Include="source\globals.cpp" />
@@ -75,6 +80,7 @@
     <ClCompile Include="source\rec.cpp" />
     <ClCompile Include="source\Snail.cpp" />
     <ClCompile Include="source\Stage.cpp" />
+    <ClCompile Include="source\StatSprite.cpp" />
     <ClCompile Include="source\Tile.cpp" />
     <ClCompile Include="source\Tilemap.cpp" />
     <ClCompile Include="source\Tileset.cpp" />

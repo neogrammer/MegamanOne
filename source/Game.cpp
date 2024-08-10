@@ -233,42 +233,6 @@ void Game::run()
 		objs.emplace_back(rec{});
 		objs[i].set({ 200.f + (19.f * 50.f),  900.f - 200.f - (((i - 25) + 1) * 50.f) }, { 50.f,50.f }, Cfg::Textures::Tileset1, { 9,3 }, { 50,50 }, { 0,0 }, { 0.f, 0.f });
 	}
-
-	/*
-	objs.reserve(static_cast<std::vector<rec, std::allocator<rec>>::size_type>(1) + 30);
-	for (int i = 1; i < 20; i++)
-	{
-		objs.emplace_back(rec{});
-		objs[i].set({ ((float)i * 64.f) + 200.f, 900.f - 256.f }, { 64.f,64.f }, TexType::Tile, { 0.f,0.f });
-	}
-	for (int i = 20; i < 25; i++)
-	{
-		objs.emplace_back(rec{});
-		objs[i].set({ 200.f,  900.f - 256.f - (((i - 20) + 1) * 64.f) }, { 64.f,64.f }, TexType::Tile, { 0.f,0.f });
-	}
-	for (int i = 25; i < 30; i++)
-	{
-		objs.emplace_back(rec{});
-		objs[i].set({ 200.f + (19.f * 64.f),  900.f - 256.f - (((i - 25) + 1) * 64.f) }, { 64.f,64.f }, TexType::Tile, { 0.f,0.f });
-	}
-	olc::vf2d mpos;
-	float dt = 0;
-	sf::Clock frameTimer;
-	while (wnd.isOpen())
-	{
-		dt = frameTimer.restart().asSeconds();
-		sf::Event e;
-		while (wnd.pollEvent(e))
-		{
-			if (e.type == sf::Event::KeyReleased && e.key.code == sf::Keyboard::Escape)
-			{
-				wnd.close();
-			}
-		}
-		if (wnd.isOpen())
-		{
-			mpos = olc::vf2d{ (float)sf::Mouse::getPosition(wnd).x, (float)sf::Mouse::getPosition(wnd).y };
-			*/
 	
 
 	aPlayer.setPos({ 800.f - (aPlayer.getBBSize().x / 2.f), -100.f});

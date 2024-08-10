@@ -130,6 +130,12 @@
     <Filter Include="assets\fonts">
       <UniqueIdentifier>{e76a9ac2-ee93-4399-8555-af26a419cc28}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entities\dyno_sprites">
+      <UniqueIdentifier>{b3855804-59ac-45c5-988c-8583d7d2b539}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\stat_sprites">
+      <UniqueIdentifier>{bc967272-e8e5-469f-ab3f-3198a6b5b3a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\ServiceLocator.h">
@@ -225,6 +231,15 @@
     <ClInclude Include="headers\MoveCommand.h">
       <Filter>Command</Filter>
     </ClInclude>
+    <ClInclude Include="headers\BaseSprite.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\DynoSprite.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\StatSprite.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -295,6 +310,15 @@
     </ClCompile>
     <ClCompile Include="source\rec.cpp">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\BaseSprite.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DynoSprite.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="source\StatSprite.cpp">
+      <Filter>Entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

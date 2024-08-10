@@ -1,0 +1,13 @@
+#include <pch.h>
+#include <DynoSprite.h>
+
+DynoSprite::DynoSprite()
+	: BaseSprite{}
+{
+
+}
+
+DynoSprite::~DynoSprite()
+{
+
+}
