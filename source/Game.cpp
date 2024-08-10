@@ -12,28 +12,28 @@ void Game::createWorld()
 
 void Game::update()
 {
-	stage.update(lua);
+	//stage.update(lua);
 
-	aPlayer.applyExternalForces();
-	aPlayer.update();
-	aPlayer.handleMapCollisions(tmap->getSolidTiles());
-	aPlayer.handleMapCollisions(stage.getPlats());
+	//aPlayer.applyExternalForces();
+	//aPlayer.update();
+	//aPlayer.handleMapCollisions(tmap->getSolidTiles());
+	//aPlayer.handleMapCollisions(stage.getPlats());
 
-	aPlayer.tickMovement();
+	//aPlayer.tickMovement();
 
-	std::vector<ASprite*> sprites{};
-	sprites.emplace_back(new ASprite{});
-	ASprite& aSpr = *sprites[0];
+	//std::vector<ASprite*> sprites{};
+	//sprites.emplace_back(new ASprite{});
+	//ASprite& aSpr = *sprites[0];
 
-	sprites[0] = nullptr;
+	//sprites[0] = nullptr;
 
-	for (auto& p : aPlayer.getProjectiles())
-	{
-		p.updateCheckHandle(aPlayer, sprites, tmap->getSolidTiles());
-	}
-	sprites[0] = &aSpr;
+	//for (auto& p : aPlayer.getProjectiles())
+	//{
+	//	p.updateCheckHandle(aPlayer, sprites, tmap->getSolidTiles());
+	//}
+	//sprites[0] = &aSpr;
 
-	delete sprites[0];
+	//delete sprites[0];
 
 	bgOffset += 10.f * gTime;
 
@@ -74,22 +74,22 @@ void Game::render()
 
 	//tmap->render();
 	//stage.render();
-	for (auto& p : aPlayer.getProjectiles())
-	{
-		if (p.isMarkedForDeletion()) continue;
-		//p.render();
-	}
+	//for (auto& p : aPlayer.getProjectiles())
+	//{
+	//	if (p.isMarkedForDeletion()) continue;
+	//	//p.render();
+	//}
 	//aPlayer.render();
-	sf::RectangleShape display;
+	/*sf::RectangleShape display;
 	display.setSize({ 300.f,200.f });
 	display.setFillColor(sf::Color::Black);
 	display.setOutlineColor(sf::Color::White);
 	display.setOutlineThickness(3);
-	display.setPosition({ gameView.getCenter().x - 450.f - 300.f - 10.f, 50.f });
+	display.setPosition({ gameView.getCenter().x - 450.f - 300.f - 10.f, 50.f });*/
 
 	//gWnd.draw(display);
 
-	sf::Text t1;
+	/*sf::Text t1;
 	t1.setFont(Cfg::fonts.get((int)Cfg::Fonts::Font1));
 	t1.setCharacterSize(24);
 	t1.setFillColor(sf::Color::White);
@@ -131,7 +131,7 @@ void Game::render()
 	t7.setFillColor(sf::Color::White);
 	t7.setString(std::to_string(aPlayer.getPos().x) + ' ' + std::to_string(aPlayer.getPos().y));
 	t7.setPosition({ gameView.getCenter().x - 450.f - 300.f, 210.f });
-	t7.setCharacterSize(24);
+	t7.setCharacterSize(24);*/
 	//gWnd.draw(t1);
 	//gWnd.draw(t2);
 	//gWnd.draw(t3);
@@ -147,17 +147,15 @@ void Game::render()
 
 void Game::input()
 {
-	aPlayer.input(gameView, tmap->getSolidTiles());
-	/*if (aPlayer.getVelocity().x != 0.f && !aPlayer.isTileBelow(tmap->getSolidTiles()) && !aPlayer.isTileBelow(stage.getPlats()))
-	{
-		aPlayer.setAffectedByGravity(true);
-		aPlayer.setCanJump(false);
-	}*/
-	stage.input();
+//	aPlayer.input(gameView, tmap->getSolidTiles());
+
+//	stage.input();
 }
 
 Game::Game()
 	: objs{}
+	, dPlayer{}
+	, sprites{}
 {
 	std::cout << "Loading..." << std::endl;
 
@@ -198,6 +196,29 @@ Game::Game()
 	}
 
 	createWorld();
+
+	
+	sprites.clear();
+	sprites.reserve(31);
+	dPlayer = std::make_shared<DynoPlayer>(Cfg::Textures::PlayerAtlas, olc::vi2d{ 0,1 }, olc::vf2d{ 400.f, 400.f });
+	sprites.push_back(dPlayer);
+
+	for (int i = 1; i < 20; i++)
+	{
+		std::shared_ptr<StatTile> sTile = std::make_shared<StatTile>(Cfg::Textures::Tileset1, olc::vi2d{ 9,3 }, olc::vf2d{ ((float)i * 50.f) + 200.f, 900.f - 200.f });
+		sprites.push_back(sTile);
+	}
+	for (int i = 20; i < 25; i++)
+	{
+		std::shared_ptr<StatTile> sTile = std::make_shared<StatTile>(Cfg::Textures::Tileset1, olc::vi2d{ 9,3 }, olc::vf2d{ 200.f + 50.f,  900.f - 200.f - (((i - 20) + 1) * 50.f) });
+		sprites.push_back(sTile);
+	}
+	for (int i = 25; i < 30; i++)
+	{
+		std::shared_ptr<StatTile> sTile = std::make_shared<StatTile>(Cfg::Textures::Tileset1, olc::vi2d{ 9,3 }, olc::vf2d{ 200.f + (19.f * 50.f),  900.f - 200.f - (((i - 25) + 1) * 50.f) });
+		sprites.push_back(sTile);
+	}
+
 	std::cout << "Load Complete" << std::endl;
 }
 
@@ -210,36 +231,15 @@ Game::~Game()
 void Game::run()
 {
 	
-	objs.clear();
-	{
-		rec pr;
-		pr.set({ 400.f, 400.f }, { 60.f, 83.f }, Cfg::Textures::PlayerAtlas, { 0,1 }, { 130, 160 }, { 32,45 }, {0.f,0.f});
-		objs.push_back(pr);
-	}
 
-	objs.reserve(static_cast<std::vector<rec, std::allocator<rec>>::size_type>(1) + 30);
-	for (int i = 1; i < 20; i++)
-	{
-		objs.emplace_back(rec{});
-		objs[i].set({ ((float)i * 50.f) + 200.f, 900.f - 200.f }, { 50.f,50.f}, Cfg::Textures::Tileset1, { 9,3 }, {50,50 }, { 0,0 }, { 0.f, 0.f });
-	}
-	for (int i = 20; i < 25; i++)
-	{
-		objs.emplace_back(rec{});
-		objs[i].set({ 200.f + 50.f,  900.f - 200.f - (((i - 20) + 1) * 50.f) }, { 50.f,50.f }, Cfg::Textures::Tileset1, { 9, 3 }, { 50,50 }, { 0,0 }, { 0.f, 0.f });
-	}
-	for (int i = 25; i < 30; i++)
-	{
-		objs.emplace_back(rec{});
-		objs[i].set({ 200.f + (19.f * 50.f),  900.f - 200.f - (((i - 25) + 1) * 50.f) }, { 50.f,50.f }, Cfg::Textures::Tileset1, { 9,3 }, { 50,50 }, { 0,0 }, { 0.f, 0.f });
-	}
 	
-
-	aPlayer.setPos({ 800.f - (aPlayer.getBBSize().x / 2.f), -100.f});
-	aPlayer.setVelocity({ 0.f, 0.f });
 	frameTimer.restart();
+
+	// game loop
 	while (gWnd.isOpen())
 	{
+
+		// window events handled here
 		sf::Event e;
 		while (gWnd.pollEvent(e))
 		{
@@ -248,6 +248,8 @@ void Game::run()
 				gWnd.close();
 			}
 		}
+
+		// if not closed, update and draw the game as needed
 		if (gWnd.isOpen())
 		{
 			gTime = frameTimer.restart().asSeconds();
@@ -255,65 +257,95 @@ void Game::run()
 			mpos = (sf::Vector2f)num;
 
 			//input();
+			// add keybased updates to playere here
+			sprites[0]->getRec().vel.x = 0.f;
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+			{
+				sprites[0]->getRec().vel.x += 250.f;
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+			{
+				sprites[0]->getRec().vel.x -= 250.f;
+			}
+			
+			
 			update();
 
-			aRay myRay{{objs[0].pos.x, objs[0].pos.y}, {mpos.x, mpos.y}};
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-			{
-				objs[0].vel += myRay.dir() * 100.f * gTime;
-			}
 
+			//gravity
+			sprites[0]->getRec().vel.y += 9.8f * gTime;
+			
+
+
+			aRay myRay{ {sprites[0]->getRec().pos.x, sprites[0]->getRec().pos.y }, {sprites[0]->getRec().pos.x + sprites[0]->getRec().vel.x, sprites[0]->getRec().pos.y + sprites[0]->getRec().vel.y}};
+			sprites[0]->getRec().vel += myRay.dir() * 250.f * gTime;
+
+			//aRay myRay{{objs[0].pos.x, objs[0].pos.y}, {mpos.x, mpos.y}};
+			/*if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+				sprites[0]->getRec().vel += myRay.dir() * 100.f * gTime;
+			}*/
+			// add gravity here
+
+			// check collisions
 			olc::vf2d cp;
 			olc::vi2d cn;
 			float ct;
 			std::vector<std::pair<int, float> > z;
-			for (int i = 1; i < objs.size(); i++)
+			for (int i = 1; i < sprites.size(); i++)
 			{
 				rec target;
-				target.set({ objs[i].pos.x, objs[i].pos.y }, { 50.f,50.f }, Cfg::Textures::Tileset1, { 9, 3 }, { 50,50 }, { 0, 0 }, { 0.f,0.f });
-				if (phys::DynamicRectVsRect(objs[0], target, cp, cn, ct, gTime))
+				target.set({ sprites[i]->getRec().pos.x, sprites[i]->getRec().pos.y}, {50.f,50.f}, Cfg::Textures::Tileset1, {9, 3}, {50,50}, {0, 0}, {0.f,0.f});
+				if (phys::DynamicRectVsRect(sprites[0]->getRec(), target, cp, cn, ct, gTime))
 				{
 					z.push_back({ i, ct });
 				}
 			}
+
+			// sort
 			std::sort(z.begin(), z.end(), [](const std::pair<int, float>& a, const std::pair<int, float>& b)
 				{
 					return a.second < b.second;
 				});
 
+
+			// resolve in correct order
 			for (auto j : z)
 			{
 				rec target;
-				target.set({ objs[j.first].pos.x, objs[j.first].pos.y }, { 50.f,50.f }, Cfg::Textures::Tileset1, { 9, 3 }, { 50,50 }, { 0, 0 }, { 0.f,0.f });
-				if (phys::DynamicRectVsRect(objs[0], target, cp, cn, ct, gTime))
+				target.set({sprites[j.first]->getRec().pos.x, sprites[j.first]->getRec().pos.y}, {50.f,50.f}, Cfg::Textures::Tileset1, {9, 3}, {50,50}, {0, 0}, {0.f,0.f});
+				if (phys::DynamicRectVsRect(sprites[0]->getRec(), target, cp, cn, ct, gTime))
 				{
-					objs[0].vel += cn * olc::vf2d{ std::abs(objs[0].vel.x), std::abs(objs[0].vel.y) } *(1 - ct);
+					sprites[0]->getRec().vel += cn * olc::vf2d{ std::abs(sprites[0]->getRec().vel.x), std::abs(sprites[0]->getRec().vel.y) } *(1 - ct);
 				}
 			}
-			objs[0].pos += objs[0].vel * gTime;
 
+			// finally update the position of the player
+			sprites[0]->getRec().pos += sprites[0]->getRec().vel * gTime;
+
+
+			// now render the screen
 			gWnd.clear(sf::Color(47, 147, 247, 255));
 
 			render();
 
-			for (auto& o : objs)
+			//when facing right tiles to the left should be behind megamans back foot
+			for (auto& o : sprites)
 			{
-				if (&o == &objs[0]) continue;
-				if (o.pos.x + (o.size.x / 2.f) <= objs[0].pos.x + (objs[0].size.x / 2.f))
-					gWnd.draw(*phys::spr(o));
+				if (&o->getRec() == &sprites[0]->getRec()) continue;
+				if (o->getRec().pos.x + (o->getRec().size.x / 2.f) <= sprites[0]->getRec().pos.x + (sprites[0]->getRec().size.x / 2.f))
+					gWnd.draw(*phys::spr(o->getRec()));
 			}
 
-			gWnd.draw(*phys::spr(objs[0]));
+			gWnd.draw(*phys::spr(sprites[0]->getRec()));
 
-			for (auto& o : objs)
+			// tiles in front get overlaid his front foot
+			for (auto& o : sprites)
 			{
-				if (&o == &objs[0]) continue;
-				if (o.pos.x + (o.size.x / 2.f) > objs[0].pos.x + (objs[0].size.x / 2.f))
-					gWnd.draw(*phys::spr(o));
+				if (&o->getRec() == &sprites[0]->getRec()) continue;
+				if (o->getRec().pos.x + (o->getRec().size.x / 2.f) > sprites[0]->getRec().pos.x + (sprites[0]->getRec().size.x / 2.f))
+					gWnd.draw(*phys::spr(o->getRec()));
 			}
-
-
-
 
 			gWnd.display();
 		}

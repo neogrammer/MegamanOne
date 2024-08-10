@@ -7,6 +7,9 @@
 #include<rec.h>
 #include <SFML/System/Clock.hpp>
 #include <vector>
+#include <DynoPlayer.h>
+#include <StatTile.h>
+
 struct lua_State;
 class Tilemap;
 
@@ -24,6 +27,8 @@ class Game
 	float bgOffset{ 1600.f };
 	lua_State* lua{};
 	sf::Clock frameTimer{};
+	std::shared_ptr<BaseSprite> dPlayer;
+	std::vector<std::shared_ptr<BaseSprite> > sprites;
 
 	// new collision variables
 	std::vector<rec> objs;

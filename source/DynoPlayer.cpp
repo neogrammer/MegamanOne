@@ -31,7 +31,7 @@ void DynoPlayer::setPreBuild(Cfg::Textures texCopy_, olc::vi2d texRecPosCopy_)
 void DynoPlayer::build(olc::vf2d pos)
 {
 	auto& r = this->getRec();
-	r.set(pos, { 60.f, 84.f }, texCopy, texRecPosCopy, { 130,160 }, { 32,45 }, {0.f,0.f});
+	r.set(pos, { 60.f, 83.f }, texCopy, texRecPosCopy, { 130,160 }, { 32,45 }, {0.f,0.f});
 }
 
 DynoPlayer& DynoPlayer::operator()()
