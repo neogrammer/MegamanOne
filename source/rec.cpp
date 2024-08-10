@@ -16,7 +16,7 @@ void rec::set(olc::vf2d pos_, olc::vf2d size_, Cfg::Textures texType_, olc::vi2d
 	pos = pos_;
 	size = size_;
 	texType = texType_;
-	texRectPos = texRectTilePos_ * texRectSize;
+	texRectPos = { texRectTilePos_.x * texRectSize_.x, texRectTilePos_.y * texRectSize_.y };
 	texPosOffset = texOffset_;
 	texRectSize = texRectSize_;
 

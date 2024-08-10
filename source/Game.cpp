@@ -211,11 +211,30 @@ void Game::run()
 {
 	
 	objs.clear();
-	/*{
+	{
 		rec pr;
-		pr.set({ 400.f, 400.f }, { 124.f, 180.f }, TexType::Player, { 0.f,0.f });
+		pr.set({ 400.f, 400.f }, { 60.f, 83.f }, Cfg::Textures::PlayerAtlas, { 0,1 }, { 130, 160 }, { 32,45 }, {0.f,0.f});
 		objs.push_back(pr);
 	}
+
+	objs.reserve(static_cast<std::vector<rec, std::allocator<rec>>::size_type>(1) + 30);
+	for (int i = 1; i < 20; i++)
+	{
+		objs.emplace_back(rec{});
+		objs[i].set({ ((float)i * 50.f) + 200.f, 900.f - 200.f }, { 50.f,50.f}, Cfg::Textures::Tileset1, { 9,3 }, {50,50 }, { 0,0 }, { 0.f, 0.f });
+	}
+	for (int i = 20; i < 25; i++)
+	{
+		objs.emplace_back(rec{});
+		objs[i].set({ 200.f + 50.f,  900.f - 200.f - (((i - 20) + 1) * 50.f) }, { 50.f,50.f }, Cfg::Textures::Tileset1, { 9, 3 }, { 50,50 }, { 0,0 }, { 0.f, 0.f });
+	}
+	for (int i = 25; i < 30; i++)
+	{
+		objs.emplace_back(rec{});
+		objs[i].set({ 200.f + (19.f * 50.f),  900.f - 200.f - (((i - 25) + 1) * 50.f) }, { 50.f,50.f }, Cfg::Textures::Tileset1, { 9,3 }, { 50,50 }, { 0,0 }, { 0.f, 0.f });
+	}
+
+	/*
 	objs.reserve(static_cast<std::vector<rec, std::allocator<rec>>::size_type>(1) + 30);
 	for (int i = 1; i < 20; i++)
 	{
@@ -249,47 +268,8 @@ void Game::run()
 		if (wnd.isOpen())
 		{
 			mpos = olc::vf2d{ (float)sf::Mouse::getPosition(wnd).x, (float)sf::Mouse::getPosition(wnd).y };
-			aRay myRay{ {objs[0].pos}, {mpos} };
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-			{
-				objs[0].vel += myRay.dir() * 100.f * dt;
-			}
-			olc::vf2d cp;
-			olc::vi2d cn;
-			float ct;
-			std::vector<std::pair<int, float> > z;
-			for (int i = 1; i < objs.size(); i++)
-			{
-				rec target;
-				target.set({ objs[i].pos.x, objs[i].pos.y }, { 64.f, 64.f }, TexType::NotSet, { 0.f,0.f });
-				if (DynamicRectVsRect(objs[0], target, cp, cn, ct, dt))
-				{
-					z.push_back({ i, ct });
-				}
-			}
-			std::sort(z.begin(), z.end(), [](const std::pair<int, float>& a, const std::pair<int, float>& b)
-				{
-					return a.second < b.second;
-				});
-			for (auto j : z)
-			{
-				rec target;
-				target.set({ objs[j.first].pos.x, objs[j.first].pos.y }, { 64.f, 64.f }, TexType::NotSet, { 0.f,0.f });
-				if (DynamicRectVsRect(objs[0], target, cp, cn, ct, dt))
-				{
-					objs[0].vel += cn * olc::vf2d{ std::abs(objs[0].vel.x), std::abs(objs[0].vel.y) } *(1 - ct);
-				}
-			}
-			objs[0].pos += objs[0].vel * dt;
-
-			wnd.clear();
-			for (auto& o : objs)
-			{
-				wnd.draw(*spr(o));
-			}
-			wnd.display();
-		}
-	}*/
+			*/
+	
 
 	aPlayer.setPos({ 800.f - (aPlayer.getBBSize().x / 2.f), -100.f});
 	aPlayer.setVelocity({ 0.f, 0.f });
@@ -312,19 +292,67 @@ void Game::run()
 
 			//input();
 			update();
-			
-			
+
+			aRay myRay{{objs[0].pos.x, objs[0].pos.y}, {mpos.x, mpos.y}};
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+				objs[0].vel += myRay.dir() * 100.f * gTime;
+			}
+
+			olc::vf2d cp;
+			olc::vi2d cn;
+			float ct;
+			std::vector<std::pair<int, float> > z;
+			for (int i = 1; i < objs.size(); i++)
+			{
+				rec target;
+				target.set({ objs[i].pos.x, objs[i].pos.y }, { 50.f,50.f }, Cfg::Textures::Tileset1, { 9, 3 }, { 50,50 }, { 0, 0 }, { 0.f,0.f });
+				if (phys::DynamicRectVsRect(objs[0], target, cp, cn, ct, gTime))
+				{
+					z.push_back({ i, ct });
+				}
+			}
+			std::sort(z.begin(), z.end(), [](const std::pair<int, float>& a, const std::pair<int, float>& b)
+				{
+					return a.second < b.second;
+				});
+
+			for (auto j : z)
+			{
+				rec target;
+				target.set({ objs[j.first].pos.x, objs[j.first].pos.y }, { 50.f,50.f }, Cfg::Textures::Tileset1, { 9, 3 }, { 50,50 }, { 0, 0 }, { 0.f,0.f });
+				if (phys::DynamicRectVsRect(objs[0], target, cp, cn, ct, gTime))
+				{
+					objs[0].vel += cn * olc::vf2d{ std::abs(objs[0].vel.x), std::abs(objs[0].vel.y) } *(1 - ct);
+				}
+			}
+			objs[0].pos += objs[0].vel * gTime;
+
 			gWnd.clear(sf::Color(47, 147, 247, 255));
 
-
 			render();
+
+			for (auto& o : objs)
+			{
+				if (&o == &objs[0]) continue;
+				if (o.pos.x + (o.size.x / 2.f) <= objs[0].pos.x + (objs[0].size.x / 2.f))
+					gWnd.draw(*phys::spr(o));
+			}
+
+			gWnd.draw(*phys::spr(objs[0]));
+
+			for (auto& o : objs)
+			{
+				if (&o == &objs[0]) continue;
+				if (o.pos.x + (o.size.x / 2.f) > objs[0].pos.x + (objs[0].size.x / 2.f))
+					gWnd.draw(*phys::spr(o));
+			}
+
+
+
+
 			gWnd.display();
 		}
 
 	}
-
-
-
-
-
 }
