@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="headers\AABB.h" />
     <ClInclude Include="headers\Action.h" />
     <ClInclude Include="headers\ActionMap.h" />
@@ -57,12 +58,13 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="headers\AABB.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="source\AABB.cpp" />
     <ClCompile Include="source\Action.cpp" />
+    <ClCompile Include="source\Animation.cpp" />
     <ClCompile Include="source\ASprite.cpp" />
     <ClCompile Include="source\BaseSprite.cpp" />
     <ClCompile Include="source\Cfg.cpp" />

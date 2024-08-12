@@ -148,7 +148,38 @@ void Game::render()
 
 void Game::input()
 {
-//	aPlayer.input(gameView, tmap->getSolidTiles());
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	{
+		sprites[0]->getRec().vel.x = -250.f;
+		playerFacingRight = false;
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	{
+		sprites[0]->getRec().vel.x = 250.f;
+		playerFacingRight = true;
+
+	}
+
+	if (playerGrounded == true)
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+		{
+			playerGrounded = false;
+			sprites[0]->getRec().vel.y = -2000.f;
+			if (playerFacingRight)
+				sprites[0]->getRec().vel.x = -40000.f;
+			else
+				sprites[0]->getRec().vel.x = 40000.f;
+
+			
+		}
+	}
+
+
+
+		//	aPlayer.input(gameView, tmap->getSolidTiles());
 
 //	stage.input();
 }
@@ -263,24 +294,42 @@ void Game::run()
 			sprites[0]->getRec().vel.x = 0.f;
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 			{
-				sprites[0]->getRec().vel.x += 250.f;
+				sprites[0]->getRec().vel.x += 300.f;
+				playerFacingRight = true;
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 			{
-				sprites[0]->getRec().vel.x -= 250.f;
+				sprites[0]->getRec().vel.x -= 300.f;
+				playerFacingRight = false;
 			}
 			
 			
-			update();
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+			{
+				jumpPressed = true;
+				if (playerGrounded == true && sprites[0]->getRec().vel.y == 0.f)
+				{
+					playerGrounded = false;
+					sprites[0]->getRec().vel.y = -1208.81f;
+				}
+			}
+			else
+			{
+				jumpPressed = false;
+			}
+
+			
+			
+			//update();
 
 
 			//gravity
-			sprites[0]->getRec().vel.y += 9.8f * gTime;
+			sprites[0]->getRec().vel.y += powf(59.8f,2) * gTime;
 			
 
 
-			aRay myRay{ {sprites[0]->getRec().pos.x, sprites[0]->getRec().pos.y }, {sprites[0]->getRec().pos.x + sprites[0]->getRec().vel.x, sprites[0]->getRec().pos.y + sprites[0]->getRec().vel.y}};
-			sprites[0]->getRec().vel += myRay.dir() * 250.f * gTime;
+			//aRay myRay{ {sprites[0]->getRec().pos.x, sprites[0]->getRec().pos.y }, {sprites[0]->getRec().pos.x + sprites[0]->getRec().vel.x, sprites[0]->getRec().pos.y + sprites[0]->getRec().vel.y}};
+			//sprites[0]->getRec().vel += myRay.dir() * 250.f * gTime;
 
 			//aRay myRay{{objs[0].pos.x, objs[0].pos.y}, {mpos.x, mpos.y}};
 			/*if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -293,6 +342,7 @@ void Game::run()
 			olc::vf2d cp;
 			olc::vi2d cn;
 			float ct;
+
 			std::vector<std::pair<int, float> > z;
 			for (int i = 1; i < sprites.size(); i++)
 			{
@@ -300,6 +350,8 @@ void Game::run()
 				target.set({ sprites[i]->getRec().pos.x, sprites[i]->getRec().pos.y}, {50.f,50.f}, Cfg::Textures::Tileset1, {9, 3}, {50,50}, {0, 0}, {0.f,0.f});
 				if (phys::DynamicRectVsRect(sprites[0]->getRec(), target, cp, cn, ct, gTime))
 				{
+					if (cn.y == -1)
+						playerGrounded = true;
 					z.push_back({ i, ct });
 				}
 			}

@@ -32,8 +32,9 @@ class Game
 
 	// new collision variables
 	std::vector<rec> objs;
-
-
+	bool playerGrounded{ false };
+	bool jumpPressed{ false };
+	bool playerFacingRight{ true };
 
 	void input();
 	void update();

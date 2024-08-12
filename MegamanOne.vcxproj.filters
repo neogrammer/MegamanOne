@@ -246,6 +246,9 @@
     <ClInclude Include="headers\DynoPlayer.h">
       <Filter>Entities\dyno_sprites</Filter>
     </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -265,9 +268,6 @@
     </ClCompile>
     <ClCompile Include="source\Dynamic.cpp">
       <Filter>Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="headers\AABB.cpp">
-      <Filter>Misc</Filter>
     </ClCompile>
     <ClCompile Include="source\physics.cpp">
       <Filter>Managers</Filter>
@@ -331,6 +331,12 @@
     </ClCompile>
     <ClCompile Include="source\DynoPlayer.cpp">
       <Filter>Entities\dyno_sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AABB.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Animation.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
