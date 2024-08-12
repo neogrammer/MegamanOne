@@ -17,6 +17,8 @@ public:
 	virtual StatSprite& operator()() override = 0;
 
 	rec& getRec();
+	virtual void render() override = 0;
+	virtual void update() override = 0;
 
 };
 

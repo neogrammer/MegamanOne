@@ -9,6 +9,7 @@ DynoSprite::DynoSprite()
 DynoSprite::DynoSprite(olc::vf2d pos_)
 	: BaseSprite{pos_}
 {
+	
 }
 
 DynoSprite::~DynoSprite()

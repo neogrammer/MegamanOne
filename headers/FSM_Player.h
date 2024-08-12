@@ -90,6 +90,15 @@ public:
 		return state_PeakingJump{};
 	}
 
+	std::optional<PlayerStateVar> On_Event(state_PeakingJump& s, const evt_AnimationFinished& e)
+	{
+		std::cout << "falling" << std::endl;
+
+		justChanged_ = true;
+		FSM<FSM_Player, PlayerStateVar>::currentState_ = "falling";
+		return state_Falling{};
+	}
+
 	std::optional<PlayerStateVar> On_Event(state_PeakingJump& s, const evt_Fell& e)
 	{
 		std::cout << "falling" << std::endl;
@@ -125,6 +134,8 @@ public:
 		FSM<FSM_Player, PlayerStateVar>::currentState_ = "brandishing";
 		return state_Brandishing{};
 	}
+
+	
 
 	std::optional<PlayerStateVar> On_Event(state_Falling& s, const evt_StartedShooting& e)
 	{
@@ -321,6 +332,14 @@ public:
 
 		FSM<FSM_Player, PlayerStateVar>::currentState_ = "runningAndShooting";
 		return state_ShootingAndRunning{};
+	}
+	std::optional<PlayerStateVar> On_Event(state_Standing& s, const evt_Fell& e)
+	{
+		justChanged_ = true;
+		std::cout << "falling" << std::endl;
+
+		FSM<FSM_Player, PlayerStateVar>::currentState_ = "falling";
+		return state_Falling{};
 	}
 
 	template <typename State, typename Event>

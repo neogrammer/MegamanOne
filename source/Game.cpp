@@ -4,6 +4,9 @@
 #include <Snail.h>
 #include <type_traits>
 #include <string>
+#include <duck_fold.h>
+#include <fsm_events.h>
+
 void Game::createWorld()
 {
 	
@@ -166,6 +169,9 @@ void Game::input()
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 		{
+			dispatch(dPlayer->fsmHandler->getMachine(), evt_Jumped{});
+			dPlayer->currentAnim = dPlayer->fsmHandler->getMachine().getCurrentState();
+
 			playerGrounded = false;
 			sprites[0]->getRec().vel.y = -2000.f;
 			if (playerFacingRight)
@@ -234,6 +240,9 @@ Game::Game()
 	sprites.reserve(31);
 	dPlayer = std::make_shared<DynoPlayer>(Cfg::Textures::PlayerAtlas, olc::vi2d{ 0,1 }, olc::vf2d{ 400.f, 400.f });
 	sprites.push_back(dPlayer);
+	
+	
+	
 
 	for (int i = 1; i < 20; i++)
 	{
@@ -268,6 +277,11 @@ void Game::run()
 	
 	frameTimer.restart();
 
+	dispatch(dPlayer->fsmHandler->getMachine(), evt_Fell{});
+	dPlayer->currentAnim = dPlayer->fsmHandler->getMachine().getCurrentState();
+	dPlayer->resetAnim();
+	gTime = 0.f;
+
 	// game loop
 	while (gWnd.isOpen())
 	{
@@ -295,20 +309,53 @@ void Game::run()
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 			{
 				sprites[0]->getRec().vel.x += 300.f;
-				playerFacingRight = true;
+				dPlayer->facingLeft = false;
+				if (dPlayer->currentAnim != "startingRun" && dPlayer->currentAnim != "running" && dPlayer->currentAnim != "landing" && dPlayer->currentAnim != "peakingJump" && dPlayer->currentAnim != "jumping" && dPlayer->currentAnim != "falling")
+				{
+					dispatch(dPlayer->fsmHandler->getMachine(), evt_StartedMoving{});
+					
+						dPlayer->fsmHandler->getMachine().setJustChanged(false);
+						dPlayer->currentAnim = dPlayer->fsmHandler->getMachine().getCurrentState();
+						dPlayer->resetAnim();
+					
+					
+				}
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 			{
 				sprites[0]->getRec().vel.x -= 300.f;
-				playerFacingRight = false;
+				dPlayer->facingLeft = true;
+				if (dPlayer->currentAnim != "startingRun" && dPlayer->currentAnim != "running" && dPlayer->currentAnim != "landing" && dPlayer->currentAnim != "peakingJump" && dPlayer->currentAnim != "jumping" && dPlayer->currentAnim != "falling")
+				{
+					dispatch(dPlayer->fsmHandler->getMachine(), evt_StartedMoving{});
+					
+						dPlayer->fsmHandler->getMachine().setJustChanged(false);
+						dPlayer->currentAnim = dPlayer->fsmHandler->getMachine().getCurrentState();
+						dPlayer->resetAnim();
+					
+				}
 			}
 			
+			if (sprites[0]->getRec().vel.x == 0.f && !sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+			{
+				dispatch(dPlayer->fsmHandler->getMachine(), evt_StoppedMoving{});
+				if (dPlayer->fsmHandler->getMachine().wasJustChanged())
+				{
+					dPlayer->fsmHandler->getMachine().setJustChanged(false);
+					dPlayer->currentAnim = dPlayer->fsmHandler->getMachine().getCurrentState();
+					dPlayer->resetAnim();
+				}
+			}
 			
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 			{
 				jumpPressed = true;
 				if (playerGrounded == true && sprites[0]->getRec().vel.y == 0.f)
 				{
+					dispatch(dPlayer->fsmHandler->getMachine(), evt_Jumped{});
+					dPlayer->currentAnim = dPlayer->fsmHandler->getMachine().getCurrentState();
+					dPlayer->resetAnim();
+
 					playerGrounded = false;
 					sprites[0]->getRec().vel.y = -1208.81f;
 				}
@@ -320,7 +367,7 @@ void Game::run()
 
 			
 			
-			//update();
+			dPlayer->update();
 
 
 			//gravity
@@ -350,9 +397,15 @@ void Game::run()
 				target.set({ sprites[i]->getRec().pos.x, sprites[i]->getRec().pos.y}, {50.f,50.f}, Cfg::Textures::Tileset1, {9, 3}, {50,50}, {0, 0}, {0.f,0.f});
 				if (phys::DynamicRectVsRect(sprites[0]->getRec(), target, cp, cn, ct, gTime))
 				{
-					if (cn.y == -1)
+					if (cn.y == -1 && dPlayer->getRec().vel.y > 10.f && dPlayer->currentAnim != "running" && dPlayer->currentAnim != "peakingJump")
+					{
+						dispatch(dPlayer->fsmHandler->getMachine(), evt_Landed{});
+						dPlayer->currentAnim = dPlayer->fsmHandler->getMachine().getCurrentState();
+						dPlayer->resetAnim();
 						playerGrounded = true;
+					}
 					z.push_back({ i, ct });
+
 				}
 			}
 
@@ -391,7 +444,7 @@ void Game::run()
 					gWnd.draw(*phys::spr(o->getRec()));
 			}
 
-			gWnd.draw(*phys::spr(sprites[0]->getRec()));
+			
 
 			// tiles in front get overlaid his front foot
 			for (auto& o : sprites)
@@ -400,6 +453,9 @@ void Game::run()
 				if (o->getRec().pos.x + (o->getRec().size.x / 2.f) > sprites[0]->getRec().pos.x + (sprites[0]->getRec().size.x / 2.f))
 					gWnd.draw(*phys::spr(o->getRec()));
 			}
+
+			gWnd.draw(*phys::sprAnim(dPlayer->getRec(), dPlayer->getFrame(), *this->dPlayer));
+
 
 			gWnd.display();
 		}

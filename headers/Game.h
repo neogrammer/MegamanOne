@@ -9,6 +9,7 @@
 #include <vector>
 #include <DynoPlayer.h>
 #include <StatTile.h>
+#include <DynoPlayer.h>
 
 struct lua_State;
 class Tilemap;
@@ -27,9 +28,9 @@ class Game
 	float bgOffset{ 1600.f };
 	lua_State* lua{};
 	sf::Clock frameTimer{};
-	std::shared_ptr<BaseSprite> dPlayer;
+	std::shared_ptr<DynoPlayer> dPlayer;
 	std::vector<std::shared_ptr<BaseSprite> > sprites;
-
+	
 	// new collision variables
 	std::vector<rec> objs;
 	bool playerGrounded{ false };

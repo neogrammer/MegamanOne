@@ -136,6 +136,9 @@
     <Filter Include="Entities\stat_sprites">
       <UniqueIdentifier>{bc967272-e8e5-469f-ab3f-3198a6b5b3a5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\NewFilter1">
+      <UniqueIdentifier>{315dbca9-71a1-468a-a435-d026a368cea1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\ServiceLocator.h">
@@ -246,7 +249,7 @@
     <ClInclude Include="headers\DynoPlayer.h">
       <Filter>Entities\dyno_sprites</Filter>
     </ClInclude>
-    <ClInclude Include="Animation.h">
+    <ClInclude Include="headers\Animation.h">
       <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>

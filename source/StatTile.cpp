@@ -44,3 +44,11 @@ rec& StatTile::getRec()
 {
 	return StatSprite::getRec();
 }
+
+void StatTile::render()
+{
+}
+
+void StatTile::update()
+{
+}

@@ -5,6 +5,10 @@ class BaseSprite
 {
 	rec rec_{};
 public:
+
+
+
+
 	BaseSprite();
 	explicit BaseSprite(olc::vf2d pos_);
 	virtual ~BaseSprite();
@@ -19,6 +23,8 @@ public:
 	virtual BaseSprite& operator()() = 0;
 	rec& getRec();
 
+	virtual void render() = 0;
+	virtual void update() = 0;
 	
 };
 

@@ -4,6 +4,8 @@
 class DynoSprite : public BaseSprite
 {
 public:
+
+
 	DynoSprite();
 	explicit DynoSprite(olc::vf2d pos_);
 	virtual ~DynoSprite() override;
@@ -17,6 +19,8 @@ public:
 	virtual DynoSprite& operator()() override = 0;
 
 	rec& getRec();
+	virtual void render() override = 0;
+	virtual void update() override = 0;
 };
 
 #endif

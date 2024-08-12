@@ -19,11 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Animation.h" />
     <ClInclude Include="headers\AABB.h" />
     <ClInclude Include="headers\Action.h" />
     <ClInclude Include="headers\ActionMap.h" />
     <ClInclude Include="headers\ActionTarget.h" />
+    <ClInclude Include="headers\Animation.h" />
     <ClInclude Include="headers\ASprite.h" />
     <ClInclude Include="headers\BaseSprite.h" />
     <ClInclude Include="headers\Cfg.h" />
