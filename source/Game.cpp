@@ -6,6 +6,7 @@
 #include <string>
 #include <duck_fold.h>
 #include <fsm_events.h>
+#include <BusterProj.h>
 
 void Game::createWorld()
 {
@@ -55,7 +56,9 @@ void Game::render()
 		gWnd.draw(*phys::spr(o->getRec()));
 	}
 
-	gWnd.draw(*phys::sprAnim(dPlayer->getRec(), dPlayer->getFrame(), *this->dPlayer));
+	dPlayer->render();
+	
+
 
 	//tmap->render();
 	//stage.render();

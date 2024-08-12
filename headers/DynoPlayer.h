@@ -8,15 +8,19 @@
 #include <algorithm>
 #include <string>
 #include <Animation.h>
-#include <Projectile.h>
-#include <map>
+#include <list>
 
+#include <map>
+class SProj;
 
 class DynoPlayer : public DynoSprite
 {
 	Cfg::Textures texCopy;
 	olc::vi2d texRecPosCopy;
 	std::map<std::pair<std::string, bool>, std::unique_ptr<Animation>> animMap;
+
+	std::list<std::unique_ptr<SProj> > liveBullets;
+
 
 	float animElapsed;
 
@@ -30,11 +34,11 @@ public:
 	DynoPlayer(DynoPlayer&&) = default;
 	DynoPlayer& operator=(DynoPlayer&&) = default;
 	void setPreBuild(Cfg::Textures texCopy_, olc::vi2d texRecPosCopy_);
-	void build(olc::vf2d pos = { 0.f,0.f }) override final;
+	void build(olc::vf2d pos) override final;
 
 	DynoPlayer&operator()() override final;
 
-	rec& getRec();
+	rec& getRec() override final;
 
 	std::unique_ptr<MachineHandler> fsmHandler{};
 	std::string currentAnim{ "idle" };
@@ -44,6 +48,14 @@ public:
 	const Cfg::Textures tex;
 	bool playerGrounded{ true };
 	bool jumpPressed{ false };
+	bool shootPressed{ false };
+	bool shootStanceHold{ false };
+	float shootStanceDelay = 0.2f;
+	float shootStanceElapsed = 0.f;
+
+	float shootElapsed{ 0.f };
+	float shootDelay{ 0.15f };
+
 	//std::vector<Projectile> projectiles{};
 	/*int numLiveBullets{ 0 };
 	int maxLiveBullets{ 5 };
@@ -68,8 +80,8 @@ public:
 	void update() override;
 
 	void handleSpriteCollisions(std::vector<std::shared_ptr<BaseSprite> >& sprites);
-//	inline std::vector<Projectile>& getProjectiles() { return projectiles; }
-//	void shoot(ProjectileType type_, bool friendly_);
+   inline std::list<std::unique_ptr<SProj> >& getProjectiles() { return liveBullets; }
+  	void shoot(ProjectileType type_, bool friendly_);
 };
 
 #endif

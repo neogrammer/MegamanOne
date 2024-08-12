@@ -37,7 +37,7 @@ void StatTile::build(olc::vf2d pos)
 
 StatTile& StatTile::operator()()
 {
-	return *dynamic_cast<StatTile*>(this);
+	return *this;
 }
 
 rec& StatTile::getRec()

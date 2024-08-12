@@ -1,12 +1,13 @@
 #include <pch.h>
 #include <DynoPlayer.h>
+#include <BusterProj.h>
 #include <iostream>
 DynoPlayer::DynoPlayer()
 	: DynoSprite{}
 	, texCopy{ Cfg::Textures::Count }
 	, texRecPosCopy{ olc::vi2d{0,0} }
 	, tex{ Cfg::Textures::PlayerAtlas }
-	//, projectiles{ std::vector<Projectile>{} }
+	, liveBullets{ std::list<std::unique_ptr<SProj>>{} }
 	, animElapsed{0.f}
 {
 	this->currentAnim = "none";
@@ -18,12 +19,12 @@ DynoPlayer::DynoPlayer(Cfg::Textures tex_, olc::vi2d texRecPos_, olc::vf2d pos)
 	, texCopy{ tex_ }
 	, texRecPosCopy{ texRecPos_ }
 	, tex { Cfg::Textures::PlayerAtlas }
-	//, projectiles{ std::vector<Projectile>{} }
+	, liveBullets{ std::list<std::unique_ptr<SProj>>{} }
 	, animElapsed{ 0.f }
 {
 	build(pos);
 	std::cout << "current state is now " << currentAnim << std::endl;
-
+	liveBullets.clear();
 	loadAnimations();
 
 	fsmHandler = std::make_unique<MachineHandler>(MachineType::Player);
@@ -366,12 +367,23 @@ void DynoPlayer::resetAnim()
 void DynoPlayer::render()
 {
 	
-	phys::sprAnim(this->getRec(), getFrame(), *this);
+	//phys::sprAnim(this->getRec(), getFrame(), *this);
+	gWnd.draw(*phys::sprAnim(getRec(), getFrame(), *this));
+
+	for (auto& b : liveBullets)
+	{
+		b->render();
+	}
 	
 }
 
 void DynoPlayer::input()
 {
+	for (auto& b : liveBullets)
+	{
+		b->input();
+	}
+
 	//input();
 			// add keybased updates to playere here
 	getRec().vel.x = 0.f;
@@ -486,13 +498,90 @@ void DynoPlayer::input()
 	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
-		//shoot(ProjectileType::BusterBullet, true);
+		shootPressed = true;
+		if (liveBullets.size() < 5)
+		{
+			if (shootElapsed > shootDelay)
+			{
+				shootElapsed = 0.f;
+				shoot(ProjectileType::BusterBullet, true);
+			}
+		}
+	}
+	else
+	{
+		shootPressed = false;
 	}
 }
 
 void DynoPlayer::update()
 {
+	if (liveBullets.size() < 5)
+	{
+		shootElapsed += gTime;
+	}
+	if (shootPressed)
+	{
+		shootStanceElapsed = 0.f;
+		shootStanceHold = true;
+
+		if (currentAnim != "shooting" && currentAnim != "brandishing")
+		{
+			dispatch(this->fsmHandler->getMachine(), evt_StartedShooting{});
+			currentAnim = this->fsmHandler->getMachine().getCurrentState();
+			resetAnim();
+		}
+	}
+	if (shootStanceHold)
+	{
+		shootStanceElapsed += gTime;
+		if (currentAnim == "brandishing" && animMap[std::pair(currentAnim,facingLeft)]->data.onLastFrame)
+		{
+			dispatch(this->fsmHandler->getMachine(), evt_AnimationFinished{});
+			currentAnim = this->fsmHandler->getMachine().getCurrentState();
+			resetAnim();
+		}
+		if (shootStanceElapsed > shootStanceDelay)
+		{
+			shootStanceElapsed = 0.f;
+			shootStanceHold = false;
+
+			dispatch(this->fsmHandler->getMachine(), evt_StoppedShooting{});
+			currentAnim = this->fsmHandler->getMachine().getCurrentState();
+			resetAnim();
+
+		}
+	}
 	
+	std::list< std::unique_ptr<SProj> >::iterator iter = liveBullets.begin();
+	std::list<  std::unique_ptr<SProj>>::iterator end = liveBullets.end();
+
+	while (iter != end)
+	{
+		std::unique_ptr<SProj>& pItem = *iter;
+
+		if (pItem->getRec().pos.x < this->getRec().pos.x - 1600 || pItem->getRec().pos.x > this->getRec().pos.x + 1600 || pItem->marked)
+		{
+			std::cout << "Erasing one bullet, there are " << liveBullets.size() << " left alive" << std::endl;
+			iter = liveBullets.erase(iter);
+		}
+		else
+		{
+			pItem->update();
+			++iter;
+		}
+	}
+	
+
+
+	
+	
+	
+	
+	for (auto& b : liveBullets)
+	{
+		b->update();
+	}
 
 	auto& r = getRec();
 	currentAnim = fsmHandler->getMachine().getCurrentState();
@@ -513,8 +602,6 @@ void DynoPlayer::update()
 		dispatch(fsmHandler->getMachine(), evt_ReachedJumpPeak{});
 		currentAnim = fsmHandler->getMachine().getCurrentState();
 		resetAnim();
-
-
 	}
 
 
@@ -534,6 +621,19 @@ void DynoPlayer::update()
 }
 void DynoPlayer::handleSpriteCollisions(std::vector<std::shared_ptr<BaseSprite>>& sprites)
 {
+	// first check bullets	
+	for (auto& b : liveBullets)
+	{
+		for (auto& spr : sprites)
+		{
+			if (spr.get() == this) { continue; }
+			if (phys::RectVsRect(b->getRec(), spr->getRec()))
+			{
+				b->marked = true;
+			}
+		}
+	}
+
 	// check collisions
 	olc::vf2d cp;
 	olc::vi2d cn;
@@ -579,19 +679,23 @@ void DynoPlayer::handleSpriteCollisions(std::vector<std::shared_ptr<BaseSprite>>
 	}
 
 }
-//void DynoPlayer::shoot(ProjectileType type_, bool friendly_)
-//{
-//	switch (type_)
-//	{
-//	case ProjectileType::BusterBullet:
-//		projectiles.emplace_back(Projectile{ Cfg::Textures::BusterBullet, "assets/data/aabbs/busterBullet.aabb", (facingLeft) ? olc::vf2d{getRec().pos.x - getRec().texPosOffset.x + 28, getRec().pos.y - getRec().texPosOffset.y + 67} : olc::vf2d{getRec().pos.x - getRec().texPosOffset.x + 99, getRec().pos.y - getRec().texPosOffset.y + 67} , (facingLeft) ? -500.f : 500.f, TravelDir::Horizontal, type_, 1});
-//		break;
-//	default:
-//		break;
-//	}
-//
-//}
 
+void DynoPlayer::shoot(ProjectileType type_, bool friendly_)
+{
+	auto& p = getRec().pos;
+
+	switch (type_)
+	{
+		case ProjectileType::BusterBullet:
+		{
+			if (currentAnim == "shooting")
+				liveBullets.push_back(std::move(std::make_unique<BusterProj>(olc::vf2d{ (facingLeft) ? p.x - getRec().texPosOffset.x + 23 : p.x - getRec().texPosOffset.x + 83 , p.y - getRec().texPosOffset.y + 57 }, facingLeft)));  //{ Cfg::Textures::BusterBullet, "assets/data/aabbs/busterBullet.aabb", (this->isFacingLeft()) ? olc::vf2d{bbPos.x - getBBOffset().x + 28, bbPos.y - getBBOffset().y + 67} : olc::vf2d{bbPos.x - getBBOffset().x + 99, bbPos.y - getBBOffset().y + 67} , (this->isFacingLeft()) ? -500.f : 500.f, TravelDir::Horizontal, type_, 1 });
+		}
+			break;
+		default:
+			break;
+	}
+}
 
 bool DynoPlayer::hasBBoxesSet(const std::string& animname, bool facingleft)
 {

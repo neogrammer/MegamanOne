@@ -94,9 +94,6 @@
     <Filter Include="FSM">
       <UniqueIdentifier>{5a57e311-bd62-43d6-b1cb-96a82e590ce8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Entities\projectiles">
-      <UniqueIdentifier>{188febad-ea61-41af-9b16-1fbb6ef3dadf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="assets\data\aabbs">
       <UniqueIdentifier>{4937fc1f-7139-428c-b7da-3935efeeb6b9}</UniqueIdentifier>
     </Filter>
@@ -138,6 +135,9 @@
     </Filter>
     <Filter Include="Core\NewFilter1">
       <UniqueIdentifier>{315dbca9-71a1-468a-a435-d026a368cea1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\projectiles">
+      <UniqueIdentifier>{188febad-ea61-41af-9b16-1fbb6ef3dadf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -252,6 +252,12 @@
     <ClInclude Include="headers\Animation.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="headers\SProj.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\BusterProj.h">
+      <Filter>Entities\projectiles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -340,6 +346,12 @@
     </ClCompile>
     <ClCompile Include="source\Animation.cpp">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SProj.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="source\BusterProj.cpp">
+      <Filter>Entities\projectiles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

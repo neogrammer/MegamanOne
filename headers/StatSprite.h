@@ -12,11 +12,12 @@ public:
 	StatSprite(StatSprite&&) = default;
 	StatSprite& operator=(StatSprite&&) = default;
 
-	virtual void build(olc::vf2d pos = { 0.f,0.f }) override = 0;
+	virtual void build(olc::vf2d pos) override = 0;
 
 	virtual StatSprite& operator()() override = 0;
 
-	rec& getRec();
+	virtual rec& getRec() override;
+
 	virtual void render() override = 0;
 	virtual void update() override = 0;
 	virtual void input() override = 0;
