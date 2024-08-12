@@ -52,3 +52,7 @@ void StatTile::render()
 void StatTile::update()
 {
 }
+
+void StatTile::input()
+{
+}

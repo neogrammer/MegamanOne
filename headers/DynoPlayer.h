@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <string>
 #include <Animation.h>
+#include <Projectile.h>
 #include <map>
 
 
@@ -38,8 +39,22 @@ public:
 	std::unique_ptr<MachineHandler> fsmHandler{};
 	std::string currentAnim{ "idle" };
 	bool facingLeft{ false };
+	bool facingOtherWay{ false };
 	int numAnims{ 0 };
 	const Cfg::Textures tex;
+	bool playerGrounded{ true };
+	bool jumpPressed{ false };
+	//std::vector<Projectile> projectiles{};
+	/*int numLiveBullets{ 0 };
+	int maxLiveBullets{ 5 };
+	bool justShot{ false };
+	bool shooting{ false };
+	float shootWaitElapsed{ 0.f };
+	float shootAnimHoldElapsed{ 0.f };
+	float shootAnimDelay{ 0.15f };
+	float shootWaitDelay{ 0.15f };
+	bool canShoot{ true };
+	bool shootAnimHolding{ false };*/
 
 	void loadAnimations();
 	bool hasBBoxesSet(const std::string& animname, bool facingleft);
@@ -48,9 +63,13 @@ public:
 
 	sf::IntRect getFrame();
 	void resetAnim();
+	void input() override;
 	void render() override;
 	void update() override;
 
+	void handleSpriteCollisions(std::vector<std::shared_ptr<BaseSprite> >& sprites);
+//	inline std::vector<Projectile>& getProjectiles() { return projectiles; }
+//	void shoot(ProjectileType type_, bool friendly_);
 };
 
 #endif

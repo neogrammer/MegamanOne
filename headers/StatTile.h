@@ -24,6 +24,8 @@ public:
 
 	 void render() override;
 	 void update() override;
+	 void input() override;
+
 };
 
 #endif

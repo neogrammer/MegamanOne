@@ -6,6 +6,8 @@ DynoPlayer::DynoPlayer()
 	, texCopy{ Cfg::Textures::Count }
 	, texRecPosCopy{ olc::vi2d{0,0} }
 	, tex{ Cfg::Textures::PlayerAtlas }
+	//, projectiles{ std::vector<Projectile>{} }
+	, animElapsed{0.f}
 {
 	this->currentAnim = "none";
 	std::cout << "current state is none"  << std::endl;
@@ -16,6 +18,8 @@ DynoPlayer::DynoPlayer(Cfg::Textures tex_, olc::vi2d texRecPos_, olc::vf2d pos)
 	, texCopy{ tex_ }
 	, texRecPosCopy{ texRecPos_ }
 	, tex { Cfg::Textures::PlayerAtlas }
+	//, projectiles{ std::vector<Projectile>{} }
+	, animElapsed{ 0.f }
 {
 	build(pos);
 	std::cout << "current state is now " << currentAnim << std::endl;
@@ -32,7 +36,7 @@ DynoPlayer::DynoPlayer(Cfg::Textures tex_, olc::vi2d texRecPos_, olc::vf2d pos)
 	this->animMap[std::pair(this->currentAnim, this->facingLeft)]->data.index = 0;
 	this->animMap[std::pair(this->currentAnim, !this->facingLeft)]->data.index = 0;
 
-
+	//projectiles.clear();
 }
 
 DynoPlayer::~DynoPlayer()
@@ -99,13 +103,13 @@ void DynoPlayer::loadAnimations()
 
 	this->animMap.emplace(std::pair{ "landing", false }, std::make_unique<Animation>());
 	this->animMap[std::pair("landing", false)]->data.numFrames = loadAnimation(this->animMap[std::pair("landing", false)]->data.frames, 1, 1, 0, 5, 14);
-	this->animMap[std::pair("landing", false)]->data.animDelay = 0.014f;
+	this->animMap[std::pair("landing", false)]->data.animDelay = 0.01f;
 	this->animMap[std::pair("landing", false)]->data.pauseDelay = 0.f;
 	this->animMap[std::pair("landing", false)]->data.looping = false;
 	// left animations
 	this->animMap.emplace(std::pair{ "landing", true }, std::make_unique<Animation>());
 	this->animMap[std::pair("landing", true)]->data.numFrames = loadAnimation(this->animMap[std::pair("landing", true)]->data.frames, 1, 1, 0, 18, 14);
-	this->animMap[std::pair("landing", true)]->data.animDelay = 0.014f;
+	this->animMap[std::pair("landing", true)]->data.animDelay = 0.01f;
 	this->animMap[std::pair("landing", true)]->data.pauseDelay = 0.f;
 	this->animMap[std::pair("landing", true)]->data.looping = false;
 
@@ -353,21 +357,143 @@ sf::IntRect DynoPlayer::getFrame()
 	if (itr == animMap.end()) return { {0,0},{0,0} };
 	return itr->second->data.frames.at(itr->second->data.index);
 }
+void DynoPlayer::resetAnim()
+{
+	animMap[std::pair(currentAnim, facingLeft)]->data.index = 0;
+    currentAnim = fsmHandler->getMachine().getCurrentState();
+    animElapsed = 0.f;
+}
 void DynoPlayer::render()
 {
 	
 	phys::sprAnim(this->getRec(), getFrame(), *this);
+	
 }
 
-void DynoPlayer::resetAnim()
+void DynoPlayer::input()
 {
-	animMap[std::pair(currentAnim, facingLeft)]->data.index = 0;
-	currentAnim = fsmHandler->getMachine().getCurrentState();
-	animElapsed = 0.f;
+	//input();
+			// add keybased updates to playere here
+	getRec().vel.x = 0.f;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	{
+		
+		if (facingLeft == true)
+		{
+			facingOtherWay = true;
+		}
+		else
+		{
+			facingOtherWay = false;
+		}
+
+		getRec().vel.x += 300.f;
+		if (!facingOtherWay)
+		{
+
+			if (currentAnim != "startingRun" && currentAnim != "running" && currentAnim != "landing" && currentAnim != "peakingJump" && currentAnim != "jumping" && currentAnim != "falling")
+			{
+				dispatch(fsmHandler->getMachine(), evt_StartedMoving{});
+
+				fsmHandler->getMachine().setJustChanged(false);
+				currentAnim = fsmHandler->getMachine().getCurrentState();
+				resetAnim();
+			}
+		}
+	}
+	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	{
+		if (facingLeft == false)
+		{
+			facingOtherWay = true;
+		}
+		else
+		{
+			facingOtherWay = false;
+		}
+
+		getRec().vel.x -= 300.f;
+		
+		if (!facingOtherWay)
+		{
+			if (currentAnim != "startingRun" && currentAnim != "running" && currentAnim != "landing" && currentAnim != "peakingJump" && currentAnim != "jumping" && currentAnim != "falling")
+			{
+
+				dispatch(fsmHandler->getMachine(), evt_StartedMoving{});
+
+				fsmHandler->getMachine().setJustChanged(false);
+				currentAnim = fsmHandler->getMachine().getCurrentState();
+				resetAnim();
+			}
+
+		}
+	}
+	if (facingOtherWay)
+	{
+		facingOtherWay = false;
+
+		if (currentAnim != "startingRun" && currentAnim != "running" && currentAnim != "landing" && currentAnim != "peakingJump" && currentAnim != "jumping" && currentAnim != "falling" && !(sf::Keyboard::isKeyPressed(sf::Keyboard::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::D)))
+		{
+			
+			dispatch(fsmHandler->getMachine(), evt_StartedMoving{});
+
+			fsmHandler->getMachine().setJustChanged(false);
+			currentAnim = fsmHandler->getMachine().getCurrentState();
+			resetAnim();
+		}
+	}
+
+	if (getRec().vel.x > 0.f)
+	{
+		facingLeft = false;
+	}
+	else if (getRec().vel.x < 0.f)
+	{
+		facingLeft = true;
+
+	}
+	else if (getRec().vel.x == 0.f && currentAnim != "idle" && ((!sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::D)) || (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))))
+	{
+		dispatch(fsmHandler->getMachine(), evt_StoppedMoving{});
+		if (fsmHandler->getMachine().wasJustChanged())
+		{
+			fsmHandler->getMachine().setJustChanged(false);
+			currentAnim = fsmHandler->getMachine().getCurrentState();
+			resetAnim();
+		}
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+	{
+		jumpPressed = true;
+		if (playerGrounded == true && getRec().vel.y == 0.f)
+		{
+			dispatch(fsmHandler->getMachine(), evt_Jumped{});
+			currentAnim = fsmHandler->getMachine().getCurrentState();
+			resetAnim();
+
+			playerGrounded = false;
+			getRec().vel.y = -1208.81f;
+		}
+	}
+	else
+	{
+		jumpPressed = false;
+	}
+
+
+	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	{
+		//shoot(ProjectileType::BusterBullet, true);
+	}
 }
 
 void DynoPlayer::update()
 {
+	
+
 	auto& r = getRec();
 	currentAnim = fsmHandler->getMachine().getCurrentState();
 
@@ -387,6 +513,8 @@ void DynoPlayer::update()
 		dispatch(fsmHandler->getMachine(), evt_ReachedJumpPeak{});
 		currentAnim = fsmHandler->getMachine().getCurrentState();
 		resetAnim();
+
+
 	}
 
 
@@ -397,7 +525,74 @@ void DynoPlayer::update()
 		animElapsed = 0.f;
 		animMap[std::pair(currentAnim, facingLeft)]->animate();
 	}
+
+	getRec().vel.y += powf(59.8f, 2) * gTime;
+
+
+
+
 }
+void DynoPlayer::handleSpriteCollisions(std::vector<std::shared_ptr<BaseSprite>>& sprites)
+{
+	// check collisions
+	olc::vf2d cp;
+	olc::vi2d cn;
+	float ct;
+
+	std::vector<std::pair<int, float> > z;
+	for (int i = 0; i < sprites.size(); i++)
+	{
+		if (sprites[i].get() == dynamic_cast<BaseSprite*>(this)) { continue; }
+
+		rec target;
+		target.set({ sprites[i]->getRec().pos.x, sprites[i]->getRec().pos.y }, { 50.f,50.f }, Cfg::Textures::Tileset1, { 9, 3 }, { 50,50 }, { 0, 0 }, { 0.f,0.f });
+		if (phys::DynamicRectVsRect(getRec(), target, cp, cn, ct, gTime))
+		{
+			if (cn.y == -1 && getRec().vel.y > 20.f && currentAnim != "running" && currentAnim != "peakingJump" && currentAnim != "jumping" && currentAnim != "idle")
+			{
+				dispatch(fsmHandler->getMachine(), evt_Landed{});
+			    currentAnim = fsmHandler->getMachine().getCurrentState();
+				resetAnim();
+				playerGrounded = true;
+			}
+			z.push_back({ i, ct });
+
+		}
+	}
+
+	// sort
+	std::sort(z.begin(), z.end(), [](const std::pair<int, float>& a, const std::pair<int, float>& b)
+		{
+			return a.second < b.second;
+		});
+
+
+	// resolve in correct order
+	for (auto j : z)
+	{
+		rec target;
+		target.set({ sprites[j.first]->getRec().pos.x, sprites[j.first]->getRec().pos.y }, { 50.f,50.f }, Cfg::Textures::Tileset1, { 9, 3 }, { 50,50 }, { 0, 0 }, { 0.f,0.f });
+		if (phys::DynamicRectVsRect(getRec(), target, cp, cn, ct, gTime))
+		{
+			getRec().vel += cn * olc::vf2d{ std::abs(getRec().vel.x), std::abs(getRec().vel.y) } *(1 - ct);
+		}
+	}
+
+}
+//void DynoPlayer::shoot(ProjectileType type_, bool friendly_)
+//{
+//	switch (type_)
+//	{
+//	case ProjectileType::BusterBullet:
+//		projectiles.emplace_back(Projectile{ Cfg::Textures::BusterBullet, "assets/data/aabbs/busterBullet.aabb", (facingLeft) ? olc::vf2d{getRec().pos.x - getRec().texPosOffset.x + 28, getRec().pos.y - getRec().texPosOffset.y + 67} : olc::vf2d{getRec().pos.x - getRec().texPosOffset.x + 99, getRec().pos.y - getRec().texPosOffset.y + 67} , (facingLeft) ? -500.f : 500.f, TravelDir::Horizontal, type_, 1});
+//		break;
+//	default:
+//		break;
+//	}
+//
+//}
+
+
 bool DynoPlayer::hasBBoxesSet(const std::string& animname, bool facingleft)
 {
 	if (animMap[std::pair(animname, facingleft)]->data.bboxes.size() > 0)

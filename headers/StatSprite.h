@@ -19,6 +19,7 @@ public:
 	rec& getRec();
 	virtual void render() override = 0;
 	virtual void update() override = 0;
+	virtual void input() override = 0;
 
 };
 
