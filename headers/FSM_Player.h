@@ -98,6 +98,22 @@ public:
 		FSM<FSM_Player, PlayerStateVar>::currentState_ = "falling";
 		return state_Falling{};
 	}
+	std::optional<PlayerStateVar> On_Event(state_PeakingJump& s, const evt_StartedShooting& e)
+	{
+		std::cout << "jumpPeakShooting" << std::endl;
+
+		justChanged_ = true;
+		FSM<FSM_Player, PlayerStateVar>::currentState_ = "jumpPeakShooting";
+		return state_PeakingJumpShoot{};
+	}
+	std::optional<PlayerStateVar> On_Event(state_PeakingJumpShoot& s, const evt_Fell& e)
+	{
+		std::cout << "fallingAndShooting" << std::endl;
+
+		justChanged_ = true;
+		FSM<FSM_Player, PlayerStateVar>::currentState_ = "fallingAndShooting";
+		return state_ShootingAndFalling{};
+	}
 
 	std::optional<PlayerStateVar> On_Event(state_PeakingJump& s, const evt_Fell& e)
 	{
@@ -244,7 +260,7 @@ public:
 		return state_PeakingJump{};
 	}
 
-	std::optional<PlayerStateVar> On_Event(state_PeakingJumpShoot& s, const evt_Fell& e)
+	std::optional<PlayerStateVar> On_Event(state_PeakingJumpShoot& s, const evt_AnimationFinished& e)
 	{
 		std::cout << "fallingAndShooting" << std::endl;
 
@@ -252,6 +268,9 @@ public:
 		FSM<FSM_Player, PlayerStateVar>::currentState_ = "fallingAndShooting";
 		return state_ShootingAndFalling{};
 	}
+
+
+
 
 	std::optional<PlayerStateVar> On_Event(state_ShootingAndFalling& s, const evt_StoppedShooting& e)
 	{
@@ -274,19 +293,19 @@ public:
 	std::optional<PlayerStateVar> On_Event(state_ShootingAndLanding& s, const evt_StoppedShooting& e)
 	{
 		justChanged_ = true;
-		std::cout << "Landing" << std::endl;
+		std::cout << "idle" << std::endl;
 
-		FSM<FSM_Player, PlayerStateVar>::currentState_ = "landing";
-		return state_Landing{};
+		FSM<FSM_Player, PlayerStateVar>::currentState_ = "idle";
+		return state_Standing{};
 	}
 
 	std::optional<PlayerStateVar> On_Event(state_ShootingAndLanding& s, const evt_AnimationFinished& e)
 	{
 		justChanged_ = true;
-		std::cout << "shooting" << std::endl;
+		std::cout << "idle" << std::endl;
 
-		FSM<FSM_Player, PlayerStateVar>::currentState_ = "shooting";
-		return state_Shooting{};
+		FSM<FSM_Player, PlayerStateVar>::currentState_ = "idle";
+		return state_Standing{};
 	}
 
 	std::optional<PlayerStateVar> On_Event(state_ShootingAndLanding& s, const evt_StartedMoving& e)
@@ -297,6 +316,16 @@ public:
 		FSM<FSM_Player, PlayerStateVar>::currentState_ = "runningAndShooting";
 		return state_ShootingAndRunning{};
 	}
+
+	std::optional<PlayerStateVar> On_Event(state_ShootingAndLanding& s, const evt_StartedShooting& e)
+	{
+		justChanged_ = true;
+		std::cout << "shooting" << std::endl;
+
+		FSM<FSM_Player, PlayerStateVar>::currentState_ = "shooting";
+		return state_Shooting{};
+	}
+
 
 	std::optional<PlayerStateVar> On_Event(state_ShootingAndRunning& s, const evt_StoppedMoving& e)
 	{

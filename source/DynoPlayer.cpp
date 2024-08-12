@@ -403,7 +403,7 @@ void DynoPlayer::input()
 		if (!facingOtherWay)
 		{
 
-			if (currentAnim != "startingRun" && currentAnim != "running" && currentAnim != "landing" && currentAnim != "peakingJump" && currentAnim != "jumping" && currentAnim != "falling")
+			if (currentAnim != "startingRun" && currentAnim != "running" && currentAnim != "runningAndShooting" && currentAnim != "shooting" && currentAnim != "landing" && currentAnim != "peakingJump" && currentAnim != "jumping" && currentAnim != "falling")
 			{
 				dispatch(fsmHandler->getMachine(), evt_StartedMoving{});
 
@@ -429,7 +429,7 @@ void DynoPlayer::input()
 		
 		if (!facingOtherWay)
 		{
-			if (currentAnim != "startingRun" && currentAnim != "running" && currentAnim != "landing" && currentAnim != "peakingJump" && currentAnim != "jumping" && currentAnim != "falling")
+			if (currentAnim != "startingRun" && currentAnim != "running" && currentAnim != "runningAndShooting" && currentAnim != "shooting"  && currentAnim != "landing" && currentAnim != "peakingJump" && currentAnim != "jumping" && currentAnim != "falling")
 			{
 
 				dispatch(fsmHandler->getMachine(), evt_StartedMoving{});
@@ -445,7 +445,7 @@ void DynoPlayer::input()
 	{
 		facingOtherWay = false;
 
-		if (currentAnim != "startingRun" && currentAnim != "running" && currentAnim != "landing" && currentAnim != "peakingJump" && currentAnim != "jumping" && currentAnim != "falling" && !(sf::Keyboard::isKeyPressed(sf::Keyboard::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::D)))
+		if (currentAnim != "startingRun" && currentAnim != "running" && currentAnim != "runningAndShooting" && currentAnim != "shooting" && currentAnim != "landing" && currentAnim != "peakingJump" && currentAnim != "jumping" && currentAnim != "falling" && !(sf::Keyboard::isKeyPressed(sf::Keyboard::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::D)))
 		{
 			
 			dispatch(fsmHandler->getMachine(), evt_StartedMoving{});
@@ -525,7 +525,7 @@ void DynoPlayer::update()
 		shootStanceElapsed = 0.f;
 		shootStanceHold = true;
 
-		if (currentAnim != "shooting" && currentAnim != "brandishing")
+		if (currentAnim != "shooting" && currentAnim != "brandishing" && currentAnim != "runningAndShooting")
 		{
 			dispatch(this->fsmHandler->getMachine(), evt_StartedShooting{});
 			currentAnim = this->fsmHandler->getMachine().getCurrentState();
@@ -550,6 +550,13 @@ void DynoPlayer::update()
 			currentAnim = this->fsmHandler->getMachine().getCurrentState();
 			resetAnim();
 
+		}
+
+		if ((getRec().vel.x > 0.f || getRec().vel.x < 0.f) && getRec().vel.y == 0.f && currentAnim != "runningAndShooting")
+		{
+			dispatch(this->fsmHandler->getMachine(), evt_StartedMoving{});
+			currentAnim = this->fsmHandler->getMachine().getCurrentState();
+			resetAnim();
 		}
 	}
 	
@@ -588,22 +595,29 @@ void DynoPlayer::update()
 
 	this->animElapsed += gTime;
 
-	if (currentAnim == "landing" || currentAnim == "startingRun" || currentAnim == "peakingJump")
+	if (currentAnim == "landing" || currentAnim == "startingRun" || currentAnim == "peakingJump" || currentAnim == "jumpPeakShooting" || currentAnim == "shootingAndLanding")
 	{
 		if (animElapsed >= animMap[std::pair(currentAnim, facingLeft)]->data.animDelay)
 		{
+			animElapsed = 0.f;
 			dispatch(fsmHandler->getMachine(),  evt_AnimationFinished{});
 			currentAnim = fsmHandler->getMachine().getCurrentState();
 			resetAnim();
 		}
 	}
-	if (r.vel.y > 0.f && currentAnim == "jumping")
+	if (r.vel.y > 0.f && (currentAnim == "jumping" || currentAnim == "jumpingAndShooting"))
 	{
 		dispatch(fsmHandler->getMachine(), evt_ReachedJumpPeak{});
 		currentAnim = fsmHandler->getMachine().getCurrentState();
 		resetAnim();
 	}
 
+	if (r.vel.y > 0.f && (currentAnim == "jumpPeakShooting" || currentAnim == "peakingJump"))
+	{
+		dispatch(fsmHandler->getMachine(), evt_Fell{});
+		currentAnim = fsmHandler->getMachine().getCurrentState();
+		resetAnim();
+	}
 
 	
 
@@ -648,7 +662,8 @@ void DynoPlayer::handleSpriteCollisions(std::vector<std::shared_ptr<BaseSprite>>
 		target.set({ sprites[i]->getRec().pos.x, sprites[i]->getRec().pos.y }, { 50.f,50.f }, Cfg::Textures::Tileset1, { 9, 3 }, { 50,50 }, { 0, 0 }, { 0.f,0.f });
 		if (phys::DynamicRectVsRect(getRec(), target, cp, cn, ct, gTime))
 		{
-			if (cn.y == -1 && getRec().vel.y > 20.f && currentAnim != "running" && currentAnim != "peakingJump" && currentAnim != "jumping" && currentAnim != "idle")
+			if (cn.y == -1 && getRec().vel.y > 20.f && currentAnim != "running" && currentAnim != "peakingJump" && currentAnim != "jumping" && currentAnim != "idle" && currentAnim != "jumpPeakShooting"
+				&& currentAnim != "runningAndShooting")
 			{
 				dispatch(fsmHandler->getMachine(), evt_Landed{});
 			    currentAnim = fsmHandler->getMachine().getCurrentState();
@@ -690,6 +705,16 @@ void DynoPlayer::shoot(ProjectileType type_, bool friendly_)
 		{
 			if (currentAnim == "shooting")
 				liveBullets.push_back(std::move(std::make_unique<BusterProj>(olc::vf2d{ (facingLeft) ? p.x - getRec().texPosOffset.x + 23 : p.x - getRec().texPosOffset.x + 83 , p.y - getRec().texPosOffset.y + 57 }, facingLeft)));  //{ Cfg::Textures::BusterBullet, "assets/data/aabbs/busterBullet.aabb", (this->isFacingLeft()) ? olc::vf2d{bbPos.x - getBBOffset().x + 28, bbPos.y - getBBOffset().y + 67} : olc::vf2d{bbPos.x - getBBOffset().x + 99, bbPos.y - getBBOffset().y + 67} , (this->isFacingLeft()) ? -500.f : 500.f, TravelDir::Horizontal, type_, 1 });
+			else if (currentAnim == "jumpingAndShooting")
+				liveBullets.push_back(std::move(std::make_unique<BusterProj>(olc::vf2d{ (facingLeft) ? p.x - getRec().texPosOffset.x + 20 : p.x - getRec().texPosOffset.x + 87 , p.y - getRec().texPosOffset.y + 53 }, facingLeft)));  //{ Cfg::Textures::BusterBullet, "assets/data/aabbs/busterBullet.aabb", (this->isFacingLeft()) ? olc::vf2d{bbPos.x - getBBOffset().x + 28, bbPos.y - getBBOffset().y + 67} : olc::vf2d{bbPos.x - getBBOffset().x + 99, bbPos.y - getBBOffset().y + 67} , (this->isFacingLeft()) ? -500.f : 500.f, TravelDir::Horizontal, type_, 1 });
+			else if (currentAnim == "fallingAndShooting")
+				liveBullets.push_back(std::move(std::make_unique<BusterProj>(olc::vf2d{ (facingLeft) ? p.x - getRec().texPosOffset.x + 20 : p.x - getRec().texPosOffset.x + 87 , p.y - getRec().texPosOffset.y + 53 }, facingLeft)));  //{ Cfg::Textures::BusterBullet, "assets/data/aabbs/busterBullet.aabb", (this->isFacingLeft()) ? olc::vf2d{bbPos.x - getBBOffset().x + 28, bbPos.y - getBBOffset().y + 67} : olc::vf2d{bbPos.x - getBBOffset().x + 99, bbPos.y - getBBOffset().y + 67} , (this->isFacingLeft()) ? -500.f : 500.f, TravelDir::Horizontal, type_, 1 });
+			else if (currentAnim == "landingAndShooting")
+				liveBullets.push_back(std::move(std::make_unique<BusterProj>(olc::vf2d{ (facingLeft) ? p.x - getRec().texPosOffset.x + 23 : p.x - getRec().texPosOffset.x + 83 , p.y - getRec().texPosOffset.y + 57 }, facingLeft)));  //{ Cfg::Textures::BusterBullet, "assets/data/aabbs/busterBullet.aabb", (this->isFacingLeft()) ? olc::vf2d{bbPos.x - getBBOffset().x + 28, bbPos.y - getBBOffset().y + 67} : olc::vf2d{bbPos.x - getBBOffset().x + 99, bbPos.y - getBBOffset().y + 67} , (this->isFacingLeft()) ? -500.f : 500.f, TravelDir::Horizontal, type_, 1 });
+			else if (currentAnim == "runningAndShooting")
+				liveBullets.push_back(std::move(std::make_unique<BusterProj>(olc::vf2d{ (facingLeft) ? p.x - getRec().texPosOffset.x + 5 : p.x - getRec().texPosOffset.x + 95 , p.y - getRec().texPosOffset.y + 53 }, facingLeft)));  //{ Cfg::Textures::BusterBullet, "assets/data/aabbs/busterBullet.aabb", (this->isFacingLeft()) ? olc::vf2d{bbPos.x - getBBOffset().x + 28, bbPos.y - getBBOffset().y + 67} : olc::vf2d{bbPos.x - getBBOffset().x + 99, bbPos.y - getBBOffset().y + 67} , (this->isFacingLeft()) ? -500.f : 500.f, TravelDir::Horizontal, type_, 1 });
+			else if (currentAnim == "jumpPeakShooting")
+				liveBullets.push_back(std::move(std::make_unique<BusterProj>(olc::vf2d{ (facingLeft) ? p.x - getRec().texPosOffset.x + 20 : p.x - getRec().texPosOffset.x + 87 , p.y - getRec().texPosOffset.y + 53 }, facingLeft)));  //{ Cfg::Textures::BusterBullet, "assets/data/aabbs/busterBullet.aabb", (this->isFacingLeft()) ? olc::vf2d{bbPos.x - getBBOffset().x + 28, bbPos.y - getBBOffset().y + 67} : olc::vf2d{bbPos.x - getBBOffset().x + 99, bbPos.y - getBBOffset().y + 67} , (this->isFacingLeft()) ? -500.f : 500.f, TravelDir::Horizontal, type_, 1 });
 		}
 			break;
 		default:
