@@ -9,12 +9,13 @@
 #include <string>
 #include <StatTile.h>
 #include <Animation.h>
+#include <ActionTarget.h>
 #include <list>
 
 #include <map>
 class SProj;
 class DynoPlat;
-class DynoPlayer : public DynoSprite
+class DynoPlayer : public DynoSprite, public ActionTarget<int>
 {
 	Cfg::Textures texCopy;
 	olc::vi2d texRecPosCopy;
@@ -24,6 +25,13 @@ class DynoPlayer : public DynoSprite
 
 
 	float animElapsed;
+
+	bool rightBtnPressed{ false };
+	bool leftBtnPressed{ false };
+	bool jumpBtnPressed{ false };
+	bool shootBtnPressed{ false };
+
+
 
 public:
 	DynoPlayer();
@@ -36,7 +44,7 @@ public:
 	DynoPlayer& operator=(DynoPlayer&&) = default;
 	void setPreBuild(Cfg::Textures texCopy_, olc::vi2d texRecPosCopy_);
 	void build(olc::vf2d pos) override final;
-
+	void setupBindings();
 	DynoPlayer&operator()() override final;
 
 	rec& getRec() override final;

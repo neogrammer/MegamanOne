@@ -4,7 +4,7 @@
 #include <DynoPlat.h>
 #include <iostream>
 DynoPlayer::DynoPlayer()
-	: DynoSprite{}
+	: DynoSprite{}, ActionTarget<int>{Cfg::playerInputs}
 	, texCopy{ Cfg::Textures::Count }
 	, texRecPosCopy{ olc::vi2d{0,0} }
 	, tex{ Cfg::Textures::PlayerAtlas }
@@ -16,7 +16,7 @@ DynoPlayer::DynoPlayer()
 }
 
 DynoPlayer::DynoPlayer(Cfg::Textures tex_, olc::vi2d texRecPos_, olc::vf2d pos)
-	: DynoSprite{pos}
+	: DynoSprite{pos}, ActionTarget<int>{Cfg::playerInputs}
 	, texCopy{ tex_ }
 	, texRecPosCopy{ texRecPos_ }
 	, tex { Cfg::Textures::PlayerAtlas }
@@ -38,7 +38,7 @@ DynoPlayer::DynoPlayer(Cfg::Textures tex_, olc::vi2d texRecPos_, olc::vf2d pos)
 	this->animMap[std::pair(this->currentAnim, this->facingLeft)]->data.index = 0;
 	this->animMap[std::pair(this->currentAnim, !this->facingLeft)]->data.index = 0;
 
-	//projectiles.clear();
+	setupBindings();
 }
 
 DynoPlayer::~DynoPlayer()
@@ -60,6 +60,44 @@ void DynoPlayer::build(olc::vf2d pos)
 	auto& r = this->getRec();
 	r.set(pos, { 80.f, 83.f }, texCopy, texRecPosCopy, { 130,160 }, { 22,45 }, {0.f,0.f});
 	this->animElapsed = 0.f;
+}
+
+void DynoPlayer::setupBindings()
+{
+	bind(Cfg::PlayerInputs::DPadX, [this](const sf::Event& e) {
+		if (sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovX) > 50.f)
+		{
+			rightBtnPressed = true;
+		}
+		else if (sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovX) < -50.f)
+		{
+			leftBtnPressed = true;
+		}
+			
+
+		});
+
+	bind(Cfg::PlayerInputs::AxisX, [this](const sf::Event& e) {
+		
+		if (sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X) > 50.f)
+		{
+			rightBtnPressed = true;
+		}
+		else if (sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X) < -50.f)
+		{
+			leftBtnPressed = true;
+		}
+
+		});
+
+	bind(Cfg::PlayerInputs::JoyX, [this](const sf::Event& e) {
+			shootBtnPressed = true;
+		});
+
+	bind(Cfg::PlayerInputs::JoyB, [this](const sf::Event& e) {
+			jumpBtnPressed = true;
+		});
+
 }
 
 DynoPlayer& DynoPlayer::operator()()
@@ -382,6 +420,15 @@ void DynoPlayer::render()
 
 void DynoPlayer::input()
 {
+	rightBtnPressed = false;
+	leftBtnPressed = false;
+	jumpBtnPressed = false;
+	shootBtnPressed = false;
+	sf::Joystick::update();
+	ActionTarget<int>::processEvents();
+
+
+
 	for (auto& b : liveBullets)
 	{
 		b->input();
@@ -390,7 +437,7 @@ void DynoPlayer::input()
 	//input();
 			// add keybased updates to playere here
 	getRec().vel.x = 0.f;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || rightBtnPressed)
 	{
 		
 		if (facingLeft == true)
@@ -417,7 +464,7 @@ void DynoPlayer::input()
 		}
 	}
 	
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || leftBtnPressed)
 	{
 		if (facingLeft == false)
 		{
@@ -479,7 +526,7 @@ void DynoPlayer::input()
 		}
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || jumpBtnPressed)
 	{
 		jumpPressed = true;
 		if (playerGrounded == true && getRec().vel.y == 0.f)
@@ -505,7 +552,7 @@ void DynoPlayer::input()
 
 
 	
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || shootBtnPressed)
 	{
 		shootPressed = true;
 		if (liveBullets.size() < 5)
