@@ -2,10 +2,11 @@
 #include <SFML/Window/ContextSettings.hpp>
 #include <SFML/Audio/Sound.hpp>
 #include <SFML/System/Vector2.hpp>
+
 #include <string>
 
 #include <rec.h>
-
+class DFlyPad;
 class DynoPlayer;
 extern sf::RenderWindow gWnd;
 extern sf::ContextSettings gWndSettings;
@@ -50,6 +51,7 @@ namespace phys
 
 	extern std::unique_ptr<sf::Sprite> spr(rec& r);
 	extern std::unique_ptr<sf::Sprite> sprAnim(rec& r, sf::IntRect iRect_, DynoPlayer& p_);
+	extern std::unique_ptr<sf::Sprite> sprAnim(rec& r, sf::IntRect iRect_, DFlyPad& p_);
 
 	extern bool PointVsRect(const olc::vf2d& p, const rec& r);
 

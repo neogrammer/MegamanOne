@@ -2,7 +2,7 @@
 #define TILEMAP_H__
 #include <Cfg.h>
 #include <vector>
-#include <Tile.h>
+#include <StatTile.h>
 #include <string>
 #include <memory>
 class Projectile;
@@ -10,8 +10,8 @@ class Tileset;
 class Tilemap
 {
 	std::unique_ptr<Tileset> tileset;;
-	std::vector<Tile> tiles;
-	std::vector<Tile> obstacles;
+	std::vector<StatTile> tiles;
+	std::vector<StatTile> obstacles;
 
 	int width;
 	int height;
@@ -25,7 +25,7 @@ public:
 	Tilemap& operator=(Tilemap&&) = delete;
 
 	void render();
-	std::vector<Tile>& getSolidTiles();
+	std::vector<StatTile>& getSolidTiles();
 };
 
 #endif

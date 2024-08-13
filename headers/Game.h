@@ -9,7 +9,8 @@
 #include <vector>
 #include <DynoPlayer.h>
 #include <StatTile.h>
-#include <DynoPlayer.h>
+#include <DFlyPad.h>
+
 
 struct lua_State;
 class Tilemap;
@@ -19,6 +20,10 @@ class Tilemap;
 
 class Game
 {
+	DFlyPad flypad1{};
+	DFlyPad flypad2{};
+	DFlyPad flypad3{};
+
 	Tilemap* tmap{};
 	ASprite aFace{};
 	Player aPlayer{ Cfg::Textures::PlayerAtlas, {{0,160},{130,160}},{ {32.f,45.f},{60.f,78.f} }, { 680.f, -100.f },AnimDirType::Right, true };

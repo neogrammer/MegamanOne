@@ -49,12 +49,18 @@ void Game::render()
 	gWnd.setView(gameView);
 
 
+	tmap->render();
+
 	//when facing right tiles to the left should be behind megamans back foot
-	for (auto& o : sprites)
+	/*for (auto& o : sprites)
 	{
 		if (&o->getRec() == &sprites[0]->getRec()) continue;
 		gWnd.draw(*phys::spr(o->getRec()));
-	}
+	}*/
+
+	flypad1.render();
+	flypad2.render();
+	flypad3.render();
 
 	dPlayer->render();
 	
@@ -111,6 +117,8 @@ void Game::run()
 			}
 		}
 
+		//dPlayer->getRec().pos.x += 200.f;
+
 		// if not closed, update and draw the game as needed
 		if (gWnd.isOpen())
 		{
@@ -133,12 +141,31 @@ void Game::run()
 
 void Game::update()
 {
+	flypad1.update();
+	flypad2.update();
+	flypad3.update();
+
 	dPlayer->update();
-	dPlayer->handleSpriteCollisions(sprites);
+	dPlayer->handleSpriteCollisions(tmap->getSolidTiles());
 
-
-	dPlayer->getRec().pos += dPlayer->getRec().vel * gTime;
-
+	std::vector<DynoPlat*> plats = {};
+	plats.push_back(&flypad1);
+	plats.push_back(&flypad2);
+	plats.push_back(&flypad3);
+	dPlayer->handleSpriteCollisions(plats);
+	// platforms let the player ride them otherwise move as normal
+	if (dPlayer->standingOnAPlatform == true)
+	{
+		dPlayer->platVel = dPlayer->platOn->getRec().vel;
+		dPlayer->getRec().vel.x += dPlayer->platVel.x;
+		dPlayer->getRec().vel.y = 0.f;
+		dPlayer->getRec().pos.x += dPlayer->getRec().vel.x * gTime;
+		dPlayer->getRec().pos.y = dPlayer->platOn->getRec().pos.y - dPlayer->getRec().size.y - 1.f;
+	}
+	else
+	{
+		dPlayer->getRec().pos += dPlayer->getRec().vel * gTime;
+	}
 
 	bgOffset += 10.f * gTime;
 }
@@ -148,6 +175,9 @@ Game::Game()
 	: objs{}
 	, dPlayer{}
 	, sprites{}
+	, flypad1{ {400.f,600.f}, {400.f, 200.f} , 200.f}
+	, flypad2{ {200.f,860.f}, {200.f, 560.f} , 150.f }
+	, flypad3{ {300.f,860.f}, {630.f, 860.f} , 300.f }
 {
 	std::cout << "Loading..." << std::endl;
 

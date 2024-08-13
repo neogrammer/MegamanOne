@@ -139,6 +139,9 @@
     <Filter Include="Entities\projectiles">
       <UniqueIdentifier>{188febad-ea61-41af-9b16-1fbb6ef3dadf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entities\dyno_sprites\platforms">
+      <UniqueIdentifier>{4bb80a3a-b5b1-438d-b64d-06a74285e595}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\ServiceLocator.h">
@@ -258,6 +261,12 @@
     <ClInclude Include="headers\BusterProj.h">
       <Filter>Entities\projectiles</Filter>
     </ClInclude>
+    <ClInclude Include="headers\DynoPlat.h">
+      <Filter>Entities\dyno_sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\DFlyPad.h">
+      <Filter>Entities\dyno_sprites\platforms</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -352,6 +361,12 @@
     </ClCompile>
     <ClCompile Include="source\BusterProj.cpp">
       <Filter>Entities\projectiles</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DynoPlat.cpp">
+      <Filter>Entities\dyno_sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DFlyPad.cpp">
+      <Filter>Entities\dyno_sprites\platforms</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

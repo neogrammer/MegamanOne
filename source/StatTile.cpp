@@ -47,12 +47,15 @@ rec& StatTile::getRec()
 
 void StatTile::render()
 {
+	gWnd.draw(*phys::spr(getRec()));
 }
 
 void StatTile::update()
 {
+	// todo
 }
 
 void StatTile::input()
 {
+	// todo
 }

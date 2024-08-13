@@ -7,12 +7,13 @@
 #include <assert.h>
 #include <algorithm>
 #include <string>
+#include <StatTile.h>
 #include <Animation.h>
 #include <list>
 
 #include <map>
 class SProj;
-
+class DynoPlat;
 class DynoPlayer : public DynoSprite
 {
 	Cfg::Textures texCopy;
@@ -52,7 +53,9 @@ public:
 	bool shootStanceHold{ false };
 	float shootStanceDelay = 0.2f;
 	float shootStanceElapsed = 0.f;
-
+	bool standingOnAPlatform{ false };
+	olc::vf2d platVel{ 0.0f, 0.f };
+	DynoPlat* platOn{ nullptr };
 	float shootElapsed{ 0.f };
 	float shootDelay{ 0.15f };
 
@@ -78,6 +81,8 @@ public:
 	void input() override;
 	void render() override;
 	void update() override;
+	void handleSpriteCollisions(std::vector<StatTile>& tiles);
+	void handleSpriteCollisions(std::vector<DynoPlat*>& plats);
 
 	void handleSpriteCollisions(std::vector<std::shared_ptr<BaseSprite> >& sprites);
    inline std::list<std::unique_ptr<SProj> >& getProjectiles() { return liveBullets; }

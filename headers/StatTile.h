@@ -20,7 +20,8 @@ public:
 	void build(olc::vf2d pos = { 0.f,0.f }) override final;
 	StatTile& operator()() override final;
 
-	rec& getRec();;
+	rec& getRec();
+
 
 	 void render() override;
 	 void update() override;

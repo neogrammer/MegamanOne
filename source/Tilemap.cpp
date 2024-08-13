@@ -23,7 +23,7 @@ Tilemap::Tilemap(Cfg::Textures tex_, const std::string& tilesetName_, const std:
 			file >> num;
 			auto  tmp = tileset->getTexRect(num);
 			auto pos = sf::Vector2f((float)x * (float)tileset->getTileSize(), (float)y * (float)tileset->getTileSize());
-			tiles.emplace_back(Tile{ tex_, tmp, { pos.x, pos.y } });
+			tiles.emplace_back(StatTile{ tex_, olc::vi2d{tmp.left,tmp.top}, olc::vf2d{ pos.x, pos.y } });
 			if (tileset->isSolid(num))
 			{
 				obstacles.push_back(tiles.back());
@@ -43,11 +43,11 @@ void Tilemap::render()
 {
 	for (auto& tile : obstacles)
 	{
-		gWnd.draw(*tile.getSpr());
+		gWnd.draw(*phys::spr(tile.getRec()));
 	}
 }
 
-std::vector<Tile>& Tilemap::getSolidTiles()
+std::vector<StatTile>& Tilemap::getSolidTiles()
 {
 	return obstacles;
 }

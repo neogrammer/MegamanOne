@@ -1,6 +1,7 @@
 #include <pch.h>
 #include <DynoPlayer.h>
 #include <BusterProj.h>
+#include <DynoPlat.h>
 #include <iostream>
 DynoPlayer::DynoPlayer()
 	: DynoSprite{}
@@ -54,6 +55,8 @@ void DynoPlayer::setPreBuild(Cfg::Textures texCopy_, olc::vi2d texRecPosCopy_)
 
 void DynoPlayer::build(olc::vf2d pos)
 {
+	pos.x += 200.f;
+
 	auto& r = this->getRec();
 	r.set(pos, { 60.f, 83.f }, texCopy, texRecPosCopy, { 130,160 }, { 32,45 }, {0.f,0.f});
 	this->animElapsed = 0.f;
@@ -486,6 +489,12 @@ void DynoPlayer::input()
 			resetAnim();
 
 			playerGrounded = false;
+
+			if (standingOnAPlatform)
+			{
+				standingOnAPlatform = false;
+				getRec().pos.y += -1208.81 * gTime;
+			}
 			getRec().vel.y = -1208.81f;
 		}
 	}
@@ -693,6 +702,120 @@ void DynoPlayer::handleSpriteCollisions(std::vector<std::shared_ptr<BaseSprite>>
 		}
 	}
 
+}
+
+void DynoPlayer::handleSpriteCollisions(std::vector<StatTile>& tiles)
+{
+	// first check bullets	
+	for (auto& b : liveBullets)
+	{
+		for (auto& tile : tiles)
+		{
+			if (phys::RectVsRect(b->getRec(), tile.getRec()))
+			{
+				b->marked = true;
+			}
+		}
+	}
+
+	// check collisions
+	olc::vf2d cp;
+	olc::vi2d cn;
+	float ct;
+
+	std::vector<std::pair<int, float> > z;
+	for (int i = 0; i < tiles.size(); i++)
+	{
+		rec target;
+		target.set({ tiles[i].getRec().pos.x, tiles[i].getRec().pos.y }, { 50.f,50.f }, Cfg::Textures::Tileset1, { 9, 3 }, { 50,50 }, { 0, 0 }, { 0.f,0.f });
+		if (phys::DynamicRectVsRect(getRec(), target, cp, cn, ct, gTime))
+		{
+			if (cn.y == -1 && getRec().vel.y > 20.f && currentAnim != "running" && currentAnim != "peakingJump" && currentAnim != "jumping" && currentAnim != "idle" && currentAnim != "jumpPeakShooting"
+				&& currentAnim != "runningAndShooting")
+			{
+				dispatch(fsmHandler->getMachine(), evt_Landed{});
+				currentAnim = fsmHandler->getMachine().getCurrentState();
+				resetAnim();
+				playerGrounded = true;
+			}
+			z.push_back({ i, ct });
+
+		}
+	}
+
+	// sort
+	std::sort(z.begin(), z.end(), [](const std::pair<int, float>& a, const std::pair<int, float>& b)
+		{
+			return a.second < b.second;
+		});
+
+
+	// resolve in correct order
+	for (auto j : z)
+	{
+		rec target;
+		target.set({ tiles[j.first].getRec().pos.x, tiles[j.first].getRec().pos.y }, { 50.f,50.f }, Cfg::Textures::Tileset1, { 9, 3 }, { 50,50 }, { 0, 0 }, { 0.f,0.f });
+		if (phys::DynamicRectVsRect(getRec(), target, cp, cn, ct, gTime))
+		{
+			getRec().vel += cn * olc::vf2d{ std::abs(getRec().vel.x), std::abs(getRec().vel.y) } *(1 - ct);
+		}
+	}
+
+}
+
+void DynoPlayer::handleSpriteCollisions(std::vector<DynoPlat*>& plats)
+{
+	/*standingOnAPlatform = false;
+	platOn = nullptr;
+	platVel = { 0.f,0.f };*/
+
+	// check collisions
+	olc::vf2d cp;
+	olc::vi2d cn;
+	float ct;
+
+	std::vector<std::pair<int, float> > z;
+	for (int i = 0; i < plats.size(); i++)
+	{
+	
+
+		rec target;
+		target.set({ plats[i]->getRec().pos.x, plats[i]->getRec().pos.y }, { 50.f,50.f }, Cfg::Textures::Tileset1, { 9, 3 }, { 50,50 }, { 0, 0 }, { 0.f,0.f });
+		if (phys::DynamicRectVsRect(getRec(), target, cp, cn, ct, gTime))
+		{
+			if (cn.y == -1 && getRec().vel.y > 20.f && currentAnim != "running" && currentAnim != "peakingJump" && currentAnim != "jumping" && currentAnim != "idle" && currentAnim != "jumpPeakShooting"
+				&& currentAnim != "runningAndShooting")
+			{
+				dispatch(fsmHandler->getMachine(), evt_Landed{});
+				currentAnim = fsmHandler->getMachine().getCurrentState();
+				resetAnim();
+				playerGrounded = true;
+				standingOnAPlatform = true;
+				platVel = plats[i]->getRec().vel;
+				platOn = plats[i];
+			}
+			z.push_back({ i, ct });
+
+		}
+	}
+
+	// sort
+	std::sort(z.begin(), z.end(), [](const std::pair<int, float>& a, const std::pair<int, float>& b)
+		{
+			return a.second < b.second;
+		});
+
+
+	// resolve in correct order
+	for (auto j : z)
+	{
+		rec target;
+		target.set({ plats[j.first]->getRec().pos.x, plats[j.first]->getRec().pos.y }, { 50.f,50.f }, Cfg::Textures::Tileset1, { 9, 3 }, { 50,50 }, { 0, 0 }, { 0.f,0.f });
+		if (phys::DynamicRectVsRect(getRec(), target, cp, cn, ct, gTime))
+		{
+			getRec().vel += cn * olc::vf2d{ std::abs(getRec().vel.x), std::abs(getRec().vel.y) } *(1 - ct);
+		}
+	}
 }
 
 void DynoPlayer::shoot(ProjectileType type_, bool friendly_)

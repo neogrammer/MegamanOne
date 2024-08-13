@@ -1,5 +1,6 @@
 #include <pch.h>
 #include <DynoPlayer.h>
+#include <DFlyPad.h>
 sf::RenderWindow gWnd = {};
 sf::ContextSettings gWndSettings = { sf::ContextSettings{} };
 unsigned int gWW = {};
@@ -64,6 +65,18 @@ std::unique_ptr<sf::Sprite> phys::spr(rec& r)
 		sprite->setTextureRect({ {r.texRectPos.x, r.texRectPos.y},{r.texRectSize.x,r.texRectSize.y} });
 	}
 	sprite->setPosition({r.getImagePos().x , r.getImagePos().y });
+	return std::move(sprite);
+}
+
+std::unique_ptr<sf::Sprite> phys::sprAnim(rec& r, sf::IntRect iRect_, DFlyPad& p_)
+{
+	std::unique_ptr<sf::Sprite> sprite = std::make_unique<sf::Sprite>();
+	if (r.texType != Cfg::Textures::Count)
+	{
+		sprite->setTexture(Cfg::textures.get((int)r.texType));
+		sprite->setTextureRect(p_.getFrame());
+	}
+	sprite->setPosition({ r.getImagePos().x , r.getImagePos().y });
 	return std::move(sprite);
 }
 
