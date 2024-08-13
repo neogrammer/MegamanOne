@@ -47,7 +47,23 @@ void Game::render()
 		}
 	}
 	gWnd.setView(gameView);
-
+	if (!dPlayer->facingLeft)
+	{
+		if (gWnd.mapCoordsToPixel({ dPlayer->getRec().pos.x + dPlayer->getRec().size.x / 2.f , dPlayer->getRec().pos.y }).x > 800)
+		{
+			if (dPlayer->getRec().pos.x + dPlayer->getRec().size.x / 2.f <= 2400.f)
+				gameView.setCenter({ dPlayer->getRec().pos.x + dPlayer->getRec().size.x / 2.f , gameView.getCenter().y });
+		}
+	}
+	
+	if (dPlayer->facingLeft)
+	{
+		if (gWnd.mapCoordsToPixel({ dPlayer->getRec().pos.x + dPlayer->getRec().size.x / 2.f , dPlayer->getRec().pos.y }).x < 800)
+		{
+			if (dPlayer->getRec().pos.x + dPlayer->getRec().size.x / 2.f >= 800.f)
+				gameView.setCenter({dPlayer->getRec().pos.x + dPlayer->getRec().size.x / 2.f , gameView.getCenter().y });
+		}
+	}
 
 	tmap->render();
 
@@ -117,7 +133,7 @@ void Game::run()
 			}
 		}
 
-		//dPlayer->getRec().pos.x += 200.f;
+
 
 		// if not closed, update and draw the game as needed
 		if (gWnd.isOpen())

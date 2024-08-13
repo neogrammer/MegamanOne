@@ -58,7 +58,7 @@ void DynoPlayer::build(olc::vf2d pos)
 	pos.x += 200.f;
 
 	auto& r = this->getRec();
-	r.set(pos, { 60.f, 83.f }, texCopy, texRecPosCopy, { 130,160 }, { 32,45 }, {0.f,0.f});
+	r.set(pos, { 80.f, 83.f }, texCopy, texRecPosCopy, { 130,160 }, { 22,45 }, {0.f,0.f});
 	this->animElapsed = 0.f;
 }
 
@@ -493,7 +493,7 @@ void DynoPlayer::input()
 			if (standingOnAPlatform)
 			{
 				standingOnAPlatform = false;
-				getRec().pos.y += -1208.81 * gTime;
+				getRec().pos.y += -1208.81f * gTime;
 			}
 			getRec().vel.y = -1208.81f;
 		}
