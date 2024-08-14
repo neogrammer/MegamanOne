@@ -26,6 +26,7 @@
     <ClInclude Include="headers\BaseSprite.h" />
     <ClInclude Include="headers\BusterProj.h" />
     <ClInclude Include="headers\Cfg.h" />
+    <ClInclude Include="headers\DCannonTurtle.h" />
     <ClInclude Include="headers\DFlyPad.h" />
     <ClInclude Include="headers\DynoEnemy.h" />
     <ClInclude Include="headers\DynoPlat.h" />
@@ -57,6 +58,7 @@
     <ClCompile Include="source\BaseSprite.cpp" />
     <ClCompile Include="source\BusterProj.cpp" />
     <ClCompile Include="source\Cfg.cpp" />
+    <ClCompile Include="source\DCannonTurtle.cpp" />
     <ClCompile Include="source\DFlyPad.cpp" />
     <ClCompile Include="source\DynoEnemy.cpp" />
     <ClCompile Include="source\DynoPlat.cpp" />
@@ -94,6 +96,7 @@
     <Image Include="assets\textures\actors\enemies\snailAtlas.png" />
     <Image Include="assets\textures\actors\player\player_atlas1.png" />
     <Image Include="assets\textures\backgrounds\space\bgSpace.png" />
+    <Image Include="assets\textures\enemies\cannonTurtleSheet.png" />
     <Image Include="assets\textures\platforms\fly_pad67x40.png" />
     <Image Include="assets\textures\projectiles\busterBullet.png" />
     <Image Include="assets\textures\tilesets\tileset1.png" />

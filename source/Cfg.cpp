@@ -58,6 +58,8 @@ void Cfg::initTextures()
 	textures.load((int)Textures::BGSpace, "assets/textures/backgrounds/space/bgSpace.png");
 	textures.load((int)Textures::BusterBullet, "assets/textures/projectiles/busterBullet.png");
 	textures.load((int)Textures::SnailEnemy, "assets/textures/actors/enemies/snailAtlas.png");
+	textures.load((int)Textures::CannonTurtle, "assets/textures/enemies/cannonTurtleSheet.png");
+
 
 
 }

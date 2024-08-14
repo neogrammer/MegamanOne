@@ -106,6 +106,9 @@
     <Filter Include="Entities\dyno_sprites\enemies">
       <UniqueIdentifier>{1f3c1039-1b0c-44f0-ae78-7099eff24929}</UniqueIdentifier>
     </Filter>
+    <Filter Include="assets\textures\enemies">
+      <UniqueIdentifier>{e2dee435-944e-409c-ae3f-daada152b955}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -189,6 +192,9 @@
     <ClInclude Include="headers\DynoEnemy.h">
       <Filter>Entities\dyno_sprites</Filter>
     </ClInclude>
+    <ClInclude Include="headers\DCannonTurtle.h">
+      <Filter>Entities\dyno_sprites\enemies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -253,6 +259,9 @@
     </ClCompile>
     <ClCompile Include="source\DynoEnemy.cpp">
       <Filter>Entities\dyno_sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DCannonTurtle.cpp">
+      <Filter>Entities\dyno_sprites\enemies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -326,6 +335,9 @@
     </Image>
     <Image Include="assets\textures\actors\enemies\snailAtlas.png">
       <Filter>assets\textures\actors\enemies</Filter>
+    </Image>
+    <Image Include="assets\textures\enemies\cannonTurtleSheet.png">
+      <Filter>assets\textures\enemies</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
