@@ -1,7 +1,6 @@
 #include <pch.h>
 #include <Game.h>
 #include <Tilemap.h>
-#include <Snail.h>
 #include <type_traits>
 #include <string>
 #include <duck_fold.h>
@@ -108,7 +107,6 @@ void Game::input()
 Game::~Game()
 {
 	delete tmap;
-	lua_close(lua);
 }
 
 void Game::run()
@@ -197,41 +195,10 @@ Game::Game()
 {
 	std::cout << "Loading..." << std::endl;
 
-	lua = luaL_newstate();
-	luaL_openlibs(lua);
-
 	tmap = new Tilemap{ Cfg::Textures::Tileset1, "tileset1", "tilemap1", 1 };
 
 	worldSpace_ = sf::View({ 800.f, 450.f }, { 1600.f,900.f });
 
-
-	lua_register(lua, "cpp_retry", Stage::lua_retry);
-
-	lua_register(lua, "cpp_moveObject", Stage::lua_moveObject);
-	lua_register(lua, "cpp_moveObjectUp", Stage::lua_moveObjectUp);
-
-	lua_register(lua, "cpp_createPlatform", Stage::lua_createPlatform);
-	if (scr::CheckLua(lua, luaL_dofile(lua, "assets/scripts/StageSetup.lua")))
-	{
-		lua_getglobal(lua, "LoadPlatforms");
-		if (lua_isfunction(lua, -1))
-		{
-			lua_pushlightuserdata(lua, &stage);
-			lua_pushnumber(lua, 1);
-			if (!scr::CheckLua(lua, lua_pcall(lua, 2, 0, 0))) {
-				throw std::runtime_error("Nope, Bad Lua");
-			}
-		}
-		else
-		{
-			throw std::runtime_error("Nope, Bad Lua");
-		}
-	}
-	else
-	{
-		throw std::runtime_error("Nope, Bad Lua");
-
-	}
 
 	createWorld();
 

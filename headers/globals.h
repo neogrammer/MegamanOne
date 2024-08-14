@@ -31,11 +31,6 @@ namespace wndw
 	
 }
 
-namespace scr
-{
-	extern bool CheckLua(lua_State* L, int r);
-}
-
 namespace snd
 {
 	extern void Play(std::string soundName_);

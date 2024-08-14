@@ -19,24 +19,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="headers\AABB.h" />
     <ClInclude Include="headers\Action.h" />
     <ClInclude Include="headers\ActionMap.h" />
     <ClInclude Include="headers\ActionTarget.h" />
     <ClInclude Include="headers\Animation.h" />
-    <ClInclude Include="headers\ASprite.h" />
     <ClInclude Include="headers\BaseSprite.h" />
     <ClInclude Include="headers\BusterProj.h" />
     <ClInclude Include="headers\Cfg.h" />
-    <ClInclude Include="headers\Command.h" />
     <ClInclude Include="headers\DFlyPad.h" />
     <ClInclude Include="headers\DynoPlat.h" />
     <ClInclude Include="headers\SProj.h" />
-    <ClInclude Include="headers\draw_shape.h" />
     <ClInclude Include="headers\duck_fold.h" />
-    <ClInclude Include="headers\Dynamic.h" />
     <ClInclude Include="headers\DynoSprite.h" />
-    <ClInclude Include="headers\Enemy.h" />
     <ClInclude Include="headers\FSM.h" />
     <ClInclude Include="headers\fsm_events.h" />
     <ClInclude Include="headers\FSM_Player.h" />
@@ -44,18 +38,9 @@
     <ClInclude Include="headers\Game.h" />
     <ClInclude Include="headers\globals.h" />
     <ClInclude Include="headers\MachineHandler.h" />
-    <ClInclude Include="headers\MoveCommand.h" />
-    <ClInclude Include="headers\physics.h" />
-    <ClInclude Include="headers\Platform.h" />
-    <ClInclude Include="headers\Player.h" />
     <ClInclude Include="headers\DynoPlayer.h" />
-    <ClInclude Include="headers\Projectile.h" />
     <ClInclude Include="headers\ResourceManager.h" />
-    <ClInclude Include="headers\ServiceLocator.h" />
-    <ClInclude Include="headers\Snail.h" />
-    <ClInclude Include="headers\Stage.h" />
     <ClInclude Include="headers\StatSprite.h" />
-    <ClInclude Include="headers\Tile.h" />
     <ClInclude Include="headers\Tilemap.h" />
     <ClInclude Include="headers\Tileset.h" />
     <ClInclude Include="headers\StatTile.h" />
@@ -66,35 +51,22 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="source\AABB.cpp" />
     <ClCompile Include="source\Action.cpp" />
     <ClCompile Include="source\Animation.cpp" />
-    <ClCompile Include="source\ASprite.cpp" />
     <ClCompile Include="source\BaseSprite.cpp" />
     <ClCompile Include="source\BusterProj.cpp" />
     <ClCompile Include="source\Cfg.cpp" />
     <ClCompile Include="source\DFlyPad.cpp" />
     <ClCompile Include="source\DynoPlat.cpp" />
     <ClCompile Include="source\SProj.cpp" />
-    <ClCompile Include="source\draw_shape.cpp" />
-    <ClCompile Include="source\Dynamic.cpp" />
     <ClCompile Include="source\DynoSprite.cpp" />
-    <ClCompile Include="source\Enemy.cpp" />
     <ClCompile Include="source\Game.cpp" />
     <ClCompile Include="source\globals.cpp" />
     <ClCompile Include="source\MachineHandler.cpp" />
     <ClCompile Include="source\main.cpp" />
-    <ClCompile Include="source\MoveCommand.cpp" />
-    <ClCompile Include="source\physics.cpp" />
-    <ClCompile Include="source\Platform.cpp" />
-    <ClCompile Include="source\Player.cpp" />
     <ClCompile Include="source\DynoPlayer.cpp" />
-    <ClCompile Include="source\Projectile.cpp" />
     <ClCompile Include="source\rec.cpp" />
-    <ClCompile Include="source\Snail.cpp" />
-    <ClCompile Include="source\Stage.cpp" />
     <ClCompile Include="source\StatSprite.cpp" />
-    <ClCompile Include="source\Tile.cpp" />
     <ClCompile Include="source\Tilemap.cpp" />
     <ClCompile Include="source\Tileset.cpp" />
     <ClCompile Include="source\StatTile.cpp" />
@@ -224,15 +196,15 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)headers;$(ProjectDir)3rdParty\sol\include;$(ProjectDir)3rdParty\sfml_64\include;$(ProjectDir)3rdParty\lua\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)headers;$(ProjectDir)3rdParty\sfml_64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)3rdParty\sfml_64\lib;$(ProjectDir)3rdParty\lua;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>openal32.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;sfml-audio-d.lib;sfml-network-d.lib;lua54.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)3rdParty\sfml_64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>openal32.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;sfml-audio-d.lib;sfml-network-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -245,7 +217,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)headers;$(ProjectDir)3rdParty\sol\include;$(ProjectDir)3rdParty\sfml_64\include;$(ProjectDir)3rdParty\lua\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)headers;$(ProjectDir)3rdParty\sfml_64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -254,8 +226,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>openal32.lib;sfml-system.lib;sfml-window.lib;sfml-graphics.lib;sfml-audio.lib;sfml-network.lib;lua54.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)3rdParty\lua;$(ProjectDir)3rdParty\sfml_64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>openal32.lib;sfml-system.lib;sfml-window.lib;sfml-graphics.lib;sfml-audio.lib;sfml-network.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)3rdParty\sfml_64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

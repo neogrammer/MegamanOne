@@ -18,8 +18,6 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include <sol/sol.hpp>
-
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
@@ -29,7 +27,6 @@
 #include <Cfg.h>
 #include <ActionTarget.h>
 #include <globals.h>
-#include <draw_shape.h>
 
 
 #endif

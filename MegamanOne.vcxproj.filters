@@ -7,32 +7,8 @@
     <Filter Include="Entities">
       <UniqueIdentifier>{309046a3-7394-42be-aa5e-e739fe1d7f0f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameStates">
-      <UniqueIdentifier>{ff4ad893-1be1-43ca-863c-498ef149ecd0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GUI">
-      <UniqueIdentifier>{d4848ece-3dbf-4113-b979-83bdae2326ee}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Components">
-      <UniqueIdentifier>{bd8cf526-75da-4ca9-9e53-d6bab150bf25}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Projectiles">
-      <UniqueIdentifier>{f2bdb538-1d33-4126-8fd3-2d772006acf1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Items">
-      <UniqueIdentifier>{445114e6-6573-40d4-b188-07176749b675}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Events">
-      <UniqueIdentifier>{29086c25-d4da-4a7f-8a74-c039dbf56837}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Misc">
-      <UniqueIdentifier>{6699c9bf-a004-4af7-87b7-28d55da004f6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Core">
       <UniqueIdentifier>{99b59560-991f-4a07-a6d0-403fd8c02f13}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scripts">
-      <UniqueIdentifier>{e9a4bde4-e37b-4720-8de4-9162f0dea798}</UniqueIdentifier>
     </Filter>
     <Filter Include="Core\tpl">
       <UniqueIdentifier>{9e76bfc4-5263-4423-96b9-bc7064191023}</UniqueIdentifier>
@@ -76,12 +52,6 @@
     <Filter Include="Entities\asprites\platforms">
       <UniqueIdentifier>{0fe45d08-e0ea-4545-a60d-1a3cdabfd610}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Stage">
-      <UniqueIdentifier>{6f27e125-e6fc-4525-9942-bce206a477d9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Stage\tilemap">
-      <UniqueIdentifier>{b5c0cb3d-82e7-4518-806f-42ee6ae38210}</UniqueIdentifier>
-    </Filter>
     <Filter Include="assets\textures\backgrounds">
       <UniqueIdentifier>{8f215a10-e07a-4678-b6db-6e7486f2dde9}</UniqueIdentifier>
     </Filter>
@@ -109,9 +79,6 @@
     <Filter Include="assets\textures\actors\enemies">
       <UniqueIdentifier>{e9f3e753-6d8c-4b68-931a-eb0b6ab0e1f8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Command">
-      <UniqueIdentifier>{3bec7edf-9bf5-4915-ac13-175e5ec940b4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="assets\data\bboxes">
       <UniqueIdentifier>{d1211efc-113a-4cd2-857a-b626fe10e411}</UniqueIdentifier>
     </Filter>
@@ -136,17 +103,17 @@
     <Filter Include="Core\NewFilter1">
       <UniqueIdentifier>{315dbca9-71a1-468a-a435-d026a368cea1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Entities\projectiles">
-      <UniqueIdentifier>{188febad-ea61-41af-9b16-1fbb6ef3dadf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Entities\dyno_sprites\platforms">
       <UniqueIdentifier>{4bb80a3a-b5b1-438d-b64d-06a74285e595}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entities\stat_sprites\projectiles">
+      <UniqueIdentifier>{188febad-ea61-41af-9b16-1fbb6ef3dadf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tilemap">
+      <UniqueIdentifier>{b5c0cb3d-82e7-4518-806f-42ee6ae38210}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="headers\ServiceLocator.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -168,38 +135,11 @@
     <ClInclude Include="headers\ActionTarget.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="headers\draw_shape.h">
-      <Filter>Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\Dynamic.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\AABB.h">
-      <Filter>Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\physics.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\ASprite.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\Player.h">
-      <Filter>Entities\asprites</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\Platform.h">
-      <Filter>Entities\asprites</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\Stage.h">
-      <Filter>Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\Tile.h">
-      <Filter>Stage\tilemap</Filter>
-    </ClInclude>
     <ClInclude Include="headers\Tilemap.h">
-      <Filter>Stage\tilemap</Filter>
+      <Filter>Tilemap</Filter>
     </ClInclude>
     <ClInclude Include="headers\Tileset.h">
-      <Filter>Stage\tilemap</Filter>
+      <Filter>Tilemap</Filter>
     </ClInclude>
     <ClInclude Include="headers\Game.h">
       <Filter>Core</Filter>
@@ -222,21 +162,6 @@
     <ClInclude Include="headers\MachineHandler.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="headers\Projectile.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\Enemy.h">
-      <Filter>Entities\asprites</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\Snail.h">
-      <Filter>Entities\asprites\enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\Command.h">
-      <Filter>Command</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\MoveCommand.h">
-      <Filter>Command</Filter>
-    </ClInclude>
     <ClInclude Include="headers\BaseSprite.h">
       <Filter>Entities</Filter>
     </ClInclude>
@@ -255,17 +180,17 @@
     <ClInclude Include="headers\Animation.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="headers\SProj.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
     <ClInclude Include="headers\BusterProj.h">
-      <Filter>Entities\projectiles</Filter>
+      <Filter>Entities\stat_sprites\projectiles</Filter>
     </ClInclude>
     <ClInclude Include="headers\DynoPlat.h">
       <Filter>Entities\dyno_sprites</Filter>
     </ClInclude>
     <ClInclude Include="headers\DFlyPad.h">
       <Filter>Entities\dyno_sprites\platforms</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\SProj.h">
+      <Filter>Entities\stat_sprites</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -281,56 +206,20 @@
     <ClCompile Include="source\Action.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="source\draw_shape.cpp">
-      <Filter>Misc</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Dynamic.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="source\physics.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
     <ClCompile Include="source\main.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="source\ASprite.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Player.cpp">
-      <Filter>Entities\asprites</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Platform.cpp">
-      <Filter>Entities\asprites</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Stage.cpp">
-      <Filter>Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Tile.cpp">
-      <Filter>Stage\tilemap</Filter>
-    </ClCompile>
     <ClCompile Include="source\Tilemap.cpp">
-      <Filter>Stage\tilemap</Filter>
+      <Filter>Tilemap</Filter>
     </ClCompile>
     <ClCompile Include="source\Tileset.cpp">
-      <Filter>Stage\tilemap</Filter>
+      <Filter>Tilemap</Filter>
     </ClCompile>
     <ClCompile Include="source\Game.cpp">
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="source\MachineHandler.cpp">
       <Filter>Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Projectile.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Enemy.cpp">
-      <Filter>Entities\asprites</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Snail.cpp">
-      <Filter>Entities\asprites\enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="source\MoveCommand.cpp">
-      <Filter>Command</Filter>
     </ClCompile>
     <ClCompile Include="source\rec.cpp">
       <Filter>Core</Filter>
@@ -350,23 +239,20 @@
     <ClCompile Include="source\DynoPlayer.cpp">
       <Filter>Entities\dyno_sprites</Filter>
     </ClCompile>
-    <ClCompile Include="source\AABB.cpp">
-      <Filter>Misc</Filter>
-    </ClCompile>
     <ClCompile Include="source\Animation.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="source\SProj.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
     <ClCompile Include="source\BusterProj.cpp">
-      <Filter>Entities\projectiles</Filter>
+      <Filter>Entities\stat_sprites\projectiles</Filter>
     </ClCompile>
     <ClCompile Include="source\DynoPlat.cpp">
       <Filter>Entities\dyno_sprites</Filter>
     </ClCompile>
     <ClCompile Include="source\DFlyPad.cpp">
       <Filter>Entities\dyno_sprites\platforms</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SProj.cpp">
+      <Filter>Entities\stat_sprites</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
