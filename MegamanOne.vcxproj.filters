@@ -28,9 +28,6 @@
     <Filter Include="assets\textures\tilesets">
       <UniqueIdentifier>{8a660b30-5732-4f32-b9f4-c7318b53f4ec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Entities\asprites">
-      <UniqueIdentifier>{d5b8e8b4-a480-4e99-92fc-232a11dbe07c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="assets\data">
       <UniqueIdentifier>{1c67241d-c0ca-479d-9461-67da7fc307ba}</UniqueIdentifier>
     </Filter>
@@ -48,9 +45,6 @@
     </Filter>
     <Filter Include="assets\textures\platforms">
       <UniqueIdentifier>{4bdde5ac-b1cd-41f5-b148-e31c699a2a21}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Entities\asprites\platforms">
-      <UniqueIdentifier>{0fe45d08-e0ea-4545-a60d-1a3cdabfd610}</UniqueIdentifier>
     </Filter>
     <Filter Include="assets\textures\backgrounds">
       <UniqueIdentifier>{8f215a10-e07a-4678-b6db-6e7486f2dde9}</UniqueIdentifier>
@@ -72,9 +66,6 @@
     </Filter>
     <Filter Include="assets\sounds">
       <UniqueIdentifier>{083252c4-ba9c-40e2-ac84-d796f0ada719}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Entities\asprites\enemies">
-      <UniqueIdentifier>{f538dddf-90d9-4e6a-8524-cb2e14ad48f3}</UniqueIdentifier>
     </Filter>
     <Filter Include="assets\textures\actors\enemies">
       <UniqueIdentifier>{e9f3e753-6d8c-4b68-931a-eb0b6ab0e1f8}</UniqueIdentifier>
@@ -111,6 +102,9 @@
     </Filter>
     <Filter Include="Tilemap">
       <UniqueIdentifier>{b5c0cb3d-82e7-4518-806f-42ee6ae38210}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\dyno_sprites\enemies">
+      <UniqueIdentifier>{1f3c1039-1b0c-44f0-ae78-7099eff24929}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -192,6 +186,9 @@
     <ClInclude Include="headers\SProj.h">
       <Filter>Entities\stat_sprites</Filter>
     </ClInclude>
+    <ClInclude Include="headers\DynoEnemy.h">
+      <Filter>Entities\dyno_sprites</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -253,6 +250,9 @@
     </ClCompile>
     <ClCompile Include="source\SProj.cpp">
       <Filter>Entities\stat_sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DynoEnemy.cpp">
+      <Filter>Entities\dyno_sprites</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

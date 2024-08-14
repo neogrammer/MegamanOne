@@ -27,6 +27,7 @@
     <ClInclude Include="headers\BusterProj.h" />
     <ClInclude Include="headers\Cfg.h" />
     <ClInclude Include="headers\DFlyPad.h" />
+    <ClInclude Include="headers\DynoEnemy.h" />
     <ClInclude Include="headers\DynoPlat.h" />
     <ClInclude Include="headers\SProj.h" />
     <ClInclude Include="headers\duck_fold.h" />
@@ -57,6 +58,7 @@
     <ClCompile Include="source\BusterProj.cpp" />
     <ClCompile Include="source\Cfg.cpp" />
     <ClCompile Include="source\DFlyPad.cpp" />
+    <ClCompile Include="source\DynoEnemy.cpp" />
     <ClCompile Include="source\DynoPlat.cpp" />
     <ClCompile Include="source\SProj.cpp" />
     <ClCompile Include="source\DynoSprite.cpp" />
