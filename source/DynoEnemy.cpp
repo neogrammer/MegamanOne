@@ -3,6 +3,10 @@
 
 DynoEnemy::DynoEnemy()
 	: DynoSprite{}
+	, tex{Cfg::Textures::Count}
+	, liveBullets{ std::list<std::unique_ptr<SProj>>{} }
+	, animElapsed{ 0.f }
+
 {
 }
 
@@ -11,6 +15,7 @@ DynoEnemy::DynoEnemy(olc::vf2d pos_)
 	, tex{ Cfg::Textures::CannonTurtle }
 	, liveBullets{ std::list<std::unique_ptr<SProj>>{} }
 	, animElapsed{ 0.f }
+
 {
 	animMap.clear();
 }

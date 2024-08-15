@@ -17,10 +17,7 @@ extern unsigned int gWW;
 extern unsigned int gWH;
 extern bool gWndFull;
 
-extern sf::Sound shootSound;
-extern sf::Sound jumpSound;
-extern sf::Sound landSound;
-
+extern 	sf::Sound dieSound;
 
 extern float gTime;
 extern float gPrevTime;
@@ -35,7 +32,7 @@ namespace wndw
 
 namespace snd
 {
-	extern void Play(std::string soundName_);
+	extern void PlayDieSound();
 }
 
 

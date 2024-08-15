@@ -33,6 +33,9 @@ class DynoPlayer : public DynoSprite, public ActionTarget<int>
 	bool shootBtnPressed{ false };
 
 
+	sf::Sound jumpSnd;
+	sf::Sound landSnd;
+	sf::Sound shootSnd;
 
 public:
 	DynoPlayer();

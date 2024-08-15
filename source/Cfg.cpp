@@ -31,9 +31,9 @@ void Cfg::initSounds()
 	sounds.load((int)Sounds::BusterShotNormal, "assets/sounds/busterShotNormal.ogg");
 	sounds.load((int)Sounds::Jump, "assets/sounds/jump.ogg");
 	sounds.load((int)Sounds::Land, "assets/sounds/land.ogg");
-	auto smpCount = sounds.get((int)Sounds::BusterShotNormal).getSampleCount();
-	std::cout << smpCount << std::endl;
-	shootSound.setBuffer(sounds.get((int)Sounds::BusterShotNormal));
+	//auto smpCount = sounds.get((int)Sounds::BusterShotNormal).getSampleCount();
+	//std::cout << smpCount << std::endl;
+	/*shootSound.setBuffer(sounds.get((int)Sounds::BusterShotNormal));
 	shootSound.setAttenuation(0.f);
 	shootSound.setRelativeToListener(false);
 	shootSound.setVolume(80);
@@ -43,9 +43,11 @@ void Cfg::initSounds()
 	jumpSound.setRelativeToListener(false);
 	landSound.setBuffer(sounds.get((int)Sounds::Land));
 	landSound.setAttenuation(0.f);
-	landSound.setRelativeToListener(false);
+	landSound.setRelativeToListener(false);*/
 
-	landSound.setVolume(80);
+	//landSound.setVolume(80);
+
+	sounds.load((int)Sounds::EnemyDie1, "assets/sounds/enemyDie1.ogg");
 
 }
 
@@ -58,7 +60,7 @@ void Cfg::initTextures()
 	textures.load((int)Textures::BGSpace, "assets/textures/backgrounds/space/bgSpace.png");
 	textures.load((int)Textures::BusterBullet, "assets/textures/projectiles/busterBullet.png");
 	textures.load((int)Textures::SnailEnemy, "assets/textures/actors/enemies/snailAtlas.png");
-	textures.load((int)Textures::CannonTurtle, "assets/textures/enemies/cannonTurtleSheet.png");
+	textures.load((int)Textures::CannonTurtle, "assets/textures/enemies/cannonTurtleSheet2.png");
 
 
 

@@ -21,6 +21,8 @@ public:
 	int lifeMax{ 7 };
 
 	bool wasHit{ false };
+	float hitElapsed{ 0.f };
+	float hitDelay{ 0.05f };
 	bool alive{ true };
 	DynoEnemy();
 	DynoEnemy(olc::vf2d pos_);

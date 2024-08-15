@@ -26,6 +26,7 @@ class Game
 	sf::Clock frameTimer{};
 	std::shared_ptr<DynoPlayer> dPlayer;
 	std::vector<std::shared_ptr<DynoEnemy> > enemies{};
+
 	
 	// new collision variables
 	std::vector<rec> objs;

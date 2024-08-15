@@ -11,6 +11,9 @@ DynoPlayer::DynoPlayer()
 	, tex{ Cfg::Textures::PlayerAtlas }
 	, liveBullets{ std::list<std::unique_ptr<SProj>>{} }
 	, animElapsed{0.f}
+		, jumpSnd{}
+		, landSnd{}
+		, shootSnd{}
 {
 	this->currentAnim = "none";
 	std::cout << "current state is none"  << std::endl;
@@ -23,6 +26,9 @@ DynoPlayer::DynoPlayer(Cfg::Textures tex_, olc::vi2d texRecPos_, olc::vf2d pos)
 	, tex { Cfg::Textures::PlayerAtlas }
 	, liveBullets{ std::list<std::unique_ptr<SProj>>{} }
 	, animElapsed{ 0.f }
+		, jumpSnd{}
+		, landSnd{}
+		, shootSnd{}
 {
 	build(pos);
 	std::cout << "current state is now " << currentAnim << std::endl;
@@ -38,6 +44,12 @@ DynoPlayer::DynoPlayer(Cfg::Textures tex_, olc::vi2d texRecPos_, olc::vf2d pos)
 	fsmHandler->getMachine().setJustChanged(false);
 	this->animMap[std::pair(this->currentAnim, this->facingLeft)]->data.index = 0;
 	this->animMap[std::pair(this->currentAnim, !this->facingLeft)]->data.index = 0;
+
+	// setup sounds
+	jumpSnd.setVolume(45);
+	jumpSnd.setBuffer(Cfg::sounds.get((int)Cfg::Sounds::Jump));
+	landSnd.setBuffer(Cfg::sounds.get((int)Cfg::Sounds::Land));
+	shootSnd.setBuffer(Cfg::sounds.get((int)Cfg::Sounds::BusterShotNormal));
 
 	setupBindings();
 }
@@ -56,7 +68,8 @@ void DynoPlayer::setPreBuild(Cfg::Textures texCopy_, olc::vi2d texRecPosCopy_)
 
 void DynoPlayer::build(olc::vf2d pos)
 {
-	pos.x += 200.f;
+	pos.x += 300.f;
+	pos.y = 600.f;
 
 	auto& r = this->getRec();
 	r.set(pos, { 80.f, 83.f }, texCopy, texRecPosCopy, { 130,160 }, { 22,45 }, {0.f,0.f});
@@ -532,6 +545,10 @@ void DynoPlayer::input()
 		jumpPressed = true;
 		if (playerGrounded == true && getRec().vel.y == 0.f)
 		{
+			
+		
+			jumpSnd.play();
+
 			dispatch(fsmHandler->getMachine(), evt_Jumped{});
 			currentAnim = fsmHandler->getMachine().getCurrentState();
 			resetAnim();
@@ -854,6 +871,11 @@ void DynoPlayer::shoot(ProjectileType type_, bool friendly_)
 				liveBullets.push_back(std::move(std::make_unique<BusterProj>(olc::vf2d{ (facingLeft) ? p.x - getRec().texPosOffset.x + 5 : p.x - getRec().texPosOffset.x + 95 , p.y - getRec().texPosOffset.y + 53 }, facingLeft)));  //{ Cfg::Textures::BusterBullet, "assets/data/aabbs/busterBullet.aabb", (this->isFacingLeft()) ? olc::vf2d{bbPos.x - getBBOffset().x + 28, bbPos.y - getBBOffset().y + 67} : olc::vf2d{bbPos.x - getBBOffset().x + 99, bbPos.y - getBBOffset().y + 67} , (this->isFacingLeft()) ? -500.f : 500.f, TravelDir::Horizontal, type_, 1 });
 			else if (currentAnim == "jumpPeakShooting" || currentAnim == "peakingJump")
 				liveBullets.push_back(std::move(std::make_unique<BusterProj>(olc::vf2d{ (facingLeft) ? p.x - getRec().texPosOffset.x + 20 : p.x - getRec().texPosOffset.x + 87 , p.y - getRec().texPosOffset.y + 53 }, facingLeft)));  //{ Cfg::Textures::BusterBullet, "assets/data/aabbs/busterBullet.aabb", (this->isFacingLeft()) ? olc::vf2d{bbPos.x - getBBOffset().x + 28, bbPos.y - getBBOffset().y + 67} : olc::vf2d{bbPos.x - getBBOffset().x + 99, bbPos.y - getBBOffset().y + 67} , (this->isFacingLeft()) ? -500.f : 500.f, TravelDir::Horizontal, type_, 1 });
+			else
+			{
+				break;
+			}
+			shootSnd.play();
 		}
 			break;
 		default:

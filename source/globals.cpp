@@ -10,9 +10,7 @@ sf::Vector2f mpos = {};
 bool gWndFull = false;
 
 sf::View gameView = {};
-sf::Sound shootSound = {};
-sf::Sound jumpSound = {};
-sf::Sound landSound = {};
+sf::Sound dieSound = {};
 
 float gTime = 0.f;
 float gPrevTime = 0.f;
@@ -31,20 +29,10 @@ void wndw::CreateWindow(std::string title_, unsigned int w_, unsigned int h_)
 
 
 
-void snd::Play(std::string soundName_)
+void snd::PlayDieSound()
 {
-	if (soundName_ == "shoot")
-	{
-		shootSound.play();
-	}
-	if (soundName_ == "jump")
-	{
-		jumpSound.play();
-	}	
-	if (soundName_ == "land")
-	{
-		landSound.play();
-	}
+	dieSound.setBuffer(Cfg::sounds.get((int)Cfg::Sounds::EnemyDie1));
+	dieSound.play();
 }
 
 std::unique_ptr<sf::Sprite> phys::spr(rec& r)

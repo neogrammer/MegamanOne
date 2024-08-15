@@ -225,7 +225,7 @@ Game::Game()
 	, flypad1{ {400.f,600.f}, {400.f, 200.f} , 200.f}
 	, flypad2{ {200.f,860.f}, {200.f, 560.f} , 150.f }
 	, flypad3{ {300.f,860.f}, {630.f, 860.f} , 300.f }
-	, dTurtle{ std::make_shared<DCannonTurtle>(olc::vf2d{ 1300.f, 850.f - 68.f }) }
+	, dTurtle{ std::make_shared<DCannonTurtle>(olc::vf2d{ 1300.f, 850.f - 68.f }, 2) }
 	, enemies{}
 {
 
@@ -271,5 +271,6 @@ Game::Game()
 	//}
 
 	std::cout << "Load Complete" << std::endl;
-
+	Cfg::music.get((int)Cfg::Music::Stage1).setVolume(40);
+	Cfg::music.get((int)Cfg::Music::Stage1).play();
 }

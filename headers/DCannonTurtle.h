@@ -4,10 +4,16 @@
 class DCannonTurtle : public DynoEnemy
 {
 public:
-	
+	bool waitingToJump{ true };
+	float jumpWaitTime{ 4.f };
+	float jumpWaitElapsed{ 0.f };
+	bool jumping{ false };
+	float startYJump{ 0.f };
+	int jumpLimit{ 0 };
+	int jumpCount{ 0 };
 	
 	DCannonTurtle();
-	explicit DCannonTurtle(olc::vf2d pos_);
+	explicit DCannonTurtle(olc::vf2d pos_, int jumpLimit_);
 	~DCannonTurtle() override;
 
 	DCannonTurtle(const DCannonTurtle&) = default;
@@ -22,6 +28,8 @@ public:
 	void update() override final;
 	void render() override final;
 	void hit(int damage_) override;
+
+
 
 };
 
