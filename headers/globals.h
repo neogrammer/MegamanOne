@@ -3,11 +3,13 @@
 #include <SFML/Audio/Sound.hpp>
 #include <SFML/System/Vector2.hpp>
 
+
 #include <string>
 
 #include <rec.h>
 class DFlyPad;
 class DynoPlayer;
+class DynoEnemy;
 extern sf::RenderWindow gWnd;
 extern sf::ContextSettings gWndSettings;
 extern sf::Vector2f mpos;
@@ -47,6 +49,8 @@ namespace phys
 	extern std::unique_ptr<sf::Sprite> spr(rec& r);
 	extern std::unique_ptr<sf::Sprite> sprAnim(rec& r, sf::IntRect iRect_, DynoPlayer& p_);
 	extern std::unique_ptr<sf::Sprite> sprAnim(rec& r, sf::IntRect iRect_, DFlyPad& p_);
+	extern std::unique_ptr<sf::Sprite> sprAnim(rec& r, sf::IntRect iRect_, DynoEnemy& p_);
+
 
 	extern bool PointVsRect(const olc::vf2d& p, const rec& r);
 

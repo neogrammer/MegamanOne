@@ -1,6 +1,7 @@
 #include <pch.h>
 #include <DynoPlayer.h>
 #include <BusterProj.h>
+#include <DynoEnemy.h>
 #include <DynoPlat.h>
 #include <iostream>
 DynoPlayer::DynoPlayer()
@@ -550,15 +551,21 @@ void DynoPlayer::input()
 		jumpPressed = false;
 	}
 
+	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !shootBtnPressed)
+	{
+	
+			firstShot = true;
 
+	}
 	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || shootBtnPressed)
 	{
 		shootPressed = true;
 		if (liveBullets.size() < 5)
 		{
-			if (shootElapsed > shootDelay)
+			if (shootElapsed > shootDelay || firstShot == true)
 			{
+				firstShot = false;
 				shootElapsed = 0.f;
 				shoot(ProjectileType::BusterBullet, true);
 			}
@@ -567,6 +574,11 @@ void DynoPlayer::input()
 	else
 	{
 		shootPressed = false;
+		if (shootElapsed > shootDelay)
+		{
+			shootElapsed = 0.f;
+			firstShot = true;
+		}
 	}
 }
 
@@ -689,63 +701,20 @@ void DynoPlayer::update()
 
 
 }
-void DynoPlayer::handleSpriteCollisions(std::vector<std::shared_ptr<BaseSprite>>& sprites)
+void DynoPlayer::handleSpriteCollisions(std::vector<std::shared_ptr<DynoEnemy> >& sprites)
 {
 	// first check bullets	
 	for (auto& b : liveBullets)
 	{
 		for (auto& spr : sprites)
 		{
-			if (spr.get() == this) { continue; }
+
 			if (phys::RectVsRect(b->getRec(), spr->getRec()))
 			{
+				spr->hit(1);
+				spr->wasHit = true;
 				b->marked = true;
 			}
-		}
-	}
-
-	// check collisions
-	olc::vf2d cp;
-	olc::vi2d cn;
-	float ct;
-
-	std::vector<std::pair<int, float> > z;
-	for (int i = 0; i < sprites.size(); i++)
-	{
-		if (sprites[i].get() == dynamic_cast<BaseSprite*>(this)) { continue; }
-
-		rec target;
-		target.set({ sprites[i]->getRec().pos.x, sprites[i]->getRec().pos.y }, { 50.f,50.f }, Cfg::Textures::Tileset1, { 9, 3 }, { 50,50 }, { 0, 0 }, { 0.f,0.f });
-		if (phys::DynamicRectVsRect(getRec(), target, cp, cn, ct, gTime))
-		{
-			if (cn.y == -1 && getRec().vel.y > 20.f && currentAnim != "running" && currentAnim != "peakingJump" && currentAnim != "jumping" && currentAnim != "idle" && currentAnim != "jumpPeakShooting"
-				&& currentAnim != "runningAndShooting")
-			{
-				dispatch(fsmHandler->getMachine(), evt_Landed{});
-			    currentAnim = fsmHandler->getMachine().getCurrentState();
-				resetAnim();
-				playerGrounded = true;
-			}
-			z.push_back({ i, ct });
-
-		}
-	}
-
-	// sort
-	std::sort(z.begin(), z.end(), [](const std::pair<int, float>& a, const std::pair<int, float>& b)
-		{
-			return a.second < b.second;
-		});
-
-
-	// resolve in correct order
-	for (auto j : z)
-	{
-		rec target;
-		target.set({ sprites[j.first]->getRec().pos.x, sprites[j.first]->getRec().pos.y }, { 50.f,50.f }, Cfg::Textures::Tileset1, { 9, 3 }, { 50,50 }, { 0, 0 }, { 0.f,0.f });
-		if (phys::DynamicRectVsRect(getRec(), target, cp, cn, ct, gTime))
-		{
-			getRec().vel += cn * olc::vf2d{ std::abs(getRec().vel.x), std::abs(getRec().vel.y) } *(1 - ct);
 		}
 	}
 
@@ -873,17 +842,17 @@ void DynoPlayer::shoot(ProjectileType type_, bool friendly_)
 	{
 		case ProjectileType::BusterBullet:
 		{
-			if (currentAnim == "shooting")
+			if (currentAnim == "shooting" || currentAnim == "brandishing" || currentAnim == "idle")
 				liveBullets.push_back(std::move(std::make_unique<BusterProj>(olc::vf2d{ (facingLeft) ? p.x - getRec().texPosOffset.x + 23 : p.x - getRec().texPosOffset.x + 83 , p.y - getRec().texPosOffset.y + 57 }, facingLeft)));  //{ Cfg::Textures::BusterBullet, "assets/data/aabbs/busterBullet.aabb", (this->isFacingLeft()) ? olc::vf2d{bbPos.x - getBBOffset().x + 28, bbPos.y - getBBOffset().y + 67} : olc::vf2d{bbPos.x - getBBOffset().x + 99, bbPos.y - getBBOffset().y + 67} , (this->isFacingLeft()) ? -500.f : 500.f, TravelDir::Horizontal, type_, 1 });
-			else if (currentAnim == "jumpingAndShooting")
+			else if (currentAnim == "jumpingAndShooting" || currentAnim == "jumping")
 				liveBullets.push_back(std::move(std::make_unique<BusterProj>(olc::vf2d{ (facingLeft) ? p.x - getRec().texPosOffset.x + 20 : p.x - getRec().texPosOffset.x + 87 , p.y - getRec().texPosOffset.y + 53 }, facingLeft)));  //{ Cfg::Textures::BusterBullet, "assets/data/aabbs/busterBullet.aabb", (this->isFacingLeft()) ? olc::vf2d{bbPos.x - getBBOffset().x + 28, bbPos.y - getBBOffset().y + 67} : olc::vf2d{bbPos.x - getBBOffset().x + 99, bbPos.y - getBBOffset().y + 67} , (this->isFacingLeft()) ? -500.f : 500.f, TravelDir::Horizontal, type_, 1 });
-			else if (currentAnim == "fallingAndShooting")
+			else if (currentAnim == "fallingAndShooting" || currentAnim == "falling")
 				liveBullets.push_back(std::move(std::make_unique<BusterProj>(olc::vf2d{ (facingLeft) ? p.x - getRec().texPosOffset.x + 20 : p.x - getRec().texPosOffset.x + 87 , p.y - getRec().texPosOffset.y + 53 }, facingLeft)));  //{ Cfg::Textures::BusterBullet, "assets/data/aabbs/busterBullet.aabb", (this->isFacingLeft()) ? olc::vf2d{bbPos.x - getBBOffset().x + 28, bbPos.y - getBBOffset().y + 67} : olc::vf2d{bbPos.x - getBBOffset().x + 99, bbPos.y - getBBOffset().y + 67} , (this->isFacingLeft()) ? -500.f : 500.f, TravelDir::Horizontal, type_, 1 });
-			else if (currentAnim == "landingAndShooting")
+			else if (currentAnim == "landingAndShooting" || currentAnim == "landing")
 				liveBullets.push_back(std::move(std::make_unique<BusterProj>(olc::vf2d{ (facingLeft) ? p.x - getRec().texPosOffset.x + 23 : p.x - getRec().texPosOffset.x + 83 , p.y - getRec().texPosOffset.y + 57 }, facingLeft)));  //{ Cfg::Textures::BusterBullet, "assets/data/aabbs/busterBullet.aabb", (this->isFacingLeft()) ? olc::vf2d{bbPos.x - getBBOffset().x + 28, bbPos.y - getBBOffset().y + 67} : olc::vf2d{bbPos.x - getBBOffset().x + 99, bbPos.y - getBBOffset().y + 67} , (this->isFacingLeft()) ? -500.f : 500.f, TravelDir::Horizontal, type_, 1 });
-			else if (currentAnim == "runningAndShooting")
+			else if (currentAnim == "runningAndShooting" || currentAnim == "running")
 				liveBullets.push_back(std::move(std::make_unique<BusterProj>(olc::vf2d{ (facingLeft) ? p.x - getRec().texPosOffset.x + 5 : p.x - getRec().texPosOffset.x + 95 , p.y - getRec().texPosOffset.y + 53 }, facingLeft)));  //{ Cfg::Textures::BusterBullet, "assets/data/aabbs/busterBullet.aabb", (this->isFacingLeft()) ? olc::vf2d{bbPos.x - getBBOffset().x + 28, bbPos.y - getBBOffset().y + 67} : olc::vf2d{bbPos.x - getBBOffset().x + 99, bbPos.y - getBBOffset().y + 67} , (this->isFacingLeft()) ? -500.f : 500.f, TravelDir::Horizontal, type_, 1 });
-			else if (currentAnim == "jumpPeakShooting")
+			else if (currentAnim == "jumpPeakShooting" || currentAnim == "peakingJump")
 				liveBullets.push_back(std::move(std::make_unique<BusterProj>(olc::vf2d{ (facingLeft) ? p.x - getRec().texPosOffset.x + 20 : p.x - getRec().texPosOffset.x + 87 , p.y - getRec().texPosOffset.y + 53 }, facingLeft)));  //{ Cfg::Textures::BusterBullet, "assets/data/aabbs/busterBullet.aabb", (this->isFacingLeft()) ? olc::vf2d{bbPos.x - getBBOffset().x + 28, bbPos.y - getBBOffset().y + 67} : olc::vf2d{bbPos.x - getBBOffset().x + 99, bbPos.y - getBBOffset().y + 67} , (this->isFacingLeft()) ? -500.f : 500.f, TravelDir::Horizontal, type_, 1 });
 		}
 			break;

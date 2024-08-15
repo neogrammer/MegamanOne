@@ -76,6 +76,13 @@ void Game::render()
 	flypad1.render();
 	flypad2.render();
 	flypad3.render();
+	if (dynamic_cast<DynoEnemy*>(dTurtle.get()) != nullptr)
+	{
+		if (dynamic_cast<DynoEnemy*>(dTurtle.get())->alive)
+		{
+			dTurtle->render();
+		}
+	}
 
 	dPlayer->render();
 	
@@ -95,7 +102,7 @@ void Game::render()
 
 void Game::input()
 {
-
+	dTurtle->input();
 	dPlayer->input();
 
 
@@ -158,15 +165,41 @@ void Game::update()
 	flypad1.update();
 	flypad2.update();
 	flypad3.update();
-
+	dTurtle->update();
 	dPlayer->update();
 	dPlayer->handleSpriteCollisions(tmap->getSolidTiles());
+
+	//std::vector<BaseSprite*> sprites = {};
+	//sprites.clear();
+	
+	//dynamic_pointer_cast<DynoEnemy>(
 
 	std::vector<DynoPlat*> plats = {};
 	plats.push_back(&flypad1);
 	plats.push_back(&flypad2);
 	plats.push_back(&flypad3);
 	dPlayer->handleSpriteCollisions(plats);
+	dPlayer->handleSpriteCollisions(enemies);
+	
+	std::vector<std::shared_ptr<DynoEnemy> >::iterator iter;
+	iter = enemies.begin();
+	int count = 0;
+	int it = -1;
+	for (auto& e : enemies)
+	{
+		if (!e->alive)
+		{
+			it = count;
+		}
+		count++;
+	}
+	if (it != -1)
+	{
+		iter = enemies.begin() + it;
+		enemies.erase(iter);
+	}
+
+
 	// platforms let the player ride them otherwise move as normal
 	if (dPlayer->standingOnAPlatform == true)
 	{
@@ -188,11 +221,17 @@ void Game::update()
 Game::Game()
 	: objs{}
 	, dPlayer{}
-	, sprites{}
+	//, sprites{}
 	, flypad1{ {400.f,600.f}, {400.f, 200.f} , 200.f}
 	, flypad2{ {200.f,860.f}, {200.f, 560.f} , 150.f }
 	, flypad3{ {300.f,860.f}, {630.f, 860.f} , 300.f }
+	, dTurtle{ std::make_shared<DCannonTurtle>(olc::vf2d{ 1300.f, 850.f - 68.f }) }
+	, enemies{}
 {
+
+	enemies.clear();
+	enemies.shrink_to_fit();
+	enemies.push_back(dTurtle);
 	std::cout << "Loading..." << std::endl;
 
 	tmap = new Tilemap{ Cfg::Textures::Tileset1, "tileset1", "tilemap1", 1 };
@@ -203,10 +242,10 @@ Game::Game()
 	createWorld();
 
 
-	sprites.clear();
-	sprites.reserve(31);
+	/*sprites.clear();
+	sprites.reserve(31);*/
 	dPlayer = std::make_shared<DynoPlayer>(Cfg::Textures::PlayerAtlas, olc::vi2d{ 0,1 }, olc::vf2d{ 400.f, 400.f });
-	sprites.push_back(dPlayer);
+	//sprites.push_back(dPlayer);
 
 
 	dispatch(dPlayer->fsmHandler->getMachine(), evt_Fell{});
@@ -215,21 +254,21 @@ Game::Game()
 	gTime = 0.f;
 
 
-	for (int i = 1; i < 20; i++)
-	{
-		std::shared_ptr<StatTile> sTile = std::make_shared<StatTile>(Cfg::Textures::Tileset1, olc::vi2d{ 9,3 }, olc::vf2d{ ((float)i * 50.f) + 200.f, 900.f - 200.f });
-		sprites.push_back(sTile);
-	}
-	for (int i = 20; i < 25; i++)
-	{
-		std::shared_ptr<StatTile> sTile = std::make_shared<StatTile>(Cfg::Textures::Tileset1, olc::vi2d{ 9,3 }, olc::vf2d{ 200.f + 50.f,  900.f - 200.f - (((i - 20) + 1) * 50.f) });
-		sprites.push_back(sTile);
-	}
-	for (int i = 25; i < 30; i++)
-	{
-		std::shared_ptr<StatTile> sTile = std::make_shared<StatTile>(Cfg::Textures::Tileset1, olc::vi2d{ 9,3 }, olc::vf2d{ 200.f + (19.f * 50.f),  900.f - 200.f - (((i - 25) + 1) * 50.f) });
-		sprites.push_back(sTile);
-	}
+	//for (int i = 1; i < 20; i++)
+	//{
+	//	std::shared_ptr<StatTile> sTile = std::make_shared<StatTile>(Cfg::Textures::Tileset1, olc::vi2d{ 9,3 }, olc::vf2d{ ((float)i * 50.f) + 200.f, 900.f - 200.f });
+	//	sprites.push_back(sTile);
+	//}
+	//for (int i = 20; i < 25; i++)
+	//{
+	//	std::shared_ptr<StatTile> sTile = std::make_shared<StatTile>(Cfg::Textures::Tileset1, olc::vi2d{ 9,3 }, olc::vf2d{ 200.f + 50.f,  900.f - 200.f - (((i - 20) + 1) * 50.f) });
+	//	sprites.push_back(sTile);
+	//}
+	//for (int i = 25; i < 30; i++)
+	//{
+	//	std::shared_ptr<StatTile> sTile = std::make_shared<StatTile>(Cfg::Textures::Tileset1, olc::vi2d{ 9,3 }, olc::vf2d{ 200.f + (19.f * 50.f),  900.f - 200.f - (((i - 25) + 1) * 50.f) });
+	//	sprites.push_back(sTile);
+	//}
 
 	std::cout << "Load Complete" << std::endl;
 

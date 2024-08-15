@@ -15,6 +15,7 @@
 #include <map>
 class SProj;
 class DynoPlat;
+class DynoEnemy;
 class DynoPlayer : public DynoSprite, public ActionTarget<int>
 {
 	Cfg::Textures texCopy;
@@ -66,6 +67,7 @@ public:
 	DynoPlat* platOn{ nullptr };
 	float shootElapsed{ 0.f };
 	float shootDelay{ 0.15f };
+	bool firstShot{ true };
 
 	//std::vector<Projectile> projectiles{};
 	/*int numLiveBullets{ 0 };
@@ -92,7 +94,7 @@ public:
 	void handleSpriteCollisions(std::vector<StatTile>& tiles);
 	void handleSpriteCollisions(std::vector<DynoPlat*>& plats);
 
-	void handleSpriteCollisions(std::vector<std::shared_ptr<BaseSprite> >& sprites);
+	void handleSpriteCollisions(std::vector<std::shared_ptr<DynoEnemy> >& enemies);
    inline std::list<std::unique_ptr<SProj> >& getProjectiles() { return liveBullets; }
   	void shoot(ProjectileType type_, bool friendly_);
 };
