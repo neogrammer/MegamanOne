@@ -69,7 +69,7 @@ void DynoPlayer::setPreBuild(Cfg::Textures texCopy_, olc::vi2d texRecPosCopy_)
 void DynoPlayer::build(olc::vf2d pos)
 {
 	pos.x += 300.f;
-	pos.y = 600.f;
+
 
 	auto& r = this->getRec();
 	r.set(pos, { 80.f, 83.f }, texCopy, texRecPosCopy, { 130,160 }, { 22,45 }, {0.f,0.f});
@@ -890,7 +890,7 @@ void DynoPlayer::handleSpriteCollisions(std::vector<DynoPlat*>& plats)
 {
 
 
-	if ((getRec().vel.x < 0.f || getRec().vel.x > 0.f) && !standingOnAPlatform && playerGrounded)
+	if ((getRec().vel.x < 0.f || getRec().vel.x > 0.f || getRec().vel.y + 0.f) && !standingOnAPlatform && playerGrounded)
 	{
 		auto result = isTileBelow(plats);
 		if (result == nullptr)
