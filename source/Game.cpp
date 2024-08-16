@@ -11,6 +11,7 @@ void Game::createWorld()
 {
 	
 	wndw::CreateWindow("MegamanOne", 1600U, 900U);
+	gWnd.setPosition({ 120, 20 });
 
 }
 

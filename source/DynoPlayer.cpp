@@ -126,6 +126,39 @@ rec& DynoPlayer::getRec()
 
 
 
+bool DynoPlayer::isTileBelow(std::vector<StatTile>& tiles)
+{
+	olc::vf2d pt1{};
+	olc::vf2d pt2{};
+	if (facingLeft)
+	{
+		// check left side and 3/4 to the right at the bottom + 10 pixels for a collision
+		auto& r = getRec();
+		pt1 = { r.pos.x, r.pos.y + r.size.y + 10.f };
+		pt2 = { r.pos.x + (3.f / 4.f) * r.size.x, r.pos.y + r.size.y + 10.f };
+	
+	}
+	else
+	{
+		// check 1/4 and right side instead
+		auto& r = getRec();
+		pt1 = { r.pos.x, r.pos.y + r.size.y + 10.f };
+		pt2 = { r.pos.x + (3.f / 4.f) * r.size.x, r.pos.y + r.size.y + 10.f };
+	}
+	for (auto& t : tiles)
+	{
+		auto& tileR = t.getRec();
+		if (tileR.pos.x + tileR.size.x  < pt1.x || tileR.pos.x > pt2.x)
+			continue;
+		if (phys::PointVsRect(pt1, tileR))
+		{
+			return true;
+		}
+	}
+	return false;
+	
+}
+
 void DynoPlayer::loadAnimations()
 {
 
@@ -464,6 +497,7 @@ void DynoPlayer::input()
 		}
 
 		getRec().vel.x += 300.f;
+		
 		if (!facingOtherWay)
 		{
 
@@ -557,6 +591,7 @@ void DynoPlayer::input()
 
 			if (standingOnAPlatform)
 			{
+				playerGrounded = true;
 				standingOnAPlatform = false;
 				getRec().pos.y += -1208.81f * gTime;
 			}
@@ -739,6 +774,28 @@ void DynoPlayer::handleSpriteCollisions(std::vector<std::shared_ptr<DynoEnemy> >
 
 void DynoPlayer::handleSpriteCollisions(std::vector<StatTile>& tiles)
 {
+	if (rightBtnPressed || leftBtnPressed && (currentAnim == "running" || currentAnim == "runningAndShooting" || currentAnim == "landingAndShooting" ))
+	{
+		if (!isTileBelow(tiles))
+		{
+			dispatch(fsmHandler->getMachine(), evt_Fell{});
+			currentAnim = fsmHandler->getMachine().getCurrentState();
+			resetAnim();
+			playerGrounded = false;
+
+			
+			
+
+			if (standingOnAPlatform)
+			{
+				playerGrounded = true;
+				standingOnAPlatform = false;
+				
+			}
+			getRec().vel.y = -1208.81f;
+		}
+	}
+
 	// first check bullets	
 	for (auto& b : liveBullets)
 	{
@@ -795,9 +852,70 @@ void DynoPlayer::handleSpriteCollisions(std::vector<StatTile>& tiles)
 	}
 
 }
+DynoPlat* DynoPlayer::isTileBelow(std::vector<DynoPlat*>& plats)
+{
 
+	olc::vf2d pt1{};
+	olc::vf2d pt2{};
+	if (facingLeft)
+	{
+		// check left side and 3/4 to the right at the bottom + 10 pixels for a collision
+		auto& r = getRec();
+		pt1 = { r.pos.x, r.pos.y + r.size.y + 10.f };
+		pt2 = { r.pos.x + (3.f / 4.f) * r.size.x, r.pos.y + r.size.y + 10.f };
+
+	}
+	else
+	{
+		// check 1/4 and right side instead
+		auto& r = getRec();
+		pt1 = { r.pos.x, r.pos.y + r.size.y + 10.f };
+		pt2 = { r.pos.x + (3.f / 4.f) * r.size.x, r.pos.y + r.size.y + 10.f };
+	}
+	for (auto& t : plats)
+	{
+		auto& tileR = t->getRec();
+		if (tileR.pos.x + tileR.size.x  < pt1.x || tileR.pos.x > pt2.x)
+			continue;
+		if (phys::PointVsRect(pt1, tileR))
+		{
+			return t;
+		}
+	}
+	return nullptr;
+
+
+}
 void DynoPlayer::handleSpriteCollisions(std::vector<DynoPlat*>& plats)
 {
+
+
+	if ((getRec().vel.x < 0.f || getRec().vel.x > 0.f) && !standingOnAPlatform && playerGrounded)
+	{
+		auto result = isTileBelow(plats);
+		if (result == nullptr)
+		{
+			/*dispatch(fsmHandler->getMachine(), evt_Fell{});
+			currentAnim = fsmHandler->getMachine().getCurrentState();
+			resetAnim();*/
+			
+			standingOnAPlatform = false;
+			
+
+		}
+		else
+		{
+				dispatch(fsmHandler->getMachine(), evt_Fell{}, evt_Landed{});
+				currentAnim = fsmHandler->getMachine().getCurrentState();
+				resetAnim();
+				playerGrounded = true;
+				standingOnAPlatform = true;
+				platVel = result->getRec().vel;
+				platOn = result;
+		}
+	}
+
+
 	/*standingOnAPlatform = false;
 	platOn = nullptr;
 	platVel = { 0.f,0.f };*/

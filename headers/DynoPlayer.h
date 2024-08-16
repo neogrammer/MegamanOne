@@ -83,6 +83,8 @@ public:
 	float shootWaitDelay{ 0.15f };
 	bool canShoot{ true };
 	bool shootAnimHolding{ false };*/
+	bool isTileBelow(std::vector<StatTile>& tiles);
+	DynoPlat* isTileBelow(std::vector<DynoPlat*>& plats);
 
 	void loadAnimations();
 	bool hasBBoxesSet(const std::string& animname, bool facingleft);
