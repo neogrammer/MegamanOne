@@ -200,12 +200,22 @@ void Game::update()
 		enemies.erase(iter);
 	}
 
+	if (dPlayer->standingOnAPlatform && (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::D)))
+	{
+		if (!dPlayer->isTileBelow(plats))
+		{
+			dPlayer->standingOnAPlatform = false;
+		}
+	}
 
 	// platforms let the player ride them otherwise move as normal
 	if (dPlayer->standingOnAPlatform == true)
 	{
-		dPlayer->platVel = dPlayer->platOn->getRec().vel;
-		dPlayer->getRec().vel.x += dPlayer->platVel.x;
+
+		dPlayer->platVel.x = dPlayer->platOn->getRec().pos.x - dPlayer->platOn->getRec().prevPos.x; //dPlayer->platOn->getRec().vel;
+		dPlayer->platVel.y = dPlayer->platOn->getRec().pos.y - dPlayer->platOn->getRec().prevPos.y; //dPlayer->platOn->getRec().vel;
+		dPlayer->getRec().vel.x += dPlayer->platOn->getRec().vel.x;
+		//dPlayer->getRec().vel.x += dPlayer->platVel.x;
 		dPlayer->getRec().vel.y = 0.f;
 		dPlayer->getRec().pos.x += dPlayer->getRec().vel.x * gTime;
 		dPlayer->getRec().pos.y = dPlayer->platOn->getRec().pos.y - dPlayer->getRec().size.y - 1.f;
@@ -214,6 +224,8 @@ void Game::update()
 	{
 		dPlayer->getRec().pos += dPlayer->getRec().vel * gTime;
 	}
+
+
 
 	bgOffset += 10.f * gTime;
 }
@@ -224,7 +236,7 @@ Game::Game()
 	, dPlayer{}
 	//, sprites{}
 	, flypad1{ {400.f,600.f}, {400.f, 200.f} , 200.f}
-	, flypad2{ {200.f,860.f}, {200.f, 560.f} , 150.f }
+	, flypad2{ {200.f,860.f}, {200.f, 560.f} , 100.f }
 	, flypad3{ {300.f,860.f}, {630.f, 860.f} , 300.f }
 	, dTurtle{ std::make_shared<DCannonTurtle>(olc::vf2d{ 1300.f, 850.f - 68.f }, 2) }
 	, enemies{}

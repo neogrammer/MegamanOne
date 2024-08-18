@@ -3,6 +3,7 @@
 
 rec::rec()
 	: pos{ 0.f,0.f }
+	, prevPos{0.f,0.f}
 	, size{ 0.f,0.f }
 	, texType{ Cfg::Textures::Count }
 	, texRectPos{ 0,0 }
@@ -14,6 +15,7 @@ rec::rec()
 void rec::set(olc::vf2d pos_, olc::vf2d size_, Cfg::Textures texType_, olc::vi2d texRectTilePos_, olc::vi2d texRectSize_, olc::vi2d texOffset_ , olc::vf2d vel_ )
 {
 	pos = pos_;
+	prevPos = pos_;
 	size = size_;
 	texType = texType_;
 	texRectPos = { texRectTilePos_.x * texRectSize_.x, texRectTilePos_.y * texRectSize_.y };
@@ -44,5 +46,6 @@ void rec::applyExternalForces()
 
 void rec::tickPos()
 {
+	prevPos = pos;
 	pos += vel * gTime;
 };

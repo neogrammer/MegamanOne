@@ -6,6 +6,7 @@
 struct rec
 {
 	olc::vf2d pos;
+	olc::vf2d prevPos;
 	olc::vf2d size;
 	Cfg::Textures  texType;
 	olc::vi2d texRectPos;
