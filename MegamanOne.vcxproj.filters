@@ -109,6 +109,9 @@
     <Filter Include="assets\textures\enemies">
       <UniqueIdentifier>{e2dee435-944e-409c-ae3f-daada152b955}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameStates">
+      <UniqueIdentifier>{541b5b5a-af5f-40d8-80c9-69057c356af5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -195,6 +198,24 @@
     <ClInclude Include="headers\DCannonTurtle.h">
       <Filter>Entities\dyno_sprites\enemies</Filter>
     </ClInclude>
+    <ClInclude Include="headers\GameState.h">
+      <Filter>GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\GameStateMgr.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\PausedState.h">
+      <Filter>GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\PlayState.h">
+      <Filter>GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\SplashState.h">
+      <Filter>GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\TitleState.h">
+      <Filter>GameStates</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -262,6 +283,24 @@
     </ClCompile>
     <ClCompile Include="source\DCannonTurtle.cpp">
       <Filter>Entities\dyno_sprites\enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GameState.cpp">
+      <Filter>GameStates</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GameStateMgr.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="source\PausedState.cpp">
+      <Filter>GameStates</Filter>
+    </ClCompile>
+    <ClCompile Include="source\PlayState.cpp">
+      <Filter>GameStates</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SplashState..cpp">
+      <Filter>GameStates</Filter>
+    </ClCompile>
+    <ClCompile Include="source\TitleState.cpp">
+      <Filter>GameStates</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -338,6 +377,12 @@
     </Image>
     <Image Include="assets\textures\enemies\cannonTurtleSheet.png">
       <Filter>assets\textures\enemies</Filter>
+    </Image>
+    <Image Include="assets\textures\backgrounds\logo.png">
+      <Filter>assets\textures\backgrounds</Filter>
+    </Image>
+    <Image Include="assets\textures\backgrounds\title.png">
+      <Filter>assets\textures\backgrounds</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>

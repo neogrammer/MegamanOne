@@ -30,6 +30,11 @@
     <ClInclude Include="headers\DFlyPad.h" />
     <ClInclude Include="headers\DynoEnemy.h" />
     <ClInclude Include="headers\DynoPlat.h" />
+    <ClInclude Include="headers\GameState.h" />
+    <ClInclude Include="headers\GameStateMgr.h" />
+    <ClInclude Include="headers\PausedState.h" />
+    <ClInclude Include="headers\PlayState.h" />
+    <ClInclude Include="headers\SplashState.h" />
     <ClInclude Include="headers\SProj.h" />
     <ClInclude Include="headers\duck_fold.h" />
     <ClInclude Include="headers\DynoSprite.h" />
@@ -46,6 +51,7 @@
     <ClInclude Include="headers\Tilemap.h" />
     <ClInclude Include="headers\Tileset.h" />
     <ClInclude Include="headers\StatTile.h" />
+    <ClInclude Include="headers\TitleState.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +68,11 @@
     <ClCompile Include="source\DFlyPad.cpp" />
     <ClCompile Include="source\DynoEnemy.cpp" />
     <ClCompile Include="source\DynoPlat.cpp" />
+    <ClCompile Include="source\GameState.cpp" />
+    <ClCompile Include="source\GameStateMgr.cpp" />
+    <ClCompile Include="source\PausedState.cpp" />
+    <ClCompile Include="source\PlayState.cpp" />
+    <ClCompile Include="source\SplashState..cpp" />
     <ClCompile Include="source\SProj.cpp" />
     <ClCompile Include="source\DynoSprite.cpp" />
     <ClCompile Include="source\Game.cpp" />
@@ -74,6 +85,7 @@
     <ClCompile Include="source\Tilemap.cpp" />
     <ClCompile Include="source\Tileset.cpp" />
     <ClCompile Include="source\StatTile.cpp" />
+    <ClCompile Include="source\TitleState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\data\aabbs\busterBullet.aabb" />
@@ -95,7 +107,9 @@
   <ItemGroup>
     <Image Include="assets\textures\actors\enemies\snailAtlas.png" />
     <Image Include="assets\textures\actors\player\player_atlas1.png" />
+    <Image Include="assets\textures\backgrounds\logo.png" />
     <Image Include="assets\textures\backgrounds\space\bgSpace.png" />
+    <Image Include="assets\textures\backgrounds\title.png" />
     <Image Include="assets\textures\enemies\cannonTurtleSheet.png" />
     <Image Include="assets\textures\platforms\fly_pad67x40.png" />
     <Image Include="assets\textures\projectiles\busterBullet.png" />
