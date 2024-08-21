@@ -14,12 +14,6 @@ void PlayState::createWorld()
 
 void PlayState::drawBG()
 {
-<<<<<<< Updated upstream
-=======
-
-	
-
->>>>>>> Stashed changes
 	gWnd.setView(gWnd.getDefaultView());
 	sf::Sprite bg{};
 	bg.setTexture(Cfg::textures.get((int)Cfg::Textures::BGSpace));
