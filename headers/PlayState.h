@@ -42,6 +42,14 @@ public:
 	virtual void render();
 	void createWorld();
 
+	void drawBG();
+	void setViewToPlayer();
+	void drawPlatforms();
+	void drawActors();
+	void updatePlatforms();
+	void updateEnemies();
+	void updatePlayer();
+	void updateProjectiles();
 
 };
 

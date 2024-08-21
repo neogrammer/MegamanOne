@@ -12,11 +12,8 @@ void PlayState::createWorld()
 
 }
 
-
-void PlayState::render()
+void PlayState::drawBG()
 {
-	
-
 	gWnd.setView(gWnd.getDefaultView());
 	sf::Sprite bg{};
 	bg.setTexture(Cfg::textures.get((int)Cfg::Textures::BGSpace));
@@ -45,7 +42,10 @@ void PlayState::render()
 			}
 		}
 	}
-	gWnd.setView(gameView);
+}
+
+void PlayState::setViewToPlayer()
+{
 	if (!dPlayer->facingLeft)
 	{
 		if (gWnd.mapCoordsToPixel({ dPlayer->getRec().pos.x + dPlayer->getRec().size.x / 2.f , dPlayer->getRec().pos.y }).x > 800)
@@ -64,18 +64,17 @@ void PlayState::render()
 		}
 	}
 
-	tmap->render();
+}
 
-	//when facing right tiles to the left should be behind megamans back foot
-	/*for (auto& o : sprites)
-	{
-		if (&o->getRec() == &sprites[0]->getRec()) continue;
-		gWnd.draw(*phys::spr(o->getRec()));
-	}*/
-
+void PlayState::drawPlatforms()
+{
 	flypad1.render();
 	flypad2.render();
 	flypad3.render();
+}
+
+void PlayState::drawActors()
+{
 	if (dynamic_cast<DynoEnemy*>(dTurtle.get()) != nullptr)
 	{
 		if (dynamic_cast<DynoEnemy*>(dTurtle.get())->alive)
@@ -85,52 +84,18 @@ void PlayState::render()
 	}
 
 	dPlayer->render();
-
-
-
-	//tmap->render();
-	//stage.render();
-	//for (auto& p : aPlayer.getProjectiles())
-	//{
-	//	if (p.isMarkedForDeletion()) continue;
-	//	//p.render();
-	//}
-	//aPlayer.render();
-
-
 }
 
-void PlayState::input()
+void PlayState::updatePlatforms()
 {
-	
-	dTurtle->input();
-	dPlayer->input();
-}
-
-PlayState::~PlayState()
-{
-	delete tmap;
-}
-
-
-void PlayState::update()
-{
-
-
-
 	flypad1.update();
 	flypad2.update();
 	flypad3.update();
-	dTurtle->update();
-	dPlayer->update();
-	dPlayer->handleSpriteCollisions(tmap->getSolidTiles());
+}
 
-	std::vector<DynoPlat*> plats = {};
-	plats.push_back(&flypad1);
-	plats.push_back(&flypad2);
-	plats.push_back(&flypad3);
-	dPlayer->handleSpriteCollisions(plats);
-	dPlayer->handleSpriteCollisions(enemies);
+void PlayState::updateEnemies()
+{
+	dTurtle->update();
 
 	std::vector<std::shared_ptr<DynoEnemy> >::iterator iter;
 	iter = enemies.begin();
@@ -149,6 +114,20 @@ void PlayState::update()
 		iter = enemies.begin() + it;
 		enemies.erase(iter);
 	}
+
+}
+
+void PlayState::updatePlayer()
+{
+	dPlayer->update();
+	dPlayer->handleSpriteCollisions(tmap->getSolidTiles());
+
+	std::vector<DynoPlat*> plats = {};
+	plats.push_back(&flypad1);
+	plats.push_back(&flypad2);
+	plats.push_back(&flypad3);
+	dPlayer->handleSpriteCollisions(plats);
+	dPlayer->handleSpriteCollisions(enemies);
 
 	if (dPlayer->standingOnAPlatform && (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::D)))
 	{
@@ -173,6 +152,41 @@ void PlayState::update()
 	{
 		dPlayer->getRec().pos += dPlayer->getRec().vel * gTime;
 	}
+}
+
+void PlayState::updateProjectiles()
+{
+}
+
+
+void PlayState::render()
+{
+	drawBG();
+	gWnd.setView(gameView);
+	tmap->render();
+	drawPlatforms();
+	drawActors();
+}
+
+void PlayState::input()
+{
+	
+	dTurtle->input();
+	dPlayer->input();
+}
+
+PlayState::~PlayState()
+{
+	delete tmap;
+}
+
+
+void PlayState::update()
+{
+	updatePlatforms();
+	updateEnemies();
+	updatePlayer();
+	updateProjectiles();
 	bgOffset += 10.f * gTime;
 }
 PlayState::PlayState(GameStateMgr* mgr_)

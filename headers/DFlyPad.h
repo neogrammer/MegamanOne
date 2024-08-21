@@ -10,6 +10,8 @@ class DFlyPad : public DynoPlat
 	olc::vf2d pathEnd{ 0.f,0.f };
 	bool toEnd{ true };
 	float speed{ 0.f };
+	float currentT{ 0.f };
+	float timeToComplete{ 3.0f };
 
 	Animation anim{};
 public:

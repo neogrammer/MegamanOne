@@ -82,18 +82,32 @@ void DFlyPad::render()
 void DFlyPad::update()
 {
 	animElapsed += gTime;
+	currentT += gTime;
 	if (animElapsed >= anim.data.animDelay)
 	{
 		animElapsed = 0.f;
 		anim.animate();
 	}
 
+	if (currentT >= timeToComplete)
+	{ 
+		toEnd = !toEnd;
+		currentT = 0.f;
+	}
+
+	float interpRatio = currentT / timeToComplete;
+
 	if (toEnd)
 	{
-		auto vectorToEnd = pathEnd - pathStart;
-		auto vN = vectorToEnd.norm();
-		getRec().vel.x = vN.x * speed;
-		getRec().vel.y = vN.y * speed;
+		olc::vf2d dir = pathEnd - pathStart;
+		olc::vf2d nextPos = pathStart + (interpRatio * dir);
+
+
+		//auto vectorToEnd = pathEnd - pathStart;
+		//auto vN = vectorToEnd.norm();
+		getRec().vel = nextPos - getRec().pos;
+
+		/*getRec().vel.y = vN.y * speed;
 
 		if (pathEnd.x > pathStart.x && vN.y == 0)
 		{
@@ -122,19 +136,22 @@ void DFlyPad::update()
 			{
 				toEnd = false;
 			}
-		}
+		}*/
 
 		
 	}
 	else
 	{
-		auto vectorToStart = pathStart - pathEnd;
-		auto vN = vectorToStart.norm();
-		getRec().vel.x = vN.x * speed;
-		getRec().vel.y = vN.y * speed;
+
+		olc::vf2d dir = pathStart - pathEnd;
+		olc::vf2d nextPos = pathStart + (interpRatio * dir);
+
+		//auto vectorToStart = pathStart - pathEnd;
+		//auto vN = vectorToStart.norm();
+		getRec().vel = nextPos - getRec().pos;
 
 
-		if (pathStart.x > pathEnd.x && vN.y == 0)
+	/*	if (pathStart.x > pathEnd.x && vN.y == 0)
 		{
 			if (getRec().pos.x >= pathStart.x)
 			{
@@ -161,7 +178,7 @@ void DFlyPad::update()
 			{
 				toEnd = true;
 			}
-		}
+		}*/
 	}
 
 	getRec().pos += getRec().vel * gTime;
