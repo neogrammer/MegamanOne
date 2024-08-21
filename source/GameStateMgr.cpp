@@ -17,7 +17,38 @@ GameStateMgr::GameStateMgr()
 
 GameStateMgr::~GameStateMgr()
 {
+	while (!stateStack.empty())
+	{
+		stateStack.pop();
+	}
+	stateMap.clear();
+}
 
+void GameStateMgr::renderUnder()
+{
+	std::stack<GameState*> tmpStack = {};
+	while (!stateStack.empty())
+	{
+		tmpStack.push(stateStack.top());
+		stateStack.pop();
+
+	}
+
+	// statestack is empty, lets put the states back, and render each one  as we do so as to render the under ones first
+	while (!tmpStack.empty())
+	{
+		stateStack.push(tmpStack.top());
+		tmpStack.pop();
+		stateStack.top()->render();
+	}
+
+	// tmpStack is now empty again and all states on the stack have been rendered in order
+	
+}
+
+bool GameStateMgr::hasUnder()
+{
+	return (stateStack.size() > 1);
 }
 
 void GameStateMgr::input()
@@ -36,10 +67,24 @@ void GameStateMgr::update()
 	return;
 }
 
+void GameStateMgr::popTop()
+{
+	stateStack.pop();
+}
+
 void GameStateMgr::render()
 {
 	if (!needsToSwitchState)
-		stateStack.top()->render();
+	{
+		if (hasUnder())
+		{
+			renderUnder();
+		}
+		else
+		{
+			stateStack.top()->render();
+		}
+	}
 	return;
 }
 

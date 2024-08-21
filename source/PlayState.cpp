@@ -14,6 +14,12 @@ void PlayState::createWorld()
 
 void PlayState::drawBG()
 {
+<<<<<<< Updated upstream
+=======
+
+	
+
+>>>>>>> Stashed changes
 	gWnd.setView(gWnd.getDefaultView());
 	sf::Sprite bg{};
 	bg.setTexture(Cfg::textures.get((int)Cfg::Textures::BGSpace));
@@ -136,14 +142,14 @@ void PlayState::updatePlayer()
 			dPlayer->standingOnAPlatform = false;
 		}
 	}
+
 	// platforms let the player ride them otherwise move as normal
 	if (dPlayer->standingOnAPlatform == true)
 	{
 
-		dPlayer->platVel.x = dPlayer->platOn->getRec().pos.x - dPlayer->platOn->getRec().prevPos.x; //dPlayer->platOn->getRec().vel;
-		dPlayer->platVel.y = dPlayer->platOn->getRec().pos.y - dPlayer->platOn->getRec().prevPos.y; //dPlayer->platOn->getRec().vel;
+		dPlayer->platVel.x = dPlayer->platOn->getRec().pos.x - dPlayer->platOn->getRec().prevPos.x; 
+		dPlayer->platVel.y = dPlayer->platOn->getRec().pos.y - dPlayer->platOn->getRec().prevPos.y; 
 		dPlayer->getRec().vel.x += dPlayer->platOn->getRec().vel.x;
-		//dPlayer->getRec().vel.x += dPlayer->platVel.x;
 		dPlayer->getRec().vel.y = 0.f;
 		dPlayer->getRec().pos.x += dPlayer->getRec().vel.x * gTime;
 		dPlayer->getRec().pos.y = dPlayer->platOn->getRec().pos.y - dPlayer->getRec().size.y - 1.f;
@@ -224,5 +230,8 @@ PlayState::PlayState(GameStateMgr* mgr_)
 
 void PlayState::processEvent(sf::Event& e)
 {
-
+	if (e.type == sf::Event::KeyReleased && e.key.code == sf::Keyboard::P)
+	{
+		owner->changeState(GameStateType::Pause, false);
+	}
 }

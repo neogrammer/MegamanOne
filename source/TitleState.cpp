@@ -31,6 +31,8 @@ void TitleState::update()
 
 void TitleState::render()
 {
+
+
 	sf::Sprite logoScreen = {};
 	logoScreen.setTexture(Cfg::textures.get((int)Cfg::Textures::Title));
 	gWnd.draw(logoScreen);

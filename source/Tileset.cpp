@@ -23,7 +23,7 @@ Tileset::Tileset(Cfg::Textures tex_, const std::string& tileset_)
 		else
 			tData.back().solid = false;
 	}
-
+	file.close();
 }
 
 Tileset::~Tileset()

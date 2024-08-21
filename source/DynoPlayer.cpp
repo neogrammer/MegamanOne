@@ -56,7 +56,8 @@ DynoPlayer::DynoPlayer(Cfg::Textures tex_, olc::vi2d texRecPos_, olc::vf2d pos)
 
 DynoPlayer::~DynoPlayer()
 {
-
+	platOn = nullptr;
+	liveBullets.clear();
 }
 
 

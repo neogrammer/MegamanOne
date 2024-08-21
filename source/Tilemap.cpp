@@ -30,6 +30,7 @@ Tilemap::Tilemap(Cfg::Textures tex_, const std::string& tilesetName_, const std:
 		}
 	}
 	obstacles.shrink_to_fit();
+	file.close();
 }
 
 Tilemap::~Tilemap()

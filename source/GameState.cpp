@@ -9,4 +9,5 @@ GameState::GameState(GameStateMgr* owner_)
 
 GameState::~GameState()
 {
+	owner = nullptr;
 }

@@ -32,6 +32,9 @@ void SplashState::update()
 
 void SplashState::render()
 {
+
+
+
 	sf::Sprite logoScreen = {};
 	logoScreen.setTexture(Cfg::textures.get((int)Cfg::Textures::Logo));
 	gWnd.draw(logoScreen);

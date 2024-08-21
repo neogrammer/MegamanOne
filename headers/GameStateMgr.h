@@ -26,13 +26,15 @@ public:
 	GameStateMgr& operator=(GameStateMgr&&) = delete;
 	GameStateMgr(GameStateMgr&&) = delete;
 
+	void renderUnder();
+	bool hasUnder();
 	void input();
 	void update();
 	void render();
 	void safeStateSwitch();
 	void processEvent(sf::Event& e_);
 	void changeState(GameStateType type_, bool popCurrent_ = true);
-
+	void popTop();
 
 };
 
